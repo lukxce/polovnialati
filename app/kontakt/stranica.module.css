@@ -1,0 +1,105 @@
+/* Kontakt — obrazac i bočna kolona. Mobilni raspored je jedna kolona. */
+
+.raspored {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 36px;
+}
+
+.formaNaslov {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+.formaUvod {
+  margin: 0 0 18px;
+  max-width: 62ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.62;
+}
+
+.bocniNaslov {
+  margin: 0 0 14px;
+  font-size: 22px;
+}
+
+.brzi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.brz {
+  display: flex;
+  gap: 12px;
+}
+
+.brzIkona {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--blue-tint);
+  color: var(--blue-deep);
+}
+
+.brzNaslov {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.brzTekst {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.brzVeza {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.demoBlok {
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.demoTekst {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .formaNaslov {
+    font-size: 28px;
+  }
+
+  .brzi {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .raspored {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  .brzi {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

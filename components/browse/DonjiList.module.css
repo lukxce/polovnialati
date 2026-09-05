@@ -1,0 +1,128 @@
+.zastor {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(23, 22, 19, 0.55);
+  backdrop-filter: blur(2px);
+  animation: pojavi var(--t-sheet) var(--ease);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 92dvh;
+  max-height: 92dvh;
+  background: var(--paper);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  box-shadow: var(--shadow-lg);
+  animation: uvuci var(--t-sheet) var(--ease);
+  transition: transform var(--t-sheet) var(--ease);
+  overflow: hidden;
+}
+
+.panel:focus {
+  outline: none;
+}
+
+.rucka {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding-top: 10px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.rucka:active {
+  cursor: grabbing;
+}
+
+.ruckaTraka {
+  display: block;
+  width: 46px;
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--line-2);
+}
+
+.zaglavlje {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px var(--pad) 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.naslov {
+  font-family: var(--font-display-stack);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+.podnaslov {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.zatvori {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: -6px -8px 0 0;
+  border-radius: var(--r-full);
+  color: var(--ink-2);
+}
+
+.zatvori:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.telo {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px var(--pad) 20px;
+}
+
+.podnozje {
+  flex: none;
+  padding: 12px var(--pad) calc(12px + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 22px rgba(23, 22, 19, 0.08);
+}
+
+@keyframes pojavi {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes uvuci {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+/* List je mobilni obrazac; na širokim ekranima se ne koristi. */
+@media (min-width: 1024px) {
+  .zastor {
+    display: none;
+  }
+}

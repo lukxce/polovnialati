@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Merenje i obeležavanje">
+  <rect width="800" height="600" fill="#EAE7E0"/>
+  <circle cx="672" cy="88" r="140" fill="#48453D" opacity=".05"/>
+  <circle cx="104" cy="536" r="112" fill="#48453D" opacity=".05"/>
+  <g>
+    <rect x="292" y="240" width="216" height="176" rx="26" fill="#48453D"/>
+    <rect x="340" y="416" width="120" height="44" rx="12" fill="#48453D"/>
+    <circle cx="400" cy="304" r="34" fill="#FF8A00"/>
+    <rect x="72" y="316" width="720" height="10" rx="5" fill="#FF8A00" opacity=".85"/>
+    <rect x="395" y="60" width="10" height="480" rx="5" fill="#FF8A00" opacity=".5"/>
+    <rect x="326" y="352" width="148" height="14" rx="7" fill="#FF8A00" opacity=".35"/>
+  </g>
+</svg>

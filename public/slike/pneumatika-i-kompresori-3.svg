@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Pneumatika i kompresori">
+  <rect width="800" height="600" fill="#FFF0DC"/>
+  <circle cx="672" cy="88" r="140" fill="#171613" opacity=".05"/>
+  <circle cx="104" cy="536" r="112" fill="#171613" opacity=".05"/>
+  <g>
+    <rect x="152" y="300" width="496" height="152" rx="76" fill="#171613"/>
+    <rect x="300" y="196" width="200" height="116" rx="24" fill="#171613"/>
+    <circle cx="400" cy="252" r="38" fill="#E06E00"/>
+    <rect x="216" y="452" width="44" height="72" rx="12" fill="#171613"/>
+    <rect x="540" y="452" width="44" height="72" rx="12" fill="#171613"/>
+    <circle cx="600" cy="256" r="46" fill="#171613"/>
+    <circle cx="600" cy="256" r="18" fill="#E06E00"/>
+    <rect x="176" y="240" width="14" height="72" rx="7" fill="#171613"/>
+  </g>
+</svg>

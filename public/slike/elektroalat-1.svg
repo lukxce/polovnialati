@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Elektroalat">
+  <rect width="800" height="600" fill="#EAE7E0"/>
+  <circle cx="672" cy="88" r="140" fill="#48453D" opacity=".05"/>
+  <circle cx="104" cy="536" r="112" fill="#48453D" opacity=".05"/>
+  <g>
+    <rect x="188" y="214" width="330" height="132" rx="24" fill="#48453D"/>
+    <path d="M296 340h108l24 150a16 16 0 0 1-16 18h-124a16 16 0 0 1-16-18z" fill="#48453D"/>
+    <rect x="252" y="356" width="40" height="26" rx="8" fill="#FF8A00"/>
+    <rect x="518" y="244" width="52" height="72" rx="12" fill="#48453D"/>
+    <rect x="570" y="266" width="112" height="28" rx="10" fill="#FF8A00"/>
+    <circle cx="230" cy="280" r="22" fill="#FF8A00"/>
+    <rect x="140" y="252" width="52" height="56" rx="14" fill="#48453D"/>
+  </g>
+</svg>

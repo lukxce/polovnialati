@@ -1,0 +1,764 @@
+/* Mobilni raspored je osnovni. Lepljiva traka na dnu traži rezervu ispod sadržaja. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 96px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+/* ── Zaglavlje ────────────────────────────────────────────────── */
+
+.zaglavlje {
+  margin-bottom: 18px;
+}
+
+.brendRed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.brendLink {
+  color: var(--ink-2);
+  font-weight: 700;
+}
+
+.model {
+  color: var(--ink-2);
+}
+
+.naslov {
+  margin: 6px 0 0;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: var(--ink-3);
+}
+
+.metaStavka {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── Raspored ─────────────────────────────────────────────────── */
+
+.raspored {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* `display: contents` pušta cenu i prodavca da se na telefonu poređaju
+   nezavisno: cena odmah ispod galerije, prodavac tek posle detalja. */
+.bocna {
+  display: contents;
+}
+
+.galerija {
+  order: 0;
+}
+
+.cenaBlok {
+  order: 1;
+}
+
+.detalji {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
+}
+
+.prodavac {
+  order: 3;
+}
+
+/* ── Cena i akcije ────────────────────────────────────────────── */
+
+.cenaBlok {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cenaRed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: -4px;
+}
+
+.dogovor {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--r-full);
+  background: var(--amber-tint);
+  color: var(--amber-deep);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.snizenje {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -6px;
+}
+
+.stanjeRed {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.stanjeDef {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* ── Parovi podataka ──────────────────────────────────────────── */
+
+.podaci {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.podatak {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.podatak:last-child {
+  border-bottom: 0;
+  padding-bottom: 2px;
+}
+
+.podatak dt {
+  color: var(--ink-3);
+  flex: 0 0 auto;
+}
+
+.podatak dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ── Sekcije ──────────────────────────────────────────────────── */
+
+.sekcija {
+  min-width: 0;
+}
+
+.h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.uvodSekcije {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+/* ── Specifikacije ────────────────────────────────────────────── */
+
+.tabela {
+  margin-top: 14px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.tabela th,
+.tabela td {
+  display: block;
+  text-align: left;
+  padding: 0 16px;
+  font-size: 14.5px;
+}
+
+.tabela th {
+  padding-top: 12px;
+  color: var(--ink-3);
+  font-weight: 600;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Namerno bez `tabular-nums`: u UI fontu `tnum` razvlači zarez i tačku u širinu
+   cifre, pa se „3,3 J" i „4.500 o/min" lome na „3, 3 J" i „4. 500 o/min".
+   Vrednosti su ionako mešavina broja i jedinice, pa se ne poravnavaju u kolonu. */
+.tabela td {
+  padding-bottom: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.tabela tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Opis ─────────────────────────────────────────────────────── */
+
+.opis {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 68ch;
+  color: var(--ink-2);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+/* ── U pakovanju ──────────────────────────────────────────────── */
+
+.pakovanje {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.pakovanje li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.cek {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  border-radius: var(--r-full);
+  background: var(--g-novo-t);
+  color: var(--g-novo);
+}
+
+/* ── Stanje — nosiva sekcija ──────────────────────────────────── */
+
+.stanjeSekcija {
+  padding: 20px 18px 22px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  min-width: 0;
+}
+
+.stanjeZaglavlje {
+  max-width: 62ch;
+}
+
+.stanjeUvod {
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.rezime {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.rezimeBroj {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex: 0 0 auto;
+}
+
+.rezimeOd {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rezimeTekst {
+  flex: 1 1 220px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.checklist {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.stavkaOk,
+.stavkaNe {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.stavkaNe {
+  background: var(--g-delove-t);
+}
+
+.znak {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-full);
+}
+
+.stavkaOk .znak {
+  background: var(--g-novo);
+  color: #fff;
+}
+
+.stavkaNe .znak {
+  background: var(--g-delove);
+  color: #fff;
+}
+
+.stavkaIme {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stavkaStatus {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+
+.stavkaOk .stavkaStatus {
+  color: var(--g-novo);
+}
+
+.stavkaNe .stavkaStatus {
+  color: var(--g-delove);
+}
+
+.stanjeFus {
+  margin-top: 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-3);
+  max-width: 70ch;
+}
+
+/* ── Prodavac ─────────────────────────────────────────────────── */
+
+.prodavac {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prodavacIme {
+  font-size: 22px;
+  margin: -4px 0 0;
+}
+
+.prodavacIme a {
+  color: var(--ink);
+}
+
+.prodavacIme a:hover {
+  color: var(--blue);
+}
+
+.prodavacRed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.ocena {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--amber-deep);
+}
+
+.ocena strong {
+  color: var(--ink);
+}
+
+.prodavacOpis {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.oznake {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── Sigurna kupovina ─────────────────────────────────────────── */
+
+.sigurnost {
+  margin-top: 36px;
+}
+
+.sigurnostZaglavlje {
+  max-width: 46ch;
+  margin-bottom: 22px;
+}
+
+.pravila {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.pravila li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  grid-template-areas:
+    'broj naslov'
+    'broj tekst';
+  column-gap: 12px;
+  row-gap: 4px;
+}
+
+.pravilobroj {
+  grid-area: broj;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-full);
+  background: var(--amber);
+  color: var(--ink);
+  font-family: var(--font-display-stack);
+  font-weight: 800;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pravilonaslov {
+  grid-area: naslov;
+  font-size: 17px;
+  margin: 2px 0 0;
+}
+
+.pravila p {
+  grid-area: tekst;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #cbc5b8;
+}
+
+.sigurnostFus {
+  margin-top: 22px;
+  font-size: 13.5px;
+  color: #9d978a;
+}
+
+.sigurnostFus a {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+/* ── Slični ───────────────────────────────────────────────────── */
+
+.stavkaMreze {
+  display: flex;
+  min-width: 0;
+}
+
+.stavkaMreze > * {
+  width: 100%;
+}
+
+/* ══ Tablet ═══════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .naslov {
+    font-size: 38px;
+  }
+
+  .raspored {
+    gap: 32px;
+  }
+
+  .cenaBlok,
+  .prodavac,
+  .stanjeSekcija {
+    padding: 24px;
+  }
+
+  .h2 {
+    font-size: 28px;
+  }
+
+  .tabela th,
+  .tabela td {
+    display: table-cell;
+    padding: 12px 18px;
+    vertical-align: baseline;
+  }
+
+  .tabela th {
+    width: 42%;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 14.5px;
+  }
+
+  .pakovanje,
+  .checklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pravila {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 32px;
+  }
+}
+
+/* ══ Desktop: 7/5 podela, desna kolona lepljiva ═══════════════ */
+
+@media (min-width: 1024px) {
+  .strana {
+    padding-bottom: 80px;
+  }
+
+  .naslov {
+    font-size: 44px;
+  }
+
+  .raspored {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      'galerija bocna'
+      'detalji bocna';
+    align-items: start;
+    column-gap: 36px;
+    row-gap: 34px;
+  }
+
+  .galerija {
+    grid-area: galerija;
+    min-width: 0;
+  }
+
+  .detalji {
+    grid-area: detalji;
+    gap: 34px;
+  }
+
+  .bocna {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    grid-area: bocna;
+    position: sticky;
+    top: calc(var(--header-h) + 16px);
+    min-width: 0;
+  }
+
+  .checklist {
+    gap: 10px;
+  }
+
+  .sigurnost {
+    margin-top: 48px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .naslov {
+    font-size: 50px;
+  }
+}
+
+/* ══ Skeleton (loading.tsx) ═══════════════════════════════════ */
+
+.skMrvice {
+  height: 14px;
+  width: 62%;
+  max-width: 340px;
+  margin-bottom: 18px;
+}
+
+.skRed {
+  height: 13px;
+  width: 40%;
+  max-width: 210px;
+}
+
+.skNaslov {
+  height: 30px;
+  width: 92%;
+  margin-top: 10px;
+}
+
+.skNaslovDruga {
+  height: 30px;
+  width: 58%;
+  margin-top: 8px;
+}
+
+.skMeta {
+  height: 13px;
+  width: 74%;
+  max-width: 420px;
+  margin-top: 14px;
+  margin-bottom: 24px;
+}
+
+.skGalerija {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-lg);
+}
+
+.skSlicice {
+  display: none;
+}
+
+.skTacke {
+  height: 8px;
+  width: 62px;
+  margin: 12px auto 0;
+  border-radius: var(--r-full);
+}
+
+.skBlok {
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skCena {
+  height: 38px;
+  width: 62%;
+}
+
+.skLinija {
+  height: 13px;
+  width: 100%;
+}
+
+.skLinijaKratka {
+  height: 13px;
+  width: 55%;
+}
+
+.skDugme {
+  height: 52px;
+  border-radius: var(--r-md);
+}
+
+.skTabela {
+  height: 268px;
+  border-radius: var(--r-lg);
+  margin-top: 14px;
+}
+
+.skStanje {
+  height: 320px;
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 768px) {
+  .skNaslov {
+    height: 42px;
+  }
+
+  .skNaslovDruga {
+    height: 42px;
+  }
+
+  .skSlicice {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .skSlicica {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--r-md);
+  }
+
+  .skTacke {
+    display: none;
+  }
+}

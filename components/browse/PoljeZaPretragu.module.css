@@ -1,0 +1,100 @@
+.forma {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 6px 6px 44px;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.velika {
+  padding: 8px 8px 8px 50px;
+  border-radius: var(--r-xl);
+}
+
+.lupa {
+  position: absolute;
+  left: 15px;
+  display: inline-flex;
+  color: var(--ink-3);
+  pointer-events: none;
+}
+
+.velika .lupa {
+  left: 17px;
+}
+
+.polje {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  outline: none;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.velika .polje {
+  min-height: 52px;
+  font-size: 16px;
+}
+
+.polje::placeholder {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.polje::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.dugme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 46px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--r-md);
+  background: var(--amber);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: var(--shadow-amber);
+  transition: background-color var(--t-hover) var(--ease);
+}
+
+.dugme:hover {
+  background: var(--amber-deep);
+}
+
+.velika .dugme {
+  min-height: 52px;
+  border-radius: var(--r-lg);
+  padding: 0 20px;
+}
+
+.dugmeTekst {
+  display: none;
+}
+
+.dugmeIkona {
+  display: inline-flex;
+}
+
+@media (min-width: 560px) {
+  .dugmeTekst {
+    display: inline;
+  }
+
+  .dugmeIkona {
+    display: none;
+  }
+}

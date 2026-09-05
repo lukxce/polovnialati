@@ -1,0 +1,69 @@
+.sekcija {
+  padding-block: var(--sekcija);
+}
+
+.sekcijaTanka {
+  padding-block: 0;
+}
+
+.zaglavlje {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.tekst {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.naslov {
+  margin: 0;
+}
+
+.opis {
+  max-width: 62ch;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+.svi {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.svi:hover {
+  text-decoration: none;
+  color: var(--blue-deep);
+}
+
+.svi svg {
+  transition: transform var(--t-hover) var(--ease);
+}
+
+.svi:hover svg {
+  transform: translateX(3px);
+}
+
+.akcija {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 900px) {
+  .zaglavlje {
+    margin-bottom: 26px;
+  }
+}

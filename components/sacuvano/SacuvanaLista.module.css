@@ -1,0 +1,61 @@
+.traka {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brojac {
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+.brojac strong {
+  color: var(--ink);
+}
+
+.potvrda {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.potvrdaTekst {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.stavka {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Kartica se rasteže da bi dugme „ukloni" bilo u istoj liniji u celom redu. */
+.stavka > :first-child {
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.ukloni {
+  width: 100%;
+}
+
+.skKartica {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 640px) {
+  .skKartica {
+    aspect-ratio: 4 / 5;
+  }
+}

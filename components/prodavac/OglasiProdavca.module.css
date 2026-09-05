@@ -1,0 +1,87 @@
+.blok {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.filteri {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grupa {
+  min-width: 0;
+}
+
+.grupa .micro {
+  margin-bottom: 7px;
+}
+
+.traka {
+  margin: 0;
+}
+
+.traka li {
+  flex: none;
+}
+
+.brojac {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.stavka {
+  display: flex;
+  min-width: 0;
+}
+
+.stavka > * {
+  width: 100%;
+}
+
+/* ── Prazan izbor ─────────────────────────────────────────────── */
+
+.prazno {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 20px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  text-align: center;
+}
+
+.praznoKrug {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.praznoNaslov {
+  margin: 0;
+  font-size: 20px;
+}
+
+.praznoOpis {
+  margin: 0 0 6px;
+  max-width: 46ch;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+@media (min-width: 768px) {
+  .filteri {
+    gap: 14px;
+  }
+}

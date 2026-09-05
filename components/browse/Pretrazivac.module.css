@@ -1,0 +1,53 @@
+.raspored {
+  display: block;
+  /* mesto za mobilnu donju traku sa filterima */
+  padding-bottom: 76px;
+}
+
+@media (min-width: 1024px) {
+  .raspored {
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+    padding-bottom: 0;
+  }
+}
+
+.railRezerva {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .railRezerva {
+    display: block;
+    height: 420px;
+    border-radius: var(--r-lg);
+    background: var(--surface-2);
+  }
+}
+
+.rezultati {
+  min-width: 0;
+}
+
+.traka {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.brojRezultata {
+  font-size: 14px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.brojRezultata strong {
+  font-family: var(--font-display-stack);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}

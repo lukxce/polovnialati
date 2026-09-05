@@ -1,0 +1,337 @@
+/* Mobilni raspored je osnovni; bočna kolona se pojavljuje tek od 1024px. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+/* ── Zaglavlje ────────────────────────────────────────────────── */
+
+.zaglavlje {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.identitet {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.grb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink-2);
+}
+
+.grb.prodavnica {
+  background: var(--blue-tint);
+  color: var(--blue-deep);
+}
+
+.grb.servis {
+  background: var(--amber-tint);
+  color: var(--amber-deep);
+}
+
+.identitetTekst {
+  min-width: 0;
+}
+
+.naslov {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.08;
+}
+
+.podnaslov {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.tacka {
+  color: var(--line-2);
+}
+
+.grad {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.clanOd {
+  font-weight: 600;
+  color: var(--ink-3);
+}
+
+.oznake {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.oznakaStavka {
+  display: inline-flex;
+}
+
+/* ── Brojke ───────────────────────────────────────────────────── */
+
+.brojke {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--surface-3);
+}
+
+.brojkaStavka {
+  padding: 12px 13px;
+  background: var(--surface-2);
+  min-width: 0;
+}
+
+.brojkaStavka dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+.brojkaVrednost {
+  margin: 5px 0 0;
+  font-family: var(--font-display-stack);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.brojkaTekst {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.brojkaTekst svg {
+  flex: none;
+  color: var(--ink-3);
+}
+
+/* ── Raspored ─────────────────────────────────────────────────── */
+
+.raspored {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.glavno {
+  min-width: 0;
+}
+
+.bocno {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 8px;
+  order: -1;
+}
+
+/* ── O prodavcu ───────────────────────────────────────────────── */
+
+.oProdavcu {
+  padding-top: 28px;
+}
+
+.podnaslovSekcije {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.opis {
+  margin: 0;
+  max-width: 68ch;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.opisTip {
+  margin: 12px 0 0;
+  max-width: 68ch;
+  color: var(--ink-3);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.rezerva {
+  height: 420px;
+  border-radius: var(--r-lg);
+}
+
+/* ── Kako se prodavac proverava ───────────────────────────────── */
+
+.provera {
+  padding: 20px 18px;
+  border-radius: var(--r-lg);
+  background: var(--ink-panel);
+  color: #ded9d0;
+}
+
+.provera .micro {
+  color: #a49d90;
+}
+
+.proveraNaslov {
+  margin: 5px 0 14px;
+  font-size: 22px;
+  color: #fbf9f5;
+}
+
+.proveraLista {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-bottom: 16px;
+}
+
+.proveraLista li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.proveraLista li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background: var(--amber);
+}
+
+.proveraLista strong {
+  color: #fbf9f5;
+}
+
+.proveraGranica {
+  margin: 0 0 12px;
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.proveraGranica strong {
+  color: var(--amber);
+}
+
+.proveraSavet {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #b8b2a7;
+}
+
+.proveraLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: #f0ede6;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.proveraLink:hover {
+  color: var(--amber);
+}
+
+.veze {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .naslov {
+    font-size: 40px;
+  }
+
+  .grb {
+    width: 68px;
+    height: 68px;
+  }
+
+  .brojke {
+    max-width: 560px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .raspored {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .bocno {
+    order: 0;
+    position: sticky;
+    top: calc(var(--header-h) + 16px);
+    padding-top: 28px;
+  }
+
+  .oProdavcu {
+    padding-top: 28px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .raspored {
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+}

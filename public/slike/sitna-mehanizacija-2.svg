@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Sitna mehanizacija">
+  <rect width="800" height="600" fill="#E7ECFF"/>
+  <circle cx="672" cy="88" r="140" fill="#1E42D0" opacity=".05"/>
+  <circle cx="104" cy="536" r="112" fill="#1E42D0" opacity=".05"/>
+  <g>
+    <rect x="164" y="440" width="472" height="64" rx="20" fill="#1E42D0"/>
+    <rect x="284" y="272" width="240" height="168" rx="26" fill="#1E42D0"/>
+    <circle cx="404" cy="352" r="52" fill="#FF8A00"/>
+    <path d="M524 316h96a26 26 0 0 1 26 26v122h-52V368h-70z" fill="#1E42D0"/>
+    <rect x="596" y="140" width="52" height="192" rx="20" fill="#1E42D0"/>
+    <rect x="560" y="120" width="128" height="42" rx="20" fill="#FF8A00"/>
+    <rect x="196" y="392" width="76" height="46" rx="14" fill="#1E42D0"/>
+  </g>
+</svg>

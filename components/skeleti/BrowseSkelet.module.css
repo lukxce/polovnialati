@@ -1,0 +1,153 @@
+/* Skelet prati mobilni raspored strane; rail se pojavljuje tek na 1024px. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  width: 220px;
+  max-width: 70%;
+  height: 14px;
+  margin-bottom: 18px;
+}
+
+.naslov {
+  width: 260px;
+  max-width: 85%;
+  height: 34px;
+  border-radius: var(--r-sm);
+}
+
+.tekst {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  max-width: 62ch;
+}
+
+.red {
+  height: 13px;
+}
+
+.red:last-child {
+  width: 72%;
+}
+
+.cipovi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.cip {
+  width: 104px;
+  height: 34px;
+  border-radius: var(--r-full);
+}
+
+.cip:nth-child(2) {
+  width: 138px;
+}
+
+.cip:nth-child(4) {
+  width: 86px;
+}
+
+.cip:nth-child(5) {
+  width: 120px;
+}
+
+.raspored,
+.rasporedBezRaila {
+  margin-top: 24px;
+}
+
+.rail {
+  display: none;
+}
+
+.mreza {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.kartica {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 0 0 12px;
+  overflow: hidden;
+}
+
+.slika {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  border-radius: 0;
+}
+
+.linija,
+.linijaKratka,
+.cena {
+  height: 12px;
+  margin: 10px 12px 0;
+}
+
+.linijaKratka {
+  width: 55%;
+}
+
+.cena {
+  width: 45%;
+  height: 20px;
+  margin-top: 14px;
+}
+
+@media (min-width: 640px) {
+  .mreza {
+    gap: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .naslov {
+    width: 420px;
+    height: 46px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .raspored {
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .rail {
+    display: block;
+    height: 620px;
+    border-radius: var(--r-lg);
+  }
+}
+
+@media (min-width: 1100px) {
+  .mreza {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .mreza {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

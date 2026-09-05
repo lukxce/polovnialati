@@ -1,0 +1,113 @@
+/* Lista vodiča. Mobilni raspored prvo. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+.uvod {
+  margin-bottom: 24px;
+  max-width: 62ch;
+}
+
+.naslov {
+  margin: 6px 0 0;
+  font-size: 34px;
+  line-height: 1.08;
+}
+
+.lede {
+  margin: 12px 0 0;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.62;
+}
+
+.mreza {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stavka {
+  display: flex;
+  min-width: 0;
+}
+
+.stavka > * {
+  width: 100%;
+}
+
+/* ── Traka na dnu ─────────────────────────────────────────────── */
+
+.traka {
+  margin-top: 40px;
+}
+
+.trakaNaslov {
+  margin: 6px 0 10px;
+  font-size: 26px;
+}
+
+.trakaTekst {
+  margin: 0 0 20px;
+  max-width: 56ch;
+  color: #cfc9bd;
+  font-size: 15.5px;
+  line-height: 1.62;
+}
+
+.trakaAkcije {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .uvod {
+    margin-bottom: 32px;
+  }
+
+  .naslov {
+    font-size: 46px;
+  }
+
+  .lede {
+    font-size: 17.5px;
+  }
+
+  .mreza {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .traka {
+    margin-top: 56px;
+  }
+
+  .trakaNaslov {
+    font-size: 34px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .naslov {
+    font-size: 54px;
+  }
+}

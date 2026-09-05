@@ -1,0 +1,171 @@
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  height: 18px;
+  width: 220px;
+  max-width: 80%;
+  margin-bottom: 14px;
+}
+
+.zaglavlje {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.identitet {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.grb {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r-md);
+}
+
+.identitetTekst {
+  flex: 1;
+  min-width: 0;
+}
+
+.naslov {
+  height: 32px;
+  width: min(320px, 90%);
+  border-radius: var(--r-sm);
+}
+
+.podnaslov {
+  height: 18px;
+  width: min(260px, 80%);
+  margin-top: 10px;
+  border-radius: var(--r-sm);
+}
+
+.oznake {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.oznaka {
+  height: 22px;
+  width: 118px;
+  border-radius: var(--r-xs);
+}
+
+.brojke {
+  height: 82px;
+  border-radius: var(--r-md);
+}
+
+.raspored {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 28px;
+}
+
+.glavno {
+  min-width: 0;
+}
+
+.blokNaslov {
+  height: 26px;
+  width: 180px;
+  border-radius: var(--r-sm);
+}
+
+.blokTekst {
+  height: 16px;
+  margin-top: 12px;
+  border-radius: var(--r-sm);
+}
+
+.blokTekstKratak {
+  height: 16px;
+  width: 62%;
+  margin-top: 8px;
+  border-radius: var(--r-sm);
+}
+
+.traka {
+  display: flex;
+  gap: 8px;
+  margin: 26px 0 16px;
+}
+
+.cip {
+  height: 34px;
+  width: 108px;
+  border-radius: var(--r-full);
+}
+
+.kartica {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-lg);
+}
+
+.bocno {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  order: -1;
+  padding-bottom: 20px;
+}
+
+.ocena {
+  height: 250px;
+  border-radius: var(--r-lg);
+}
+
+.provera {
+  height: 380px;
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .naslov {
+    height: 42px;
+  }
+
+  .grb {
+    width: 68px;
+    height: 68px;
+  }
+
+  .brojke {
+    max-width: 560px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .raspored {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .bocno {
+    order: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  .raspored {
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+}

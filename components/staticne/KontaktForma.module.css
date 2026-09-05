@@ -1,0 +1,112 @@
+/* Obrazac za kontakt. Ništa se ne šalje — to je i napisano u obrascu. */
+
+.forma {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+}
+
+.red {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.polje {
+  display: block;
+}
+
+.pomoc {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.greska {
+  display: block;
+  margin-top: 5px;
+  color: var(--g-delove);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.poljeGreska {
+  border-color: var(--g-delove);
+}
+
+.tekst {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.6;
+  padding-top: 12px;
+}
+
+.dno {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.napomena {
+  color: var(--ink-3);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* ── Poruka posle „slanja" ────────────────────────────────────── */
+
+.ishod {
+  display: flex;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--amber-tint);
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.62;
+}
+
+.ishodIkona {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--amber);
+  color: var(--ink);
+}
+
+.ishodNaslov {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+@media (min-width: 640px) {
+  .forma {
+    padding: 26px;
+  }
+
+  .red {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dno {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .napomena {
+    max-width: 42ch;
+  }
+}

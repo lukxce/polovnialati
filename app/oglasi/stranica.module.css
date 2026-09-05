@@ -1,0 +1,71 @@
+/* Mobilni raspored je osnovni; širi razmaci dolaze tek od 768px naviše. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+/* ── Uvod ─────────────────────────────────────────────────────── */
+
+.uvod {
+  margin-bottom: 22px;
+  max-width: 62ch;
+}
+
+.naslov {
+  margin: 6px 0 0;
+  font-size: 34px;
+  line-height: 1.08;
+}
+
+.lede {
+  margin: 10px 0 0;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Rezultati ────────────────────────────────────────────────── */
+
+/* Mreža sama nosi kolone (.mreza iz globals.css); stavka samo poravnava karticu. */
+.stavka {
+  display: flex;
+  min-width: 0;
+}
+
+.stavka > * {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .uvod {
+    margin-bottom: 28px;
+  }
+
+  .naslov {
+    font-size: 44px;
+  }
+
+  .lede {
+    font-size: 16.5px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .naslov {
+    font-size: 52px;
+  }
+}

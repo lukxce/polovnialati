@@ -1,0 +1,44 @@
+.prazno {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 44px 20px 48px;
+  text-align: center;
+  background: var(--surface-2);
+  border-radius: var(--r-lg);
+}
+
+.krug {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-full);
+  background: var(--surface);
+  color: var(--ink-3);
+  box-shadow: var(--shadow-sm);
+}
+
+.naslov {
+  margin: 0;
+}
+
+.opis {
+  max-width: 48ch;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+.predlozi {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.predlozi li {
+  display: inline-flex;
+}

@@ -1,0 +1,298 @@
+/* Stranica vodiča. Mobilni raspored je osnovni; bočna kolona tek od 1024px. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+/* ── Zaglavlje članka ─────────────────────────────────────────── */
+
+.zaglavlje {
+  max-width: 70ch;
+  margin-bottom: 24px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.tacka {
+  color: var(--line-2);
+}
+
+.naslov {
+  margin: 10px 0 0;
+  font-size: 34px;
+  line-height: 1.06;
+}
+
+.podnaslov {
+  margin: 14px 0 0;
+  color: var(--ink-2);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* ── Raspored ─────────────────────────────────────────────────── */
+
+.raspored {
+  display: block;
+}
+
+.telo {
+  max-width: 70ch;
+}
+
+/* ── Ključno ──────────────────────────────────────────────────── */
+
+.kljucno {
+  margin: 0 0 32px;
+  padding: 18px;
+  border-radius: var(--r-lg);
+  background: var(--ink-panel);
+  color: #ded8cc;
+}
+
+.kljucno :global(.micro) {
+  color: #9d978a;
+}
+
+.kljucnoNaslov {
+  margin: 6px 0 12px;
+  color: #fbf9f5;
+  font-size: 20px;
+  line-height: 1.1;
+}
+
+.kljucnoLista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kljucnoLista > li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.58;
+}
+
+.kljucnoLista > li:last-child {
+  margin-bottom: 0;
+}
+
+.kljucnoLista > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--amber);
+}
+
+/* ── Veze iz vodiča ───────────────────────────────────────────── */
+
+.veze {
+  margin-top: 40px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.vezeNaslov {
+  margin: 6px 0 4px;
+  font-size: 22px;
+}
+
+.vezeUvod {
+  margin: 0 0 16px;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.vezeLista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.veza {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  padding: 14px 16px;
+}
+
+.vezaIkona {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--blue-tint);
+  color: var(--blue-deep);
+}
+
+.vezaNaziv {
+  margin: 0;
+  font-family: var(--font-display-stack);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.vezaLink {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.vezaLink:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.vezaLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.vezaOpis {
+  margin: 3px 0 0;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* ── Ostali vodiči ────────────────────────────────────────────── */
+
+.ostali {
+  margin-top: 48px;
+}
+
+.ostaliNaslov {
+  margin: 6px 0 16px;
+  font-size: 26px;
+}
+
+.ostaliLista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ostaliStavka {
+  display: flex;
+  min-width: 0;
+}
+
+.ostaliStavka > * {
+  width: 100%;
+}
+
+/* ── 768px ────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 80px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .zaglavlje {
+    margin-bottom: 32px;
+  }
+
+  .naslov {
+    font-size: 48px;
+  }
+
+  .podnaslov {
+    font-size: 19px;
+  }
+
+  .kljucno {
+    padding: 26px 28px;
+    margin-bottom: 40px;
+  }
+
+  .kljucno :global(.micro) {
+  color: #9d978a;
+}
+
+.kljucnoNaslov {
+    font-size: 24px;
+  }
+
+  .vezeLista,
+  .ostaliLista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .ostali {
+    margin-top: 64px;
+  }
+
+  .ostaliNaslov {
+    font-size: 32px;
+  }
+}
+
+/* ── 1024px: bočna kolona sa sadržajem ───────────────────────── */
+
+@media (min-width: 1024px) {
+  .raspored {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 56px;
+    align-items: start;
+    max-width: 1040px;
+  }
+
+  .bocna {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .telo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .zaglavlje {
+    max-width: 62ch;
+  }
+
+  .naslov {
+    font-size: 56px;
+  }
+
+  .ostaliLista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

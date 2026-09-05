@@ -1,0 +1,120 @@
+/* Kartica vodiča — bez ivice, lift na hover (DESIGN: nikad ivica + senka). */
+
+.kartica {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.gore {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tema {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: var(--r-xs);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.vreme {
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.naslov {
+  margin: 0 0 8px;
+  font-size: 21px;
+  line-height: 1.14;
+}
+
+.naslovLink {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.naslovLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.naslovLink:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.lede {
+  margin: 0 0 14px;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.kljucno {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.kljucno > li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 6px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.kljucno > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--amber);
+}
+
+.podnozje {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.kartica:hover .podnozje {
+  color: var(--blue-deep);
+}
+
+@media (min-width: 768px) {
+  .kartica {
+    padding: 24px;
+  }
+
+  .naslov {
+    font-size: 25px;
+  }
+
+  .lede {
+    font-size: 15.5px;
+  }
+}

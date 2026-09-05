@@ -1,0 +1,382 @@
+/* Mobilni raspored je osnovni; šire kolone i razmaci dolaze od 768px naviše. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+/* ── Zaglavlje brenda ─────────────────────────────────────────── */
+
+.zaglavlje {
+  padding: 24px 20px 22px;
+}
+
+.oznaka {
+  margin-bottom: 12px;
+}
+
+/* Logotipski ispis: ime brenda je ovde grafički element, ne samo naslov. */
+.zig {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.zigIme {
+  display: block;
+  color: #fbf9f5;
+}
+
+.zigCrta {
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin-top: 12px;
+  border-radius: var(--r-full);
+  background: var(--amber);
+}
+
+.opis {
+  max-width: 66ch;
+  margin-top: 16px;
+  color: #d8d3c8;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.brojke {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 12px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(240, 237, 230, 0.16);
+}
+
+.brojke dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #9d978a;
+}
+
+.brojke dd {
+  margin: 3px 0 0;
+  font-family: var(--font-display-stack);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fbf9f5;
+}
+
+/* ── Sekcije ──────────────────────────────────────────────────── */
+
+.sekcija {
+  margin-top: 36px;
+}
+
+.sekcijaNaslov {
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.podnaslov {
+  max-width: 62ch;
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+.proza {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 68ch;
+  margin-top: 14px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.proza strong {
+  color: var(--ink);
+}
+
+.bezSistema {
+  max-width: 68ch;
+  padding: 16px 18px;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Akumulatorski sistemi ────────────────────────────────────── */
+
+.sistemi {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.sistem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px;
+}
+
+.sistemVrh {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sistemIkona {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--amber-tint);
+  color: var(--amber-deep);
+}
+
+.sistemIme {
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.sistemBrojevi {
+  font-size: 14.5px;
+  color: var(--ink-2);
+}
+
+.sistemBrojevi strong {
+  font-family: var(--font-display-stack);
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.sistemUkupno {
+  color: var(--ink-3);
+}
+
+.sistemNota {
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.sistemDugme {
+  margin-top: 4px;
+}
+
+/* ── Razbijanje po kategorijama ───────────────────────────────── */
+
+.razbijanje {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.grana {
+  min-width: 0;
+}
+
+.granaLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.granaLink:hover {
+  color: var(--blue-deep);
+  text-decoration: none;
+}
+
+.granaLink:hover .granaIme {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.granaIkona {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.granaIme {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.granaBroj {
+  flex: none;
+  font-family: var(--font-display-stack);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Udeo kategorije — obična traka, bez biblioteke za grafikone. */
+.traka {
+  display: block;
+  height: 6px;
+  margin: 2px 0 10px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.traka::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--udeo, 0%);
+  background: var(--ink);
+  border-radius: var(--r-full);
+}
+
+.deca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ── Rezultati i podnožje ─────────────────────────────────────── */
+
+.stavka {
+  display: flex;
+  min-width: 0;
+}
+
+.stavka > * {
+  width: 100%;
+}
+
+.ostali {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.podnavNaslov {
+  margin: 0 0 10px;
+  font-family: var(--font-ui-stack);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.cipovi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Navigacioni čipovi (potkategorije brenda, ostali brendovi) — najmanje 44px. */
+.cipovi :global(.chip),
+.deca :global(.chip) {
+  height: auto;
+  min-height: 44px;
+  padding-block: 8px;
+}
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 72px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .zaglavlje {
+    padding: 40px 36px 34px;
+  }
+
+  .zig {
+    font-size: 64px;
+  }
+
+  .zigCrta {
+    width: 76px;
+    height: 5px;
+  }
+
+  .opis {
+    font-size: 16.5px;
+  }
+
+  .brojke {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .brojke dd {
+    font-size: 24px;
+  }
+
+  .sekcija {
+    margin-top: 52px;
+  }
+
+  .sekcijaNaslov {
+    font-size: 32px;
+  }
+
+  .proza {
+    font-size: 16.5px;
+  }
+
+  .sistemi {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .razbijanje {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 28px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .zig {
+    font-size: 84px;
+  }
+
+  .sistemi {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

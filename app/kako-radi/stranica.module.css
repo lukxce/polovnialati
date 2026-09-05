@@ -1,0 +1,518 @@
+/* „Kako radi" — referentna stranica. Mobilni raspored je osnovni. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+/* ── Uvod ─────────────────────────────────────────────────────── */
+
+.uvod {
+  margin-bottom: 20px;
+  max-width: 64ch;
+}
+
+.naslov {
+  margin: 6px 0 0;
+  font-size: 34px;
+  line-height: 1.06;
+}
+
+.lede {
+  margin: 12px 0 0;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.62;
+}
+
+.brzaNav {
+  margin-bottom: 36px;
+}
+
+/* Ovo je glavna navigacija stranice na telefonu — mora da ima 44px za prst. */
+.brzaNav :global(.chip) {
+  height: 44px;
+  padding-inline: 16px;
+}
+
+/* ── Sekcije ──────────────────────────────────────────────────── */
+
+.sekcija {
+  margin-bottom: 44px;
+  scroll-margin-top: calc(var(--header-h) + 20px);
+}
+
+.sekcijaNaslov {
+  margin: 6px 0 10px;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.sekcijaUvod {
+  margin: 0 0 22px;
+  max-width: 68ch;
+  color: var(--ink-2);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.pod {
+  margin: 30px 0 0;
+  scroll-margin-top: calc(var(--header-h) + 20px);
+}
+
+.podNaslov {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.podTekst {
+  margin: 0 0 14px;
+  max-width: 68ch;
+  color: var(--ink-2);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+/* ── Koraci ───────────────────────────────────────────────────── */
+
+.koraci {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: korak;
+}
+
+.korak {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 18px;
+  counter-increment: korak;
+}
+
+.korakBroj {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 12px;
+  border-radius: var(--r-sm);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-display-stack);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.korakBrojAmber {
+  background: var(--amber);
+  color: var(--ink);
+}
+
+.korakNaslov {
+  margin: 0 0 6px;
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.korakTekst {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.korakLista {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.korakLista > li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 5px;
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.korakLista > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--amber);
+}
+
+.korakVeza {
+  margin: 12px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ── Referentna tabela ocena ──────────────────────────────────── */
+
+.tabelaOkvir {
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.tabela caption {
+  padding: 16px 16px 0;
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-3);
+}
+
+/* Na telefonu tabela postaje niz blokova — bez horizontalnog skrola. */
+.tabela thead {
+  display: none;
+}
+
+.tabela tr {
+  display: block;
+  padding: 16px;
+}
+
+.tabela tbody tr + tr {
+  border-top: 1px solid var(--line-2);
+}
+
+.tabela th,
+.tabela td {
+  display: block;
+  padding: 0;
+  text-align: left;
+}
+
+.tabela tbody th {
+  margin-bottom: 10px;
+}
+
+.tabela td {
+  color: var(--ink-2);
+}
+
+.tabela td + td {
+  margin-top: 10px;
+}
+
+.tabela td::before {
+  content: attr(data-oznaka);
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+.oznakaOcene {
+  display: inline-flex;
+}
+
+/* ── Lista provere ────────────────────────────────────────────── */
+
+.provera {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proveraStavka {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.proveraDa {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-xs);
+  background: var(--g-novo-t);
+  color: var(--g-novo);
+}
+
+.proveraNe {
+  background: var(--g-delove-t);
+  color: var(--g-delove);
+}
+
+/* ── Pravila (sigurna kupovina) ───────────────────────────────── */
+
+.pravila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pravilo {
+  display: flex;
+  gap: 12px;
+  height: 100%;
+  padding: 16px;
+}
+
+.pravilolkona {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  background: var(--blue-tint);
+  color: var(--blue-deep);
+}
+
+.pravilolkonaAmber {
+  background: var(--amber-tint);
+  color: var(--amber-deep);
+}
+
+.pravilolkonaCrvena {
+  background: var(--g-delove-t);
+  color: var(--g-delove);
+}
+
+.pravilNaslov {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.pravilTekst {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Česta pitanja ────────────────────────────────────────────── */
+
+.pitanja {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--line);
+}
+
+.pitanje {
+  padding: 18px;
+  background: var(--surface);
+}
+
+.pitanjeNaslov {
+  margin: 0 0 6px;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.pitanjeOdgovor {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14.5px;
+  line-height: 1.62;
+}
+
+/* ── Tamna traka ──────────────────────────────────────────────── */
+
+.traka {
+  margin-top: 8px;
+}
+
+.trakaNaslov {
+  margin: 6px 0 12px;
+  font-size: 26px;
+}
+
+.trakaTekst {
+  margin: 0 0 12px;
+  max-width: 62ch;
+  color: #cfc9bd;
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.trakaAkcije {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* ── 768px ────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 80px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .naslov {
+    font-size: 48px;
+  }
+
+  .lede {
+    font-size: 17.5px;
+  }
+
+  .brzaNav {
+    margin-bottom: 48px;
+  }
+
+  .sekcija {
+    margin-bottom: 64px;
+  }
+
+  .sekcijaNaslov {
+    font-size: 36px;
+  }
+
+  .sekcijaUvod {
+    font-size: 16.5px;
+  }
+
+  .koraci {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .pravila {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .pitanja {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .provera {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .podNaslov {
+    font-size: 22px;
+  }
+
+  .trakaNaslov {
+    font-size: 34px;
+  }
+
+  /* Tabela postaje prava tabela tek kada za nju ima mesta. */
+  .tabela thead {
+    display: table-header-group;
+  }
+
+  .tabela tr {
+    display: table-row;
+    padding: 0;
+  }
+
+  .tabela th,
+  .tabela td {
+    display: table-cell;
+    padding: 14px 16px;
+    vertical-align: top;
+  }
+
+  .tabela thead th {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .tabela tbody tr + tr th,
+  .tabela tbody tr + tr td {
+    border-top: 1px solid var(--line);
+  }
+
+  .tabela tbody tr + tr {
+    border-top: 0;
+  }
+
+  .tabela tbody th {
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .tabela td + td {
+    margin-top: 0;
+  }
+
+  .tabela td::before {
+    display: none;
+  }
+
+  .tabela caption {
+    padding: 16px 16px 4px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .naslov {
+    font-size: 56px;
+  }
+
+  .koraci {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pitanja {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

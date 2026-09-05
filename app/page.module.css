@@ -1,150 +1,639 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
+/* ══ 1. Hero ═══════════════════════════════════════════════════ */
 
-  --text-primary: #000;
-  --text-secondary: #666;
+.hero {
+  padding-block: 32px 8px;
+  background: linear-gradient(180deg, #efece5 0%, var(--paper) 100%);
+}
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
+@media (min-width: 900px) {
+  .hero {
+    padding-block: 56px 16px;
+  }
+}
 
+.heroUnutra {
+  max-width: 940px;
+}
+
+.heroOznaka {
+  color: var(--amber-deep);
+}
+
+.heroNaslov {
+  margin-top: 10px;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+@media (min-width: 700px) {
+  .heroNaslov {
+    font-size: 56px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .heroNaslov {
+    font-size: 64px;
+  }
+}
+
+.podvuceno {
+  background-image: linear-gradient(var(--amber), var(--amber));
+  background-repeat: no-repeat;
+  background-size: 100% 0.14em;
+  background-position: 0 0.94em;
+}
+
+.heroTekst {
+  max-width: 62ch;
+  margin-top: 14px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+@media (min-width: 900px) {
+  .heroTekst {
+    font-size: 17px;
+  }
+}
+
+.heroPretraga {
+  margin-top: 22px;
+}
+
+.heroCipovi {
   display: flex;
-  flex: 1;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.heroBrojke {
+  display: grid;
+  /* Četiri kolone se ne uklapaju na 375px — oznake se sudaraju i brojevi
+     iskaču iz reda. Na telefonu ide 2×2, četiri u red tek kad ima mesta. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 12px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.heroBrojke > div {
+  display: flex;
   flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.heroBrojke dt {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+.heroBrojke dd {
+  font-family: var(--font-display-stack);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 600px) {
+  .heroBrojke {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px 12px;
+  }
+}
+
+@media (min-width: 900px) {
+  .heroBrojke dd {
+    font-size: 32px;
+  }
+}
+
+/* ══ 2. Kategorije ═════════════════════════════════════════════ */
+
+.kategorije {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (min-width: 700px) {
+  .kategorije {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .kategorije {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+.plocica {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  min-height: 132px;
+  padding: 14px;
+  color: var(--ink);
+}
+
+@media (min-width: 700px) {
+  .plocica {
+    min-height: 150px;
+    padding: 18px;
+  }
+}
+
+.plocica:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.plocicaIkona {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  width: 44px;
+  height: 44px;
+  margin-bottom: 4px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink);
+  transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
 }
 
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+.plocica:hover .plocicaIkona {
+  background: var(--amber);
+  color: var(--ink);
 }
 
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+.plocicaNaziv {
+  font-family: var(--font-display-stack);
+  font-size: 16.5px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
+@media (min-width: 700px) {
+  .plocicaNaziv {
+    font-size: 18px;
+  }
+}
+
+.plocicaBroj {
+  margin-top: auto;
+  font-size: 12px;
   font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+.plocicaPod {
+  display: none;
 }
 
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
+@media (min-width: 700px) {
+  .plocicaPod {
+    display: inline;
+  }
 }
 
-.ctas {
+/* ══ 3. Brzi ulazi ═════════════════════════════════════════════ */
+
+.brziSekcija {
+  padding-bottom: var(--sekcija);
+}
+
+.brzi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (min-width: 760px) {
+  .brzi {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+.brzaKarta {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 2px;
+  height: 100%;
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink);
+  transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+}
+
+.brzaKarta:hover {
+  background: var(--ink);
+  color: #fff;
+  text-decoration: none;
+}
+
+.brzaNaziv {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.brzaOpis {
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--ink-3);
+}
+
+.brzaKarta:hover .brzaOpis {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ══ 5. Tamna traka sa ocenama ═════════════════════════════════ */
+
+.ocene {
+  margin-top: var(--sekcija);
+  padding-block: var(--sekcija);
+}
+
+.oceneZaglavlje {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 26px;
+}
+
+@media (min-width: 980px) {
+  .oceneZaglavlje {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+}
+
+.oceneZaglavlje .micro {
+  color: var(--amber);
+}
+
+.oceneNaslov {
+  max-width: 20ch;
+  margin-top: 8px;
+  color: #fbf9f5;
+  text-wrap: balance;
+}
+
+@media (min-width: 980px) {
+  .oceneNaslov {
+    max-width: 24ch;
+  }
+}
+
+.oceneUvod {
+  max-width: 62ch;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #b8b2a6;
+}
+
+.oceneDugme {
+  flex: none;
+  align-self: flex-start;
+}
+
+/* Tabela ocena stanja.
+   Na telefonu tri kolone ne staju u 375px — umesto bočnog skrolovanja kroz
+   najvažniju sekciju na strani, red se slaže u blok: čip i broj u prvom redu,
+   definicija ispod. Tabelarni prikaz se vraća od 640px naviše. */
+
+.tabelaOkvir {
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabela {
   width: 100%;
-  max-width: 440px;
-  gap: 16px;
   font-size: 14px;
 }
 
-.ctas a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+.tabela thead {
+  display: none;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
+.tabela tbody,
+.tabela tbody tr,
+.tabela tbody th,
+.tabela tbody td {
+  display: block;
+}
+
+.tabela tbody tr {
+  padding: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.tabela tbody tr:first-child {
+  border-top: 0;
+}
+
+.tabela tbody th {
+  padding: 0;
+  text-align: left;
+  font-weight: 400;
+}
+
+.tabela tbody td {
+  padding: 0;
+  margin-top: 8px;
+}
+
+/* Broj oglasa se na telefonu penje u red sa čipom, desno. */
+.tabela tbody tr {
+  position: relative;
+}
+
+.tabela tbody td.kolonaBroj {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  margin-top: 0;
+}
+
+@media (min-width: 640px) {
+  .tabelaOkvir {
+    overflow-x: auto;
+  }
+
+  .tabela {
+    min-width: 100%;
+  }
+
+  .tabela thead {
+    display: table-header-group;
+  }
+
+  .tabela tbody {
+    display: table-row-group;
+  }
+
+  .tabela tbody tr {
+    display: table-row;
+    position: static;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .tabela thead th {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    text-align: left;
+    color: #918b7f;
+    white-space: nowrap;
+  }
+
+  .tabela tbody th {
+    display: table-cell;
+    padding: 14px;
+    text-align: left;
+    vertical-align: top;
+    font-weight: 400;
+    white-space: nowrap;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .tabela tbody td {
+    display: table-cell;
+    padding: 14px;
+    margin-top: 0;
+    vertical-align: top;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .tabela tbody td.kolonaBroj {
+    position: static;
+  }
+
+  .tabela tbody tr:first-child th,
+  .tabela tbody tr:first-child td {
+    border-top: 0;
+  }
+}
+
+.definicija {
+  display: block;
+  color: #efece5;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.savet {
+  display: block;
+  max-width: 56ch;
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #918b7f;
+}
+
+.kolonaBroj {
+  text-align: right;
+}
+
+.brojLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.07);
+  color: #efece5;
+  font-family: var(--font-display-stack);
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.brojLink:hover {
+  background: var(--amber);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.garancije {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+@media (min-width: 900px) {
+  .garancije {
+    flex-direction: row;
+    gap: 28px;
+  }
+}
+
+.garancije li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #b8b2a6;
+}
+
+.garancije svg {
+  flex: none;
+  color: var(--amber);
+}
+
+/* ══ 7. Brendovi ═══════════════════════════════════════════════ */
+
+.brendovi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+@media (min-width: 640px) {
+  .brendovi {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
+@media (min-width: 1000px) {
+  .brendovi {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
+.brend {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 56px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  transition: box-shadow var(--t-hover) var(--ease), transform var(--t-hover) var(--ease);
+}
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+.brend:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  color: var(--ink);
+  text-decoration: none;
+}
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
+.brendIme {
+  font-family: var(--font-display-stack);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+.brendBroj {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ══ 8. Prodaj CTA ═════════════════════════════════════════════ */
+
+.prodaj {
+  padding-bottom: var(--sekcija);
+}
+
+.prodajPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 980px) {
+  .prodajPanel {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
   }
 }
 
-.code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
-  background: color-mix(in srgb, currentColor 8%, transparent);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
+.prodajPanel .micro {
+  color: var(--amber);
+}
+
+.prodajNaslov {
+  max-width: 22ch;
+  margin-top: 8px;
+  font-size: 28px;
+  color: #fbf9f5;
+  text-wrap: balance;
+}
+
+@media (min-width: 900px) {
+  .prodajNaslov {
+    font-size: 38px;
+  }
+}
+
+.prodajTekst {
+  max-width: 56ch;
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #b8b2a6;
+}
+
+.prodajAkcije {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  flex: none;
+}
+
+.prodajLink {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #b8b2a6;
+}
+
+.prodajLink:hover {
+  color: var(--amber);
 }

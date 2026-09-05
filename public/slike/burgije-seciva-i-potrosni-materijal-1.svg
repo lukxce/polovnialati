@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Burgije, sečiva i potrošni materijal">
+  <rect width="800" height="600" fill="#EAE7E0"/>
+  <circle cx="672" cy="88" r="140" fill="#48453D" opacity=".05"/>
+  <circle cx="104" cy="536" r="112" fill="#48453D" opacity=".05"/>
+  <g>
+    <circle cx="566" cy="332" r="128" fill="#48453D"/>
+    <circle cx="566" cy="332" r="42" fill="#FF8A00"/>
+    <rect x="150" y="128" width="66" height="120" rx="14" fill="#48453D"/>
+    <path d="M150 248h66v264l-33 44-33-44z" fill="#48453D"/>
+    <path d="M150 288h66v22h-66zM150 340h66v22h-66zM150 392h66v22h-66zM150 444h66v22h-66z" fill="#FF8A00" opacity=".8"/>
+  </g>
+</svg>

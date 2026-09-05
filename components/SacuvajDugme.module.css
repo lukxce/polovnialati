@@ -1,0 +1,72 @@
+.plutajuce {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-full);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink-2);
+  box-shadow: var(--shadow-sm);
+  transition: color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease),
+    transform var(--t-hover) var(--ease);
+}
+
+.plutajuce:hover {
+  background: #fff;
+  color: var(--ink);
+}
+
+.dugme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  transition: color var(--t-hover) var(--ease), background-color var(--t-hover) var(--ease),
+    border-color var(--t-hover) var(--ease), transform var(--t-hover) var(--ease);
+}
+
+.dugme:hover {
+  background: var(--surface-2);
+}
+
+.aktivno {
+  color: var(--g-delove);
+}
+
+.dugme.aktivno {
+  border-color: var(--g-delove);
+  background: var(--g-delove-t);
+}
+
+/* Jedini flourish u sistemu: 200 ms pop pri čuvanju. */
+.pop {
+  animation: pop 200ms var(--ease);
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.28);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop {
+    animation: none;
+  }
+}

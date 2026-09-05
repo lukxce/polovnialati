@@ -1,0 +1,403 @@
+/* Filter rail / sadržaj lista — ravna površina, bez senke (DESIGN §Surfaces) */
+
+.omot {
+  display: flex;
+  flex-direction: column;
+}
+
+.uRailu {
+  background: var(--surface-2);
+  border-radius: var(--r-lg);
+  padding: 14px 14px 18px;
+}
+
+.uListu {
+  padding: 0;
+  background: transparent;
+}
+
+.zaglavlje {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+}
+
+.uListu .zaglavlje {
+  display: none;
+}
+
+.obrisi {
+  padding: 4px 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.obrisi:hover {
+  color: var(--blue-deep);
+}
+
+/* ── Grupa ────────────────────────────────────────────────────── */
+
+.grupa {
+  border-top: 1px solid var(--line);
+  padding-block: 4px 10px;
+}
+
+.grupa:first-of-type {
+  border-top: 0;
+}
+
+.grupaNaslovOmot {
+  font-family: var(--font-ui-stack);
+  font-size: 14px;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.grupaNaslov {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: left;
+}
+
+.grupaZnak {
+  flex: none;
+  color: var(--ink-3);
+}
+
+.grupaTelo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.napomena {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* Akumulatorski sistem — jedini filter koji se pojavljuje uslovno,
+   pa se i vizuelno predstavi kao nalaz, a ne kao još jedna lista. */
+.grupaAkcenat {
+  background: var(--amber-tint);
+  border-radius: var(--r-md);
+  border-top: 0;
+  margin-block: 6px;
+  padding: 2px 12px 12px;
+}
+
+.grupaAkcenat .grupaNaslov {
+  color: var(--ink);
+}
+
+.grupaAkcenat .grupaNaslov span:first-child::before {
+  content: 'Pametni filter · ';
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--amber-deep);
+}
+
+.grupaAkcenat .napomena {
+  color: #6b4a10;
+}
+
+.glif {
+  flex: none;
+  color: var(--amber-deep);
+}
+
+/* ── Redovi sa kvadratićem ────────────────────────────────────── */
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.listaSkrol {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.red {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 8px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background-color var(--t-hover) var(--ease);
+}
+
+.red:hover {
+  background: rgba(23, 22, 19, 0.05);
+}
+
+.redAktivan {
+  background: var(--surface);
+}
+
+.uRailu .redAktivan:hover {
+  background: var(--surface);
+}
+
+.redOnemogucen {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.redOnemogucen:hover {
+  background: transparent;
+}
+
+.kvadratic {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  margin: 2px 0 0;
+  accent-color: var(--blue);
+  cursor: inherit;
+}
+
+.redTekst {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.redOznaka {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.redAktivan .redOznaka {
+  font-weight: 700;
+}
+
+.redOpis {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+.broj {
+  flex: none;
+  margin-top: 2px;
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+
+/* ── Stablo kategorija ────────────────────────────────────────── */
+
+.stablo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.katGrana {
+  display: flex;
+  flex-direction: column;
+}
+
+.katRedOmot {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+}
+
+.katStrelica {
+  flex: none;
+  width: 32px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  color: var(--ink-3);
+}
+
+.katStrelica:hover {
+  background: rgba(23, 22, 19, 0.06);
+  color: var(--ink);
+}
+
+.strelicaDesno,
+.strelicaDole {
+  display: block;
+  font-size: 19px;
+  line-height: 1;
+  transition: transform var(--t-hover) var(--ease);
+}
+
+.strelicaDole {
+  transform: rotate(90deg);
+}
+
+.katRed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  text-align: left;
+  color: var(--ink);
+  transition: background-color var(--t-hover) var(--ease), color var(--t-hover) var(--ease);
+}
+
+.katRed:hover:not(:disabled) {
+  background: rgba(23, 22, 19, 0.06);
+}
+
+.katRed:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.katIme {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.katAktivna {
+  background: var(--ink);
+  color: #fff;
+}
+
+.katAktivna:hover:not(:disabled) {
+  background: #2b2924;
+}
+
+.katAktivna .broj {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.katDeca {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-left: 16px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line-2);
+}
+
+.katDete .katIme {
+  font-weight: 500;
+  font-size: 13.5px;
+}
+
+.katDete.katAktivna .katIme {
+  font-weight: 700;
+}
+
+/* ── Cena ─────────────────────────────────────────────────────── */
+
+.cenaPolja {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cenaPolje input {
+  font-variant-numeric: tabular-nums;
+}
+
+.opsezi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.opsezi > button {
+  font-size: 12.5px;
+  padding: 0 11px;
+}
+
+/* ── Pretraga brenda ──────────────────────────────────────────── */
+
+.pretragaOmot {
+  position: relative;
+}
+
+.pretragaIkona {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  pointer-events: none;
+}
+
+.pretragaPolje {
+  padding-left: 38px;
+}
+
+.pretragaPolje::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.nemaPogodaka {
+  padding: 10px 8px;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* ── Select ───────────────────────────────────────────────────── */
+
+.selectOmot {
+  display: block;
+}
+
+.selectOmot select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%),
+    linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: calc(100% - 19px) calc(50% + 1px), calc(100% - 14px) calc(50% + 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+/* ── Fusnota ──────────────────────────────────────────────────── */
+
+.fusnota {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}

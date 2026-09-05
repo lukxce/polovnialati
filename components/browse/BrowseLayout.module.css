@@ -1,0 +1,287 @@
+/* Mobilni raspored je osnovni; kolona sa filterima se pojavljuje tek na 1024px. */
+
+.raspored {
+  display: block;
+}
+
+.kolona {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* Filter kolona — skrivena na telefonu, tamo je zamenjuje donji list */
+.rail {
+  display: none;
+}
+
+/* ── Vrh: brojač + sortiranje ─────────────────────────────────── */
+
+.vrh {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brojac {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.brojac strong {
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.brojacDodatak {
+  color: var(--ink-3);
+}
+
+/* Sortiranje je na telefonu u donjoj traci — ovde ga sakrivamo */
+.sortOmot {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortOznaka {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ink-3);
+}
+
+.sortSelect {
+  appearance: none;
+  min-height: 40px;
+  padding: 0 34px 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%),
+    linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% + 1px), calc(100% - 13px) calc(50% + 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* ── Traka aktivnih filtera ───────────────────────────────────── */
+
+.cipoviOmot {
+  margin-inline: calc(var(--pad) * -1);
+  padding-inline: var(--pad);
+}
+
+.cipovi {
+  align-items: center;
+}
+
+.cipovi > li {
+  display: inline-flex;
+  flex: none;
+}
+
+.cip {
+  gap: 5px;
+  padding-right: 10px;
+}
+
+.cipGrupa {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-3);
+}
+
+.cipTekst {
+  font-weight: 700;
+}
+
+.cipX {
+  color: var(--ink-3);
+}
+
+.cip:hover .cipX {
+  color: var(--g-delove);
+}
+
+.obrisiSve {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.obrisiSve:hover {
+  color: var(--blue-deep);
+}
+
+.uToku {
+  opacity: 0.55;
+  transition: opacity var(--t-hover) var(--ease);
+}
+
+/* ── Mobilna zakucana traka ───────────────────────────────────── */
+
+.mobTraka {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  align-items: stretch;
+  background: rgba(244, 242, 237, 0.88);
+  backdrop-filter: blur(14px) saturate(150%);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.mobDugme {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 56px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.mobDugme:active {
+  background: var(--surface-2);
+}
+
+.mobPodela {
+  width: 1px;
+  margin-block: 12px;
+  background: var(--line-2);
+}
+
+.mobZnacka {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  background: var(--amber);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Sadržaj listova ──────────────────────────────────────────── */
+
+.listPodnozje {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.listPodnozje .btn:first-child {
+  flex: none;
+}
+
+.sortLista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sortRed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  text-align: left;
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.sortRedAktivan {
+  background: var(--ink);
+  color: #fff;
+}
+
+.sortRedIme {
+  display: block;
+  font-size: 15.5px;
+  font-weight: 700;
+}
+
+.sortRedOpis {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.sortRedAktivan .sortRedOpis {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Desktop ──────────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .raspored {
+    display: grid;
+    grid-template-columns: 288px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .rail {
+    display: block;
+    position: sticky;
+    top: calc(var(--header-h) + 16px);
+  }
+
+  .railKlizac {
+    max-height: calc(100dvh - var(--header-h) - 32px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: var(--r-lg);
+    scrollbar-width: thin;
+  }
+
+  .kolona {
+    gap: 16px;
+  }
+
+  .sortOmot {
+    display: inline-flex;
+  }
+
+  .mobTraka {
+    display: none;
+  }
+
+  .cipoviOmot {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}

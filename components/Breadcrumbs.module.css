@@ -1,0 +1,43 @@
+.nav {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.lista {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.stavka {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.link {
+  color: var(--ink-3);
+  font-weight: 600;
+}
+
+.link:hover {
+  color: var(--blue);
+}
+
+.trenutna {
+  color: var(--ink-2);
+  font-weight: 700;
+}
+
+.strelica {
+  color: var(--line-2);
+  font-size: 15px;
+}

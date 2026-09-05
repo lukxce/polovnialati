@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Radionica">
+  <rect width="800" height="600" fill="#FFF0DC"/>
+  <circle cx="672" cy="88" r="140" fill="#171613" opacity=".05"/>
+  <circle cx="104" cy="536" r="112" fill="#171613" opacity=".05"/>
+  <g>
+    <path d="M188 268h424a32 32 0 0 1 32 32v180a32 32 0 0 1-32 32H188a32 32 0 0 1-32-32V300a32 32 0 0 1 32-32z" fill="#171613"/>
+    <path d="M320 268v-44a44 44 0 0 1 44-44h72a44 44 0 0 1 44 44v44h-56v-32h-48v32z" fill="#171613"/>
+    <rect x="156" y="352" width="488" height="36" fill="#E06E00" opacity=".85"/>
+    <rect x="356" y="330" width="88" height="80" rx="14" fill="#E06E00"/>
+    <rect x="380" y="356" width="40" height="28" rx="8" fill="#171613"/>
+  </g>
+</svg>

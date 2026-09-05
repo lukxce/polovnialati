@@ -1,0 +1,126 @@
+.blok {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dugmad {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sporedne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.pozovi {
+  width: 100%;
+}
+
+.sacuvaj {
+  width: 100%;
+}
+
+.odgovor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-3);
+  font-size: 13.5px;
+}
+
+/* ── Paneli (poruka, telefon, potvrda) ────────────────────────── */
+
+.panel {
+  margin-top: 4px;
+  padding: 16px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tekst {
+  resize: vertical;
+  min-height: 104px;
+  line-height: 1.5;
+}
+
+.panelNaslov {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.panelTekst,
+.napomenaMala {
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.napomenaMala {
+  color: var(--ink-3);
+}
+
+.panelDugmad {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Lepljiva traka na telefonu ───────────────────────────────── */
+
+.traka {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--pad) calc(10px + env(safe-area-inset-bottom));
+  background: rgba(244, 242, 237, 0.94);
+  backdrop-filter: blur(14px) saturate(150%);
+  border-top: 1px solid var(--line);
+  transition: transform var(--t-sheet) var(--ease);
+}
+
+.trakaSklonjena {
+  transform: translateY(110%);
+  pointer-events: none;
+}
+
+.traka > :global(.btn-primary) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.traka > :global(.btn-tertiary) {
+  flex: 0 0 auto;
+}
+
+.srce {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.srce > button {
+  width: 46px;
+  height: 46px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+}
+
+@media (min-width: 768px) {
+  .traka {
+    display: none;
+  }
+
+  .dugmad {
+    gap: 12px;
+  }
+}
