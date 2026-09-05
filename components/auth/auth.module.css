@@ -1,0 +1,94 @@
+/* Zajednička karta za registraciju i prijavu — mala, centrirana forma. */
+
+.omotac {
+  display: grid;
+  place-items: center;
+  min-height: calc(100dvh - var(--header-h, 64px) - 200px);
+  padding: 40px 16px;
+}
+
+.karta {
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 32px;
+}
+
+.naslov {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.lede {
+  margin: 0 0 24px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.polje-grupa {
+  margin-bottom: 16px;
+}
+
+.oznaka {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.dva {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.tipovi {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tipDugme {
+  padding: 10px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.tipAktivan {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.greska {
+  margin: -8px 0 16px;
+  color: var(--g-delove);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.podnozje {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.podnozje a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+}

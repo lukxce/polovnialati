@@ -1,0 +1,105 @@
+/* Mobilni raspored je osnovni. Prodavac je na terenu, sa telefonom. */
+
+.strana {
+  padding-top: 14px;
+  padding-bottom: 40px;
+  max-width: 900px;
+}
+
+.mrvice {
+  margin-bottom: 14px;
+}
+
+.uvod {
+  margin-bottom: 26px;
+  max-width: 62ch;
+}
+
+.naslov {
+  margin: 6px 0 0;
+  font-size: 34px;
+  line-height: 1.08;
+}
+
+.lede {
+  margin: 10px 0 0;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.demo {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 13px 14px;
+  border-radius: var(--r-md);
+  background: var(--ink-panel);
+  color: #ded9d0;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.demo svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--amber);
+}
+
+.demo strong {
+  color: #fbf9f5;
+}
+
+/* ── Rezerva dok se korak iz URL-a ne razreši ─────────────────── */
+
+.rezerva {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rezervaTraka {
+  height: 44px;
+  border-radius: var(--r-sm);
+}
+
+.rezervaNaslov {
+  height: 34px;
+  width: 60%;
+  border-radius: var(--r-sm);
+}
+
+.rezervaBlok {
+  height: 320px;
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 768px) {
+  .strana {
+    padding-top: 20px;
+    padding-bottom: 56px;
+  }
+
+  .mrvice {
+    margin-bottom: 18px;
+  }
+
+  .naslov {
+    font-size: 44px;
+  }
+
+  .lede {
+    font-size: 16.5px;
+  }
+
+  .uvod {
+    margin-bottom: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .naslov {
+    font-size: 52px;
+  }
+}

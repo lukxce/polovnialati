@@ -1,0 +1,69 @@
+// Real backend for Alatnica — SQLite for local dev (no Postgres available in
+// this environment yet), same pattern already proven on the Pricetracker
+// build: switch `provider` to "postgresql" + a real DATABASE_URL for
+// production, one line, no rewrite. Deliberately avoids Prisma-native enums
+// and array/JSON column types for the same portability reason — "tip",
+// "uloga" etc. are plain Strings validated in app code (lib/auth.ts), and
+// list-shaped fields (slike, specifikacije, uPakovanju, dostava) are
+// JSON-encoded strings, parsed/serialized in lib/oglasi.ts.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Real seller/buyer account. "tip" reuses the EXACT values already used by
+// the demo data's TipProdavca (lib/types.ts) — 'privatno-lice' | 'prodavnica'
+// | 'servis' — so a real User maps onto the existing Prodavac-shaped UI
+// (KarticaPregled, StanjeChip, etc.) without a parallel vocabulary.
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  naziv        String // ime i prezime (privatno lice) ili naziv firme (servis/prodavnica)
+  tip          String // 'privatno-lice' | 'prodavnica' | 'servis'
+  grad         String
+  telefon      String?
+  pib          String? // samo servis/prodavnica — realan podatak, ne izmišljen (vidi Prodavac.oznake "PIB verifikovan" u demo podacima)
+  uloga        String   @default("PRODAVAC") // 'PRODAVAC' | 'ADMIN' — vidi lib/auth.ts ULOGE
+  verifikovan  Boolean  @default(false) // admin ručno potvrđuje — isto polje kao Prodavac.verifikovan u demo šemi
+  createdAt    DateTime @default(now())
+
+  oglasi Oglas[]
+}
+
+// Pravi, upisan oglas — za razliku od Nacrt-a u components/prodaj/model.ts,
+// koji i dalje živi samo u memoriji pregledača dok korisnik popunjava
+// formu. Struktura namerno prati postojeći Oglas tip (lib/types.ts) polje
+// po polje, da mapiranje nacrtUOglas() -> ovo ne zahteva novi vokabular.
+model Oglas {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  naslov        String
+  kategorija    String
+  brend         String
+  model         String
+  stanje        String
+  cena          Float
+  cenaDogovor   Boolean  @default(false)
+  opis          String
+  slike         String // JSON: string[] (data URL-ovi — vidi napomenu o skladištu slika u lib/oglasi.ts)
+  specifikacije String // JSON: {naziv, vrednost}[]
+  uPakovanju    String // JSON: string[]
+  godiste       Int?
+  garancija     Int?
+  akuSistem     String?
+  lokacija      String
+  dostava       String // JSON: Dostava[]
+  aktivan       Boolean  @default(true) // prodavac može da deaktivira bez brisanja
+  provereno     Boolean  @default(false) // admin potvrđuje — isto polje kao Oglas.provereno u demo šemi
+  istaknuto     Boolean  @default(false) // admin promoviše
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}

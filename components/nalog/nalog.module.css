@@ -1,0 +1,91 @@
+.strana {
+  padding-top: 14px;
+  padding-bottom: 56px;
+}
+
+.zaglavlje {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.naslov {
+  margin: 6px 0 0;
+  font-size: 30px;
+}
+
+.lede {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
+.dugmad {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.karta {
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela th,
+.tabela td {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.tabela th {
+  color: var(--ink-3);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tabela tr:last-child td {
+  border-bottom: 0;
+}
+
+.prazno {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ink-2);
+}
+
+.znacka {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.znackaAktivan {
+  background: var(--g-novo-t);
+  color: var(--g-novo);
+}
+
+.znackaNeaktivan {
+  background: var(--line-2);
+  color: var(--ink-3);
+}
+
+.akcije {
+  display: flex;
+  gap: 8px;
+}
