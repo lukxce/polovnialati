@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Ikona } from '@/components/Ikone'
 import { STANJA, stanjeDefinicija, stanjeLabela } from '@/lib/format'
 import type { Stanje } from '@/lib/types'
@@ -42,13 +42,6 @@ export function Korak2Detalji({
   const id = useId()
   const [upitBrenda, setUpitBrenda] = useState('')
   const [novaStavka, setNovaStavka] = useState('')
-  const [generisemOpis, setGenerisemOpis] = useState(false)
-  const [greskaOpisAI, setGreskaOpisAI] = useState<string | null>(null)
-  // Indeksi specifikacija čija je vrednost popunjena AI predlogom, ne ručno —
-  // dok korisnik ne izmeni vrednost. Lokalno stanje ovog koraka, ne deo
-  // Nacrt-a: to je samo vizuelna napomena "proveri ovo", ne podatak koji
-  // treba da preživi izlazak iz koraka.
-  const [aiPredlozeneSpec, setAiPredlozeneSpec] = useState<Set<number>>(new Set())
 
   const g = (kljuc: string) => (dodirnuta.includes(kljuc) ? greske[kljuc] : undefined)
 
@@ -65,6 +58,25 @@ export function Korak2Detalji({
   const predloziPak = predloziPakovanja(koren)
   const duzinaOpisa = nacrt.opis.trim().length
 
+  /**
+   * Standardna polja za kategoriju se popunjavaju sama — prodavac ne dodaje
+   * nove redove (vidi dole, "Dodaj red" je namerno uklonjen), samo unosi
+   * vrednosti ili stavi "X" gde se ne odnosi. Ovo se pokreće pri prvom
+   * ulasku u korak i svaki put kad se kategorija stvarno promeni (nazad pa
+   * druga kategorija) — ali nikad ako je prodavac već upisao bilo koju
+   * vrednost, da mu se ne obriše rad.
+   */
+  const prethodniKoren = useRef(koren)
+  useEffect(() => {
+    const promenjenaKategorija = prethodniKoren.current !== koren
+    prethodniKoren.current = koren
+    const sveVrednostiPrazne = nacrt.specifikacije.every((sp) => !sp.vrednost.trim())
+    if (koren && sveVrednostiPrazne && (nacrt.specifikacije.length === 0 || promenjenaKategorija)) {
+      azuriraj({ specifikacije: predloziSpecifikacija(koren).map((naziv) => ({ naziv, vrednost: '' })) })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [koren])
+
   /** Naslov se predlaže dok ga korisnik ne dotakne rukom. */
   function predlozi(brendSlug?: string, model?: string) {
     if (nacrt.naslovRucno) return
@@ -80,13 +92,6 @@ export function Korak2Detalji({
   function postaviSpec(i: number, delta: Partial<{ naziv: string; vrednost: string }>) {
     const kopija = nacrt.specifikacije.map((sp, j) => (i === j ? { ...sp, ...delta } : sp))
     azuriraj({ specifikacije: kopija })
-    // Ručna izmena bilo kog polja skida "AI predlog" napomenu za taj red —
-    // korisnik ga je pregledao (ili prepisao), više nema potrebe da se ističe.
-    if (aiPredlozeneSpec.has(i)) {
-      const kopijaSet = new Set(aiPredlozeneSpec)
-      kopijaSet.delete(i)
-      setAiPredlozeneSpec(kopijaSet)
-    }
   }
 
   function dodajStavku() {
@@ -98,71 +103,6 @@ export function Korak2Detalji({
     }
     azuriraj({ uPakovanju: [...nacrt.uPakovanju, v] })
     setNovaStavka('')
-  }
-
-  /**
-   * Šalje trenutno unete podatke (brend, model, stanje...) AI-u i dobija
-   * nazad predlog opisa plus predloge vrednosti za prazne redove
-   * specifikacija. Nikad ne piše preko postojećeg opisa bez potvrde — ista
-   * logika kao naslov ("dok ga korisnik ne dotakne rukom"), samo sa
-   * potvrdom umesto tihog preskakanja, jer opis obično već ima neki tekst
-   * kad se ovo pozove.
-   */
-  async function generisiOpisAI() {
-    if (!nacrt.brend || nacrt.model.trim().length < 2) return
-    if (nacrt.opis.trim().length > 0) {
-      const nastavi = window.confirm('Opis već ima tekst. Zameniti ga AI predlogom?')
-      if (!nastavi) return
-    }
-
-    setGenerisemOpis(true)
-    setGreskaOpisAI(null)
-
-    const brendNaziv = izabranBrend?.naziv ?? nacrt.brend
-    try {
-      const res = await fetch('/api/opis/generisi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          brend: brendNaziv,
-          model: nacrt.model.trim(),
-          nazivKategorije,
-          godiste: nacrt.godiste,
-          stanje: nacrt.stanje,
-          akuSistem: nacrt.akuSistem,
-          specifikacije: nacrt.specifikacije,
-          uPakovanju: nacrt.uPakovanju,
-        }),
-      })
-      const data = await res.json()
-      if (!res.ok) {
-        setGreskaOpisAI(data.error || 'Greška pri generisanju opisa.')
-        return
-      }
-
-      azuriraj({ opis: data.opis })
-
-      if (Array.isArray(data.specPredlozi) && data.specPredlozi.length > 0) {
-        const noviIndeksi = new Set<number>()
-        const kopija = nacrt.specifikacije.map((sp, i) => {
-          const predlog = data.specPredlozi.find(
-            (p: { naziv: string; vrednost: string }) =>
-              p.naziv.trim().toLowerCase() === sp.naziv.trim().toLowerCase() && !sp.vrednost.trim()
-          )
-          if (predlog) {
-            noviIndeksi.add(i)
-            return { ...sp, vrednost: predlog.vrednost }
-          }
-          return sp
-        })
-        azuriraj({ specifikacije: kopija })
-        setAiPredlozeneSpec(noviIndeksi)
-      }
-    } catch {
-      setGreskaOpisAI('Greška pri povezivanju sa AI servisom.')
-    } finally {
-      setGenerisemOpis(false)
-    }
   }
 
   return (
@@ -403,17 +343,10 @@ export function Korak2Detalji({
                 />
                 <input
                   type="text"
-                  className={[
-                    'polje',
-                    s.specVrednost,
-                    aiPredlozeneSpec.has(i) ? s.specVrednostAI : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  placeholder="Vrednost"
+                  className={['polje', s.specVrednost].join(' ')}
+                  placeholder="Vrednost, ili X ako se ne odnosi"
                   value={sp.vrednost}
-                  aria-label={`Vrednost specifikacije ${i + 1}${aiPredlozeneSpec.has(i) ? ' (AI predlog, proveri pre objave)' : ''}`}
-                  title={aiPredlozeneSpec.has(i) ? 'AI predlog — proveri pre objave, nije potvrđen podatak' : undefined}
+                  aria-label={`Vrednost specifikacije ${i + 1}`}
                   onChange={(e) => postaviSpec(i, { vrednost: e.target.value })}
                   onBlur={() => dodirni('specifikacije')}
                 />
@@ -434,43 +367,12 @@ export function Korak2Detalji({
           <p className={s.nemaStavki}>Nijedna specifikacija još nije dodata.</p>
         )}
 
-        {aiPredlozeneSpec.size > 0 ? (
-          <p className={[s.pomoc, s.upozorenjeAI].join(' ')}>
-            Označene vrednosti su AI predlog, ne potvrđen podatak iz deklaracije — proveri ih pre objave.
-          </p>
-        ) : null}
-
         <datalist id={`${id}-spec-predlozi`}>
           {predloziSpec.map((p) => (
             <option key={p} value={p} />
           ))}
         </datalist>
 
-        <div className={s.dodajRed}>
-          <button
-            type="button"
-            className="btn btn-tertiary"
-            onClick={() =>
-              azuriraj({ specifikacije: [...nacrt.specifikacije, { naziv: '', vrednost: '' }] })
-            }
-          >
-            <Ikona ime="plus" velicina={18} />
-            Dodaj red
-          </button>
-          {nacrt.specifikacije.length === 0 ? (
-            <button
-              type="button"
-              className="btn btn-ghost"
-              onClick={() =>
-                azuriraj({
-                  specifikacije: predloziSpec.slice(0, 4).map((p) => ({ naziv: p, vrednost: '' })),
-                })
-              }
-            >
-              Popuni uobičajene za ovu kategoriju
-            </button>
-          ) : null}
-        </div>
         {g('specifikacije') ? (
           <p className={s.greska} role="alert">
             {greske.specifikacije}
@@ -502,28 +404,6 @@ export function Korak2Detalji({
           onChange={(e) => azuriraj({ opis: e.target.value })}
           onBlur={() => dodirni('opis')}
         />
-
-        <div className={s.dodajRed}>
-          <button
-            type="button"
-            className="btn btn-tertiary"
-            disabled={!nacrt.brend || nacrt.model.trim().length < 2 || generisemOpis}
-            title={
-              !nacrt.brend || nacrt.model.trim().length < 2
-                ? 'Prvo unesi brend i model'
-                : undefined
-            }
-            onClick={generisiOpisAI}
-          >
-            <Ikona ime="zvezda" velicina={18} />
-            {generisemOpis ? 'Generisanje…' : 'Generiši opis pomoću AI'}
-          </button>
-        </div>
-        {greskaOpisAI ? (
-          <p className={s.greska} role="alert">
-            {greskaOpisAI}
-          </p>
-        ) : null}
       </Polje>
 
       {/* ── U pakovanju ─────────────────────────────────────────── */}

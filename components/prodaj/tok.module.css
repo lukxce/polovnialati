@@ -669,18 +669,6 @@
   grid-area: vrednost;
 }
 
-/* AI je predložio ovu vrednost — korisnik je još nije ručno potvrdio.
-   Suptilna izmena postojećeg polja umesto novog grid-područja: red ostaje
-   isti raspored na mobilnom i desktopu (vidi media query ispod). */
-.specVrednostAI {
-  border-color: var(--amber);
-  background: color-mix(in srgb, var(--amber) 8%, transparent);
-}
-
-.upozorenjeAI {
-  color: var(--amber);
-}
-
 .ukloniDugme {
   display: inline-flex;
   align-items: center;
