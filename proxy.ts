@@ -9,8 +9,10 @@ import { jwtVerify } from 'jose'
 
 // /prodaj traži prijavu od početka — bolje nego pustiti nekoga da popuni
 // svih pet koraka pa mu tek na kraju reći da mora da se prijavi i izgubi
-// nacrt (Nacrt živi samo u memoriji pregledača, vidi model.ts).
-const ZASTICENO = ['/nalog', '/admin', '/prodaj']
+// nacrt (Nacrt živi samo u memoriji pregledača, vidi model.ts). /poruke ima
+// i sopstveni redirect() na nivou stranice (isto kao /nalog i /admin) — ovo
+// je samo prva linija odbrane, pre nego što se strana uopšte renderuje.
+const ZASTICENO = ['/nalog', '/admin', '/prodaj', '/poruke']
 
 function tajniKljuc() {
   const tajna = process.env.SESSION_SECRET
@@ -18,7 +20,7 @@ function tajniKljuc() {
   return new TextEncoder().encode(tajna)
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   const trebaZastitu = ZASTICENO.some((p) => pathname === p || pathname.startsWith(`${p}/`))
@@ -49,5 +51,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/nalog/:path*', '/admin/:path*', '/prodaj/:path*'],
+  matcher: ['/nalog/:path*', '/admin/:path*', '/prodaj/:path*', '/poruke/:path*'],
 }
