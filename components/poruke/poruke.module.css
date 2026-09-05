@@ -1,0 +1,164 @@
+.kontaktKartica {
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kontaktTekst {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.tekst {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.greska {
+  margin: 0;
+  color: var(--g-delove);
+  font-size: 13px;
+}
+
+/* ── Inbox lista ─────────────────────────────────────────── */
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--line-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.red {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+}
+
+.red:hover {
+  background: var(--surface-2);
+}
+
+.redNeprocitan {
+  font-weight: 600;
+}
+
+.redInfo {
+  min-width: 0;
+}
+
+.redOglas {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.redSagovornik {
+  margin: 2px 0 4px;
+  font-size: 15px;
+}
+
+.redPoruka {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.redDesno {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.redVreme {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.znackaBroj {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── Nit razgovora ───────────────────────────────────────── */
+
+.nit {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+}
+
+.mehur {
+  max-width: 72%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.mehurJa {
+  align-self: flex-end;
+  background: var(--ink);
+  color: var(--surface);
+  border-bottom-right-radius: 4px;
+}
+
+.mehurOni {
+  align-self: flex-start;
+  background: var(--line-2);
+  color: var(--ink);
+  border-bottom-left-radius: 4px;
+}
+
+.mehurVreme {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.65;
+}
+
+.odgovorForma {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.odgovorPolje {
+  flex: 1;
+  resize: none;
+}

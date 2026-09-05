@@ -64,6 +64,9 @@ export default function OglasiTabela({ oglasi }: { oglasi: OglasZaPrikaz[] }) {
               <td>{new Date(o.createdAt).toLocaleDateString('sr-RS')}</td>
               <td>
                 <div className={s.akcije}>
+                  <Link href={`/oglas/id/${o.id}`} className="btn btn-ghost">
+                    Pogledaj
+                  </Link>
                   <button type="button" className="btn btn-tertiary" onClick={() => prebaciAktivan(o.id, o.aktivan)}>
                     {o.aktivan ? 'Deaktiviraj' : 'Aktiviraj'}
                   </button>

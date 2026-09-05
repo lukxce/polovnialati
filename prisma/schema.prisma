@@ -33,6 +33,10 @@ model User {
   createdAt    DateTime @default(now())
 
   oglasi Oglas[]
+
+  razgovoriKaoKupac    Razgovor[] @relation("RazgovoriKaoKupac")
+  razgovoriKaoProdavac Razgovor[] @relation("RazgovoriKaoProdavac")
+  poruke               Poruka[]
 }
 
 // Pravi, upisan oglas — za razliku od Nacrt-a u components/prodaj/model.ts,
@@ -65,5 +69,52 @@ model Oglas {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  razgovori Razgovor[]
+
   @@index([userId])
+}
+
+// Jedan razgovor = jedan kupac + jedan oglas (i time i njegov prodavac, preko
+// oglas.userId). @@unique([oglasId, kupacId]) je namerno: isti kupac ne
+// otvara drugi razgovor za isti oglas, samo nastavlja postojeći.
+//
+// Nepročitano se ne prati po poruci (nema procitano polje na Poruka) — svaka
+// strana ima sopstveni "poslednji put pročitano" pečat na Razgovor-u, pa je
+// broj nepročitanih samo poruke novije od tog pečata koje nije poslala ta
+// strana. Jeftinije za upit, dovoljno za dva učesnika po razgovoru.
+model Razgovor {
+  id     String @id @default(cuid())
+  oglasId String
+  oglas   Oglas  @relation(fields: [oglasId], references: [id], onDelete: Cascade)
+
+  kupacId    String
+  kupac      User   @relation("RazgovoriKaoKupac", fields: [kupacId], references: [id], onDelete: Cascade)
+  prodavacId String
+  prodavac   User   @relation("RazgovoriKaoProdavac", fields: [prodavacId], references: [id], onDelete: Cascade)
+
+  procitanoKupac    DateTime?
+  procitanoProdavac DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  poruke Poruka[]
+
+  @@unique([oglasId, kupacId])
+  @@index([kupacId])
+  @@index([prodavacId])
+}
+
+model Poruka {
+  id         String   @id @default(cuid())
+  razgovorId String
+  razgovor   Razgovor @relation(fields: [razgovorId], references: [id], onDelete: Cascade)
+
+  posiljalacId String
+  posiljalac   User   @relation(fields: [posiljalacId], references: [id], onDelete: Cascade)
+
+  tekst     String
+  createdAt DateTime @default(now())
+
+  @@index([razgovorId])
 }

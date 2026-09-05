@@ -27,6 +27,9 @@ export default async function NalogPage() {
           <p className={s.lede}>{sesija.email}</p>
         </div>
         <div className={s.dugmad}>
+          <Link href="/poruke" className="btn btn-tertiary">
+            Poruke
+          </Link>
           <Link href="/prodaj" className="btn btn-primary">
             + Novi oglas
           </Link>

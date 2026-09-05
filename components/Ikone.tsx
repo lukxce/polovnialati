@@ -36,6 +36,7 @@ export type ImeIkone =
   | 'sat'
   | 'plus'
   | 'minus'
+  | 'poruka'
 
 const PUTANJE: Record<ImeIkone, React.ReactNode> = {
   pretraga: (
@@ -158,6 +159,12 @@ const PUTANJE: Record<ImeIkone, React.ReactNode> = {
     <>
       <circle cx="12" cy="12" r="8.5" />
       <path d="M12 7.2V12l3.2 2" />
+    </>
+  ),
+  poruka: (
+    <>
+      <rect x="3" y="5.5" width="18" height="13" rx="2" />
+      <path d="M3.5 6.5 12 13l8.5-6.5" />
     </>
   ),
   plus: (

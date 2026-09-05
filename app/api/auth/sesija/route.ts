@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { ucitajSesiju } from '@/lib/auth'
+import { ukupnoNeprocitano } from '@/lib/poruke'
 
 /**
  * Sesija se čita ovde, ne u deljenom Header-u — Header je deo layout-a
@@ -7,10 +8,13 @@ import { ucitajSesiju } from '@/lib/auth'
  * renderovanje (nema cacheComponents u next.config, pa je granica i dalje
  * na nivou rute). Umesto toga HeaderNav ovo učita na klijentu, isto kao
  * useSacuvani() za broj sačuvanih oglasa.
+ *
+ * Nosi i broj nepročitanih poruka — jedan fetch umesto dva na svakoj strani.
  */
 export async function GET() {
   const sesija = await ucitajSesiju()
-  return NextResponse.json(
-    sesija ? { naziv: sesija.naziv, uloga: sesija.uloga } : null,
-  )
+  if (!sesija) return NextResponse.json(null)
+
+  const neprocitano = await ukupnoNeprocitano(sesija.userId)
+  return NextResponse.json({ naziv: sesija.naziv, uloga: sesija.uloga, neprocitano })
 }

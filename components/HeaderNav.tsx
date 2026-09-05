@@ -15,7 +15,7 @@ export type StabloStavka = {
   deca: { slug: string; naziv: string }[]
 }
 
-export type SesijaZaNav = { naziv: string; uloga: 'PRODAVAC' | 'ADMIN' } | null
+export type SesijaZaNav = { naziv: string; uloga: 'PRODAVAC' | 'ADMIN'; neprocitano: number } | null
 
 export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
   const putanja = usePathname()
@@ -167,6 +167,14 @@ export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
           </Link>
 
           {sesija ? (
+            <Link href="/poruke" className={s.sacuvano}>
+              <Ikona ime="poruka" velicina={19} />
+              <span className={s.sacuvanoTekst}>Poruke</span>
+              {sesija.neprocitano > 0 ? <span className={s.brojac}>{sesija.neprocitano}</span> : null}
+            </Link>
+          ) : null}
+
+          {sesija ? (
             <Link href={sesija.uloga === 'ADMIN' ? '/admin' : '/nalog'} className={s.sacuvano}>
               <Ikona ime="osoba" velicina={19} />
               <span className={s.sacuvanoTekst}>{sesija.naziv}</span>
@@ -217,6 +225,14 @@ export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
                   Sačuvano{brojSacuvanih > 0 ? ` (${brojSacuvanih})` : ''}
                 </Link>
               </li>
+              {sesija ? (
+                <li>
+                  <Link href="/poruke">
+                    <Ikona ime="poruka" velicina={19} />
+                    Poruke{sesija.neprocitano > 0 ? ` (${sesija.neprocitano})` : ''}
+                  </Link>
+                </li>
+              ) : null}
               <li>
                 {sesija ? (
                   <Link href={sesija.uloga === 'ADMIN' ? '/admin' : '/nalog'}>
