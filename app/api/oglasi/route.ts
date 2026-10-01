@@ -1,39 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { ucitajSesiju } from '@/lib/auth'
-import { upisPodataka, citanjePodataka, type NoviOglas } from '@/lib/oglasi'
+import { aktivnaSesija } from '@/lib/auth'
+import { proveriOglas, slugOglasa, uOglas } from '@/lib/oglasi'
+import { dozvoljeno } from '@/lib/ogranicenje'
+import { osveziKatalog } from '@/lib/osvezavanje'
+import { nasaSlika } from '@/lib/slike'
 
 // GET: prodavčevi sopstveni oglasi (za /nalog). POST: objava novog oglasa —
 // jedino mesto gde ProdajniTok stvarno upisuje ono što je nacrt sakupio.
 export async function GET() {
-  const sesija = await ucitajSesiju()
+  const sesija = await aktivnaSesija()
   if (!sesija) return NextResponse.json({ greska: 'Nisi prijavljen.' }, { status: 401 })
 
   const redovi = await db.oglas.findMany({
     where: { userId: sesija.userId },
+    include: { user: { select: { id: true, slug: true, tip: true } } },
     orderBy: { createdAt: 'desc' },
   })
-  return NextResponse.json({ oglasi: redovi.map(citanjePodataka) })
+  return NextResponse.json({ oglasi: redovi.map(uOglas) })
 }
 
 export async function POST(req: NextRequest) {
-  const sesija = await ucitajSesiju()
+  const sesija = await aktivnaSesija()
   if (!sesija) return NextResponse.json({ greska: 'Nisi prijavljen.' }, { status: 401 })
 
-  const telo = (await req.json().catch(() => null)) as NoviOglas | null
-  if (!telo?.naslov?.trim() || !telo.model?.trim() || !telo.brend || !telo.kategorija || !telo.stanje) {
-    return NextResponse.json({ greska: 'Nedostaju obavezna polja.' }, { status: 400 })
+  if (!(await dozvoljeno(`oglas:${sesija.userId}`, 20, 24 * 60))) {
+    return NextResponse.json(
+      { greska: 'Dostignut je dnevni limit od 20 novih oglasa. Javi nam se ako ti treba više.' },
+      { status: 429 },
+    )
   }
-  if (!telo.cena || telo.cena <= 0) {
-    return NextResponse.json({ greska: 'Cena mora biti veća od nule.' }, { status: 400 })
-  }
-  if (!telo.lokacija?.trim()) {
-    return NextResponse.json({ greska: 'Grad je obavezan.' }, { status: 400 })
-  }
+
+  const telo = await req.json().catch(() => null)
+  const provera = proveriOglas(telo, nasaSlika)
+  if (!provera.ok) return NextResponse.json({ greska: provera.greska }, { status: 400 })
+  const o = provera.oglas
 
   const oglas = await db.oglas.create({
-    data: { userId: sesija.userId, ...upisPodataka(telo) },
+    data: {
+      userId: sesija.userId,
+      slug: slugOglasa(o.naslov),
+      ...o,
+      specifikacije: o.specifikacije,
+      stanjeChecklist: o.stanjeChecklist,
+    },
   })
 
-  return NextResponse.json({ ok: true, id: oglas.id })
+  osveziKatalog()
+  return NextResponse.json({ ok: true, id: oglas.id, slug: oglas.slug })
 }

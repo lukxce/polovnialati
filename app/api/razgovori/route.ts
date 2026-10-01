@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { zahtevajSesiju } from '@/lib/auth'
+import { dozvoljeno } from '@/lib/ogranicenje'
 import { dobijIliNapraviRazgovor, ucitajRazgovore } from '@/lib/poruke'
 
 export async function GET() {
@@ -29,6 +30,13 @@ export async function POST(zahtev: Request) {
   }
   if (tekst.length > 2000) {
     return NextResponse.json({ greska: 'Poruka je predugačka.' }, { status: 400 })
+  }
+
+  if (!(await dozvoljeno(`poruka:${sesija.userId}`, 60, 60))) {
+    return NextResponse.json(
+      { greska: 'Poslao si previše poruka u poslednjih sat vremena. Pokušaj malo kasnije.' },
+      { status: 429 },
+    )
   }
 
   try {

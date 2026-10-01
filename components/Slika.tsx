@@ -12,12 +12,13 @@ type Props = {
 }
 
 /**
- * Katalog-ilustracija oglasa. Nema fotografija: svaka slika je generisani
- * dvotonski SVG iz `/public/slike`, silueta po kategoriji, tint po brendu.
+ * Naslovna slika oglasa: prodavčeva fotografija, a ako je nema (stari ili
+ * demo oglasi) dvotonski SVG iz `/public/slike`, silueta po kategoriji.
  */
 export function Slika({ oglas, indeks = 0, prioritet, className }: Props) {
   const izvor = oglas.slike?.[indeks] ?? slikaZaOglas(oglas)
-  const opis = `${oglas.naslov}, ilustracija kategorije`
+  const fotografija = !!oglas.slike?.[indeks] && !oglas.slike[indeks].endsWith('.svg')
+  const opis = fotografija ? `${oglas.naslov}, fotografija` : `${oglas.naslov}, ilustracija kategorije`
 
   return (
     <div className={[s.okvir, className ?? ''].filter(Boolean).join(' ')}>

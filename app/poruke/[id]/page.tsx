@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import s from '@/components/nalog/nalog.module.css'
 import { Nit } from '@/components/poruke/Nit'
-import { ucitajSesiju } from '@/lib/auth'
+import { aktivnaSesija } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { jeUcesnikRazgovora, oznaciProcitano } from '@/lib/poruke'
 
@@ -12,14 +12,14 @@ export const metadata: Metadata = { title: 'Razgovor', robots: { index: false, f
 type Props = { params: Promise<{ id: string }> }
 
 export default async function RazgovorStranica({ params }: Props) {
-  const sesija = await ucitajSesiju()
+  const sesija = await aktivnaSesija()
   if (!sesija) redirect('/prijava?odakle=/poruke')
 
   const { id } = await params
   const razgovor = await db.razgovor.findUnique({
     where: { id },
     include: {
-      oglas: { select: { id: true, naslov: true } },
+      oglas: { select: { id: true, slug: true, naslov: true, aktivan: true } },
       kupac: { select: { id: true, naziv: true } },
       prodavac: { select: { id: true, naziv: true } },
       poruke: { orderBy: { createdAt: 'asc' } },
@@ -41,7 +41,11 @@ export default async function RazgovorStranica({ params }: Props) {
       <header className={s.zaglavlje}>
         <div>
           <p className="micro">
-            <Link href={`/oglas/id/${razgovor.oglas.id}`}>{razgovor.oglas.naslov}</Link>
+            {razgovor.oglas.aktivan ? (
+              <Link href={`/oglas/${razgovor.oglas.slug}`}>{razgovor.oglas.naslov}</Link>
+            ) : (
+              <>{razgovor.oglas.naslov} (oglas više nije aktivan)</>
+            )}
           </p>
           <h1 className={s.naslov} style={{ fontSize: 22 }}>
             {sagovornik.naziv}

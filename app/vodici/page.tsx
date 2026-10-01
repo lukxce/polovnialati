@@ -5,6 +5,7 @@ import VodicKartica from '@/components/vodici/VodicKartica'
 import { brojSr } from '@/lib/format'
 import { sviVodici, vremeCitanja } from '@/lib/vodici'
 import s from './stranica.module.css'
+import { SITE_URL } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Vodiči za kupovinu alata',
@@ -31,7 +32,7 @@ export default function VodiciStranica() {
     itemListElement: vodici.map((v, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `https://alatnica.rs/vodici/${v.slug}`,
+      url: `${SITE_URL}/vodici/${v.slug}`,
       name: v.naslov,
     })),
   }

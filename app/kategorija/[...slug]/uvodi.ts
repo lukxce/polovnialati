@@ -33,7 +33,7 @@ export const UVODI: Record<string, string[]> = {
   ],
   'sitna-mehanizacija': [
     'Mašine koje staju u kombi, a ne na šleper: vibro nabijači, pumpe za vodu, agregati i mešalice za beton.',
-    'Kod svega sa motorom sa unutrašnjim sagorevanjem presudni su sati rada i redovnost servisa, ne godište. Većina oglasa ovde ima naveden broj sati rada; ako ga nema, pitaj pre nego što kreneš po mašinu u drugi grad.',
+    'Kod svega sa motorom sa unutrašnjim sagorevanjem presudni su sati rada i redovnost servisa, ne godište. Ako oglas nema naveden broj sati rada, pitaj pre nego što kreneš po mašinu u drugi grad.',
   ],
   'skele-merdevine-i-zastita': [
     'Deo opreme koji se prvi zaboravi da kupi i poslednji da zameni, a jedini je čija cena nije samo novac.',

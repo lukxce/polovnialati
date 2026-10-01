@@ -22,7 +22,7 @@ type Props = {
 
 const OSNOVA = '/pretraga'
 
-/** Primeri koji stvarno daju rezultat u ovom katalogu. */
+/** Primeri čestih upita — svaki pogađa bar kategoriju ili brend, i kad je katalog mali. */
 const PRIMERI = [
   'SDS bušilica',
   'Makita 18V',
@@ -52,13 +52,13 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return {
       title: 'Pretraga alata po nazivu, brendu i modelu',
       description:
-        'Pretraži ceo katalog Alatnice odjednom: oglase, kategorije i brendove. Radi i bez dijakritike, a rezultat se dalje filtrira po oceni stanja, ceni, gradu i akumulatorskom sistemu.',
+        'Pretraži Alatnicu odjednom: oglase, kategorije i brendove. Radi i bez dijakritike, a rezultat se dalje filtrira po oceni stanja, ceni, gradu i akumulatorskom sistemu.',
       robots: { index: true, follow: true },
       alternates: { canonical: OSNOVA },
     }
   }
 
-  const r = pretraga(q)
+  const r = await pretraga(q)
   const ukupno = r.oglasi.length + r.kategorije.length + r.brendovi.length
 
   return {
@@ -75,19 +75,23 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function PretragaStranica({ searchParams }: Props) {
   const sp = await searchParams
   const q = upitIz(sp)
-  const rezultat = q ? pretraga(q) : { oglasi: [], kategorije: [], brendovi: [] }
+  const [rezultat, globalni] = await Promise.all([
+    q ? pretraga(q) : Promise.resolve({ oglasi: [], kategorije: [], brendovi: [] }),
+    brojeviFiltera({}),
+  ])
   const ukupno = rezultat.oglasi.length + rezultat.kategorije.length + rezultat.brendovi.length
 
-  const globalni = brojeviFiltera({})
+  // Dok je katalog prazan, „najveće" nema smisla — prikazuje se taksonomija bez brojeva.
+  const imaOglasa = Object.values(globalni.stanje).some((n) => n > 0)
   const popularneKategorije = stabloKategorija()
     .map(({ kategorija }) => ({ ...kategorija, broj: globalni.kategorija[kategorija.slug] ?? 0 }))
-    .filter((k) => k.broj > 0)
+    .filter((k) => !imaOglasa || k.broj > 0)
     .sort((a, b) => b.broj - a.broj)
     .slice(0, 6)
 
   const popularniBrendovi = sviBrendovi()
     .map((b) => ({ ...b, broj: globalni.brend[b.slug] ?? 0 }))
-    .filter((b) => b.broj > 0)
+    .filter((b) => !imaOglasa || b.broj > 0)
     .sort((a, b) => b.broj - a.broj || a.naziv.localeCompare(b.naziv, 'sr'))
     .slice(0, 8)
 
@@ -175,7 +179,7 @@ export default async function PretragaStranica({ searchParams }: Props) {
 
           <section className={s.grupa} aria-labelledby="kat-predlozi">
             <h2 id="kat-predlozi" className={s.grupaNaslov}>
-              Najveće kategorije
+              {imaOglasa ? 'Najveće kategorije' : 'Kategorije'}
             </h2>
             <ul className={s.kartice}>
               {popularneKategorije.map((k) => (
@@ -185,7 +189,9 @@ export default async function PretragaStranica({ searchParams }: Props) {
                       <Ikona ime={k.ikona} velicina={20} />
                     </span>
                     <span className={s.karticaIme}>{k.naziv}</span>
-                    <span className={['broj', s.karticaBroj].join(' ')}>{k.broj}</span>
+                    {imaOglasa ? (
+                      <span className={['broj', s.karticaBroj].join(' ')}>{k.broj}</span>
+                    ) : null}
                   </Link>
                 </li>
               ))}
@@ -194,7 +200,7 @@ export default async function PretragaStranica({ searchParams }: Props) {
 
           <section className={s.grupa} aria-labelledby="brend-predlozi">
             <h2 id="brend-predlozi" className={s.grupaNaslov}>
-              Traženi brendovi
+              {imaOglasa ? 'Traženi brendovi' : 'Brendovi'}
             </h2>
             <ul className={s.cipovi}>
               {popularniBrendovi.map((b) => (

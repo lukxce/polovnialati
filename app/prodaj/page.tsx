@@ -3,7 +3,8 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { Ikona } from '@/components/Ikone'
 import ProdajniTok from '@/components/prodaj/ProdajniTok'
 import type { BrendOpcija, GrupaKategorija } from '@/components/prodaj/model'
-import { stabloKategorija, sviBrendovi, sviGradovi } from '@/lib/queries'
+import { GRADOVI } from '@/lib/gradovi'
+import { stabloKategorija, sviBrendovi } from '@/lib/taksonomija'
 import s from './stranica.module.css'
 
 export const metadata: Metadata = {
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
   description:
     'Objavi oglas za alat kroz pet koraka: kategorija, detalji mašine, lista provere prilagođena kategoriji, fotografije i cena. Ocena stanja je jedna od pet definisanih, ne slobodan tekst.',
   alternates: { canonical: '/prodaj' },
-  // Tok ima korak u query-ju; indeksira se samo čista putanja.
-  robots: { index: true, follow: true },
+  // Traži prijavu (proxy.ts preusmerava na /prijava), pa nema šta da se indeksira.
+  robots: { index: false, follow: true },
 }
 
 export default function ProdajStranica() {
@@ -30,7 +31,7 @@ export default function ProdajStranica() {
     akuSistemi: b.akuSistemi ?? [],
   }))
 
-  const gradovi = sviGradovi()
+  const gradovi = GRADOVI
 
   return (
     <div className={['container', s.strana].join(' ')}>
@@ -51,10 +52,8 @@ export default function ProdajStranica() {
         <p className={s.demo}>
           <Ikona ime="stit" velicina={17} />
           <span>
-            Oglas se čuva na tvom nalogu odmah po objavi — vidiš ga u <strong>Mom nalogu</strong> i
-            možeš da ga deaktiviraš ili obrišeš kad hoćeš. Javna pretraga (<code>/oglasi</code>) za
-            sada i dalje prikazuje samo probne oglase — pravi oglasi se tamo uključuju u sledećoj
-            fazi.
+            Oglas je javan odmah po objavi, u pretrazi i u svojoj kategoriji. U{' '}
+            <strong>Mom nalogu</strong> menjaš cenu, sklanjaš ga kad prodaš ili ga brišeš.
           </span>
         </p>
       </header>

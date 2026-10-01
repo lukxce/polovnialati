@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import s from './Breadcrumbs.module.css'
+import { SITE_URL } from '@/lib/site'
 
 export type Mrvica = { naziv: string; href?: string }
 
@@ -14,7 +15,7 @@ type Props = {
  * Vizuelni breadcrumb + `BreadcrumbList` JSON-LD.
  * Poslednja stavka je trenutna strana i nije link.
  */
-export function Breadcrumbs({ stavke, osnova = 'https://alatnica.rs', className }: Props) {
+export function Breadcrumbs({ stavke, osnova = SITE_URL, className }: Props) {
   if (stavke.length === 0) return null
 
   const jsonLd = {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { zahtevajSesiju } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { dozvoljeno } from '@/lib/ogranicenje'
 import { jeUcesnikRazgovora, oznaciProcitano } from '@/lib/poruke'
 
 type Props = { params: Promise<{ id: string }> }
@@ -61,6 +62,13 @@ export async function POST(zahtev: Request, { params }: Props) {
   })
   if (!razgovor || !jeUcesnikRazgovora(razgovor, sesija.userId)) {
     return NextResponse.json({ greska: 'Razgovor ne postoji.' }, { status: 404 })
+  }
+
+  if (!(await dozvoljeno(`poruka:${sesija.userId}`, 60, 60))) {
+    return NextResponse.json(
+      { greska: 'Poslao si previše poruka u poslednjih sat vremena. Pokušaj malo kasnije.' },
+      { status: 429 },
+    )
   }
 
   const telo = await zahtev.json().catch(() => null)

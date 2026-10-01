@@ -1,89 +1,108 @@
-// Real backend for Alatnica — SQLite for local dev (no Postgres available in
-// this environment yet), same pattern already proven on the Pricetracker
-// build: switch `provider` to "postgresql" + a real DATABASE_URL for
-// production, one line, no rewrite. Deliberately avoids Prisma-native enums
-// and array/JSON column types for the same portability reason — "tip",
-// "uloga" etc. are plain Strings validated in app code (lib/auth.ts), and
-// list-shaped fields (slike, specifikacije, uPakovanju, dostava) are
-// JSON-encoded strings, parsed/serialized in lib/oglasi.ts.
+// Alatnica — Postgres i lokalno i u produkciji.
+//
+// Lokalno: `npm run db:lokalno` podiže Prisma Postgres na ovoj mašini (bez
+// Dockera i bez instalacije) i ispisuje DATABASE_URL za .env. Produkcija:
+// Neon preko Vercel Storage taba, koji sam upisuje DATABASE_URL (pooled) i
+// DATABASE_URL_UNPOOLED (direktna veza — migracije ne rade preko poolera).
+//
+// "tip", "uloga", "stanje" su i dalje obični String-ovi validirani u kodu
+// (lib/auth.ts, lib/validacija.ts), ne Prisma enum — vrednosti su iste kao u
+// lib/types.ts i tako ostaju jedno mesto istine.
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
-// Real seller/buyer account. "tip" reuses the EXACT values already used by
-// the demo data's TipProdavca (lib/types.ts) — 'privatno-lice' | 'prodavnica'
-// | 'servis' — so a real User maps onto the existing Prodavac-shaped UI
-// (KarticaPregled, StanjeChip, etc.) without a parallel vocabulary.
+// Pravi nalog prodavca/kupca. "tip" koristi iste vrednosti kao TipProdavca
+// u lib/types.ts — 'privatno-lice' | 'prodavnica' | 'servis'.
 model User {
   id           String   @id @default(cuid())
+  /// javna adresa profila: /prodavac/[slug]
+  slug         String   @unique
   email        String   @unique
   passwordHash String
   naziv        String // ime i prezime (privatno lice) ili naziv firme (servis/prodavnica)
   tip          String // 'privatno-lice' | 'prodavnica' | 'servis'
   grad         String
   telefon      String?
-  pib          String? // samo servis/prodavnica — realan podatak, ne izmišljen (vidi Prodavac.oznake "PIB verifikovan" u demo podacima)
+  pib          String? // samo servis/prodavnica
+  /// kratak javni opis na profilu prodavca
+  opis         String?
   uloga        String   @default("PRODAVAC") // 'PRODAVAC' | 'ADMIN' — vidi lib/auth.ts ULOGE
-  verifikovan  Boolean  @default(false) // admin ručno potvrđuje — isto polje kao Prodavac.verifikovan u demo šemi
+  verifikovan  Boolean  @default(false) // admin ručno potvrđuje
+  /// blokiran nalog ne može da se prijavi, objavljuje ni šalje poruke; oglasi mu se skidaju iz pretrage
+  blokiran     Boolean  @default(false)
+  /// uvezen iz demo podataka (npm run db:demo) — nikad pravi korisnik
+  demo         Boolean  @default(false)
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   oglasi Oglas[]
 
   razgovoriKaoKupac    Razgovor[] @relation("RazgovoriKaoKupac")
   razgovoriKaoProdavac Razgovor[] @relation("RazgovoriKaoProdavac")
   poruke               Poruka[]
+  prijave              Prijava[]
 }
 
-// Pravi, upisan oglas — za razliku od Nacrt-a u components/prodaj/model.ts,
-// koji i dalje živi samo u memoriji pregledača dok korisnik popunjava
-// formu. Struktura namerno prati postojeći Oglas tip (lib/types.ts) polje
-// po polje, da mapiranje nacrtUOglas() -> ovo ne zahteva novi vokabular.
+// Oglas — polja prate Oglas tip iz lib/types.ts.
 model Oglas {
-  id            String   @id @default(cuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  naslov        String
-  kategorija    String
-  brend         String
-  model         String
-  stanje        String
-  cena          Float
-  cenaDogovor   Boolean  @default(false)
-  opis          String
-  slike         String // JSON: string[] (data URL-ovi — vidi napomenu o skladištu slika u lib/oglasi.ts)
-  specifikacije String // JSON: {naziv, vrednost}[]
-  uPakovanju    String // JSON: string[]
-  godiste       Int?
-  garancija     Int?
-  akuSistem     String?
-  lokacija      String
-  dostava       String // JSON: Dostava[]
-  aktivan       Boolean  @default(true) // prodavac može da deaktivira bez brisanja
-  provereno     Boolean  @default(false) // admin potvrđuje — isto polje kao Oglas.provereno u demo šemi
-  istaknuto     Boolean  @default(false) // admin promoviše
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  /// javna adresa: /oglas/[slug]; pravi se iz naslova + kratkog sufiksa
+  slug            String   @unique
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  naslov          String
+  kategorija      String
+  brend           String
+  model           String
+  stanje          String
+  /// RSD, ceo broj
+  cena            Int
+  cenaDogovor     Boolean  @default(false)
+  staraCena       Int?
+  opis            String
+  /// javni URL-ovi fotografija (Vercel Blob u produkciji, /uploads lokalno)
+  slike           String[]
+  /// {naziv, vrednost}[]
+  specifikacije   Json     @default("[]")
+  uPakovanju      String[]
+  /// {stavka, ok}[] — prodavčeva lista provere stanja
+  stanjeChecklist Json     @default("[]")
+  godiste         Int?
+  satiRada        Int?
+  garancija       Int?
+  akuSistem       String?
+  lokacija        String
+  dostava         String[]
+  pregleda        Int      @default(0)
+  aktivan         Boolean  @default(true) // prodavac može da deaktivira bez brisanja
+  provereno       Boolean  @default(false) // admin potvrđuje
+  istaknuto       Boolean  @default(false) // admin promoviše
+  demo            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   razgovori Razgovor[]
+  prijave   Prijava[]
 
   @@index([userId])
+  @@index([aktivan, createdAt])
 }
 
-// Jedan razgovor = jedan kupac + jedan oglas (i time i njegov prodavac, preko
-// oglas.userId). @@unique([oglasId, kupacId]) je namerno: isti kupac ne
-// otvara drugi razgovor za isti oglas, samo nastavlja postojeći.
+// Jedan razgovor = jedan kupac + jedan oglas. @@unique([oglasId, kupacId]):
+// isti kupac ne otvara drugi razgovor za isti oglas, samo nastavlja postojeći.
 //
-// Nepročitano se ne prati po poruci (nema procitano polje na Poruka) — svaka
-// strana ima sopstveni "poslednji put pročitano" pečat na Razgovor-u, pa je
-// broj nepročitanih samo poruke novije od tog pečata koje nije poslala ta
-// strana. Jeftinije za upit, dovoljno za dva učesnika po razgovoru.
+// Nepročitano se prati pečatom "poslednji put pročitano" po strani, ne po
+// poruci — broj nepročitanih su poruke novije od pečata koje nije poslala ta
+// strana.
 model Razgovor {
-  id     String @id @default(cuid())
+  id      String @id @default(cuid())
   oglasId String
   oglas   Oglas  @relation(fields: [oglasId], references: [id], onDelete: Cascade)
 
@@ -117,4 +136,43 @@ model Poruka {
   createdAt DateTime @default(now())
 
   @@index([razgovorId])
+}
+
+// Prijava oglasa (lažan oglas, pogrešna ocena stanja, prevara...) — admin ih
+// vidi u /admin. userId je null kad prijavljuje neko ko nije prijavljen.
+model Prijava {
+  id        String   @id @default(cuid())
+  oglasId   String
+  oglas     Oglas    @relation(fields: [oglasId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  razlog    String
+  tekst     String?
+  resena    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([resena, createdAt])
+}
+
+// Poruke sa /kontakt forme — admin ih čita u /admin.
+model KontaktPoruka {
+  id        String   @id @default(cuid())
+  ime       String
+  email     String
+  tema      String
+  tekst     String
+  procitana Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Jedan red = jedan pokušaj neke radnje (prijava, registracija, poruka,
+// upload...). lib/ogranicenje.ts broji redove u prozoru i odbija preko
+// limita; stari redovi se brišu usput. Radi i na serverless-u, gde memorija
+// procesa ne preživljava između zahteva.
+model Pokusaj {
+  id        String   @id @default(cuid())
+  kljuc     String
+  createdAt DateTime @default(now())
+
+  @@index([kljuc, createdAt])
 }

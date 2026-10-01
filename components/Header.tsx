@@ -1,5 +1,5 @@
 import HeaderNav from '@/components/HeaderNav'
-import { stabloKategorija } from '@/lib/queries'
+import { stabloKategorija } from '@/lib/taksonomija'
 
 /**
  * Server omotač: taksonomija se izračunava na serveru i prosleđuje kao

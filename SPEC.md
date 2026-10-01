@@ -120,7 +120,7 @@ battery-system filter demonstrably works.
 | `/oglas/[slug]` | Listing detail |
 | `/prodavac/[slug]` | Seller storefront: header, stats, badges, their listings, reviews |
 | `/prodaj` | **Sell flow** — 5 steps |
-| `/sacuvano` | Saved listings (localStorage) |
+| `/sacuvano` | Saved listings (slugs in localStorage, cards fetched by slug) |
 | `/pretraga?q=` | Search results across listings + categories + brands |
 | `/kako-radi` | How it works + safety: condition grades table, payment advice, meetup advice |
 | `/vodici` `/vodici/[slug]` | Buying guides (4 real ones, SEO) |
@@ -175,9 +175,10 @@ Desktop: 7/5 split, right column = price + actions + seller, sticky.
 ## 6. Sell flow (`/prodaj`)
 
 Five steps, one screen each, progress bar on top, state in URL (`?korak=2`),
-`Nazad`/`Dalje` bottom bar (sticky on mobile). Nothing is submitted anywhere —
-step 5 shows a real preview of the card and the detail page, then a success
-screen. Be honest in the UI that this is a demo.
+`Nazad`/`Dalje` bottom bar (sticky on mobile). Step 5 shows a real preview of
+the card; `Objavi` uploads the photos (resized in the browser, stored in
+Vercel Blob) and publishes the listing to the database — it is public
+immediately. Requires a signed-in account (`proxy.ts`).
 
 1. **Kategorija** — searchable category picker, big tappable tiles
 2. **Detalji** — brend, model, godište, stanje (radio cards with definitions),
@@ -185,7 +186,7 @@ screen. Be honest in the UI that this is a demo.
 3. **Stanje i provera** — the condition checklist (checkbox list, required for
    anything not `novo`) + warranty months
 4. **Fotografije** — drag/drop dropzone, reorder, cover marker (client-side
-   object URLs, nothing uploaded)
+   object URLs until `Objavi`)
 5. **Cena, lokacija i objava** — price, dogovor toggle, city, delivery options,
    then a live preview + `Objavi`
 

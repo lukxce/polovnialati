@@ -1,47 +1,55 @@
 'use client'
 
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import OglasKartica from '@/components/OglasKartica'
 import Prazno from '@/components/Prazno'
 import SacuvajDugme, { useSacuvani } from '@/components/SacuvajDugme'
 import { obrisiSve } from '@/components/sacuvano/skladiste'
 import { pluralSr } from '@/lib/format'
+import type { Oglas } from '@/lib/types'
 import s from './SacuvanaLista.module.css'
 
-export type SacuvanaStavka = {
-  slug: string
-  /** Kartica se renderuje na serveru i ovde se samo bira koja se prikazuje. */
-  kartica: ReactNode
-}
-
 type Props = {
-  stavke: SacuvanaStavka[]
   /** Ulazi u kategorije za prazno stanje — dolaze sa servera. */
   predlozi: { tekst: string; href: string }[]
-  /** Ukupno oglasa u katalogu, za tekst praznog stanja. */
-  ukupnoOglasa: number
 }
 
 /**
  * Sačuvani oglasi žive u localStorage-u, pa se lista može sastaviti tek u
- * pregledaču. Sve kartice stižu sa servera kao gotovi čvorovi; ovde se samo
- * bira koje se montiraju — tako klijent ne dobija bazu oglasa u bundle.
+ * pregledaču: traže se samo ti slugovi (/api/oglasi/kartice). Oglas koji je
+ * u međuvremenu prodat ili obrisan se jednostavno ne vraća.
  */
-export function SacuvanaLista({ stavke, predlozi, ukupnoOglasa }: Props) {
+export function SacuvanaLista({ predlozi }: Props) {
   const sacuvani = useSacuvani()
-  const [ucitano, setUcitano] = useState(false)
+  const [oglasi, setOglasi] = useState<Map<string, Oglas> | null>(null)
   const [potvrda, setPotvrda] = useState(false)
 
-  useEffect(() => setUcitano(true), [])
+  const kljuc = [...sacuvani].sort().join(',')
+  useEffect(() => {
+    let otkazano = false
+    if (!kljuc) {
+      setOglasi(new Map())
+      return
+    }
+    fetch(`/api/oglasi/kartice?slug=${encodeURIComponent(kljuc)}`)
+      .then((r) => r.json())
+      .then((d: { oglasi: Oglas[] }) => {
+        if (!otkazano) setOglasi(new Map(d.oglasi.map((o) => [o.slug, o])))
+      })
+      .catch(() => {
+        if (!otkazano) setOglasi(new Map())
+      })
+    return () => {
+      otkazano = true
+    }
+  }, [kljuc])
 
-  const poSlugu = useMemo(
-    () => new Map(stavke.map((st) => [st.slug, st.kartica])),
-    [stavke],
-  )
+  const ucitano = oglasi !== null
 
   // Redosled iz localStorage-a je „poslednje sačuvano prvo" — zadržava se.
   const prikazani = useMemo(
-    () => sacuvani.filter((slug) => poSlugu.has(slug)),
-    [sacuvani, poSlugu],
+    () => (oglasi ? sacuvani.filter((slug) => oglasi.has(slug)) : []),
+    [sacuvani, oglasi],
   )
 
   useEffect(() => {
@@ -72,12 +80,12 @@ export function SacuvanaLista({ stavke, predlozi, ukupnoOglasa }: Props) {
           <>
             Srce u gornjem desnom uglu svake kartice stavlja oglas na ovu listu. Korisno je kada
             porediš tri iste bušilice od tri prodavca, ili kada čekaš da neko spusti cenu. Lista se
-            čuva u ovom pregledaču: nema naloga i ništa ne odlazi na server.
+            čuva u ovom pregledaču, bez prijave.
           </>
         }
         predlozi={predlozi}
         akcijaHref="/oglasi"
-        akcijaTekst={`Pregledaj svih ${ukupnoOglasa} oglasa`}
+        akcijaTekst="Pregledaj oglase"
       />
     )
   }
@@ -125,7 +133,7 @@ export function SacuvanaLista({ stavke, predlozi, ukupnoOglasa }: Props) {
       <ul className="mreza">
         {prikazani.map((slug) => (
           <li key={slug} className={s.stavka}>
-            {poSlugu.get(slug)}
+            <OglasKartica oglas={oglasi!.get(slug)!} kompaktno />
             <SacuvajDugme slug={slug} varijanta="dugme" className={s.ukloni} />
           </li>
         ))}

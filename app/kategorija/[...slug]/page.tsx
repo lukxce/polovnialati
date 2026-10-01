@@ -75,13 +75,14 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   if (!cilj) return { title: 'Kategorija nije pronađena' }
 
   const { kategorija, nad, osnova } = cilj
-  const broj = filtrirajOglase({ kategorija: kategorija.slug }).length
+  const broj = (await filtrirajOglase({ kategorija: kategorija.slug })).length
   const f = parseNaKategoriju(await searchParams, cilj)
   const filtrirano = brojAktivnihFiltera(f) > 1 || !!f.sort
 
+  const brojTekst = broj > 0 ? `${brojSr(broj, ['oglas', 'oglasa', 'oglasa'])} u ponudi. ` : ''
   const opis = nad
-    ? `${brojSr(broj, ['oglas', 'oglasa', 'oglasa'])} u potkategoriji ${kategorija.naziv} (${nad.naziv}). ${SAVETI[kategorija.slug] ?? ''}`
-    : `${kategorija.opis ?? ''} Trenutno ${brojSr(broj, ['oglas', 'oglasa', 'oglasa'])}, svaki sa jednom od pet ocena stanja i poznatim prodavcem.`
+    ? `${kategorija.naziv} (${nad.naziv}), nov i polovan alat. ${brojTekst}${SAVETI[kategorija.slug] ?? ''}`
+    : `${kategorija.opis ?? ''} ${brojTekst}Svaki oglas ima jednu od pet ocena stanja i poznatog prodavca.`
 
   return {
     title: nad ? `${kategorija.naziv}, ${nad.naziv}` : `${kategorija.naziv}, nov i polovan alat`,
@@ -123,12 +124,15 @@ export default async function KategorijaStranica({ params, searchParams }: Props
   const { kategorija, nad, osnova } = cilj
   const sp = await searchParams
   const filteri = parseNaKategoriju(sp, cilj)
-  const podaci = pripremiBrowse(filteri)
+  const [podaci, globalni, uKategoriji, uKategorijiBrojevi] = await Promise.all([
+    pripremiBrowse(filteri),
+    /* Brojevi za navigaciju (čipovi, brendovi) — nezavisni od korisnikovih filtera. */
+    brojeviFiltera({}),
+    filtrirajOglase({ kategorija: kategorija.slug }),
+    brojeviFiltera({ kategorija: kategorija.slug }),
+  ])
   const fasete = samoFasete(podaci)
 
-  /* Brojevi za navigaciju (čipovi, brendovi) — nezavisni od korisnikovih filtera. */
-  const globalni = brojeviFiltera({})
-  const uKategoriji = filtrirajOglase({ kategorija: kategorija.slug })
   const ukupno = uKategoriji.length
   const cene = uKategoriji.map((o) => o.cena)
   const najniza = cene.length ? Math.min(...cene) : 0
@@ -142,7 +146,7 @@ export default async function KategorijaStranica({ params, searchParams }: Props
         .filter((k) => k.roditelj === kategorija.slug)
         .map((k) => ({ ...k, broj: globalni.kategorija[k.slug] ?? 0 }))
 
-  const brendoviUKategoriji = brojeviFiltera({ kategorija: kategorija.slug }).brend
+  const brendoviUKategoriji = uKategorijiBrojevi.brend
   const brendovi = sviBrendovi()
     .map((b) => ({ ...b, broj: brendoviUKategoriji[b.slug] ?? 0 }))
     .filter((b) => b.broj > 0)
@@ -300,7 +304,7 @@ function uvodPotkategorije(
 
   if (ukupno === 0) {
     return [
-      `U potkategoriji ${kategorija.naziv} trenutno nema nijednog aktivnog oglasa. Dešava se, jer se ovde alat proda brzo.`,
+      `U potkategoriji ${kategorija.naziv} trenutno nema nijednog aktivnog oglasa. Ako imaš ovakav alat za prodaju, tvoj oglas će biti prvi koji kupci ovde vide.`,
       savet ?? '',
     ].filter(Boolean)
   }

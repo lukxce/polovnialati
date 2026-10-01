@@ -4,17 +4,25 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma migrate deploy && next build",
     "start": "next start",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "typecheck": "tsc --noEmit",
+    "db:lokalno": "prisma dev --name alatnica --detach",
+    "db:migracija": "prisma migrate dev",
+    "db:admin": "tsx prisma/seed.ts",
+    "db:demo": "tsx prisma/demo.ts",
+    "db:demo:obrisi": "tsx prisma/demo.ts --obrisi"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
+    "@vercel/blob": "^2.8.0",
     "bcryptjs": "^3.0.3",
     "jose": "^6.2.11",
     "next": "16.3.1",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

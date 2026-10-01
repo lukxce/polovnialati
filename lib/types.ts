@@ -49,11 +49,15 @@ export type Oglas = {
   /** city */
   lokacija: string
   dostava: Dostava[]
+  /** slug prodavca — adresa /prodavac/[slug] */
   prodavacId: string
+  /** tip prodavca, prepisan na oglas da kartica i filter ne traže prodavca */
+  prodavacTip: TipProdavca
+  /** User.id vlasnika — za proveru „ovo je tvoj oglas" i za poruke */
+  vlasnikId: string
   /** ISO date */
   objavljeno: string
   pregleda: number
-  sacuvano: number
   /** platform-verified listing */
   provereno: boolean
   /** promoted */
@@ -63,18 +67,23 @@ export type Oglas = {
 }
 
 export type Prodavac = {
+  /** User.id */
+  id: string
   slug: string
   naziv: string
   tip: TipProdavca
   grad: string
   /** ISO date */
   clanOd: string
-  ocena: number
+  /** Prosečna ocena kupaca. Ocene još ne postoje na sajtu, pa je uvek undefined za prave naloge. */
+  ocena?: number
   brojOcena: number
   brojOglasa: number
-  /** 'obično za 2 sata' */
-  odgovaraZa: string
+  /** 'obično za 2 sata' — prikazuje se samo kad postoji */
+  odgovaraZa?: string
   verifikovan: boolean
+  /** prodavac je ostavio broj telefona (sam broj se ne šalje u HTML) */
+  imaTelefon: boolean
   opis?: string
   /** 'PIB verifikovan' | 'Ovlašćeni servis' | 'Šalje isti dan' */
   oznake: string[]

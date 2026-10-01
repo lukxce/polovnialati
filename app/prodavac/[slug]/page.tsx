@@ -7,20 +7,20 @@ import OglasKartica from '@/components/OglasKartica'
 import Prazno from '@/components/Prazno'
 import ProdavacOznaka from '@/components/ProdavacOznaka'
 import Sekcija from '@/components/Sekcija'
-import Ocena from '@/components/prodavac/Ocena'
 import OglasiProdavca, {
   type Opcija,
   type StavkaOglasa,
 } from '@/components/prodavac/OglasiProdavca'
 import { brojSr, stanjeLabela, tipProdavcaLabela, tipProdavcaMnozina } from '@/lib/format'
-import { kategorijaBySlug, oglasiProdavca, prodavacBySlug, sviProdavci } from '@/lib/queries'
+import { kategorijaBySlug, oglasiProdavca, prodavacBySlug } from '@/lib/queries'
 import type { Stanje, TipProdavca } from '@/lib/types'
 import s from './stranica.module.css'
 
 type Props = { params: Promise<{ slug: string }> }
 
-export function generateStaticParams() {
-  return sviProdavci().map((p) => ({ slug: p.slug }))
+/** Profili se renderuju pri prvoj poseti i keširaju (ISR), kao i oglasi. */
+export async function generateStaticParams() {
+  return []
 }
 
 /**
@@ -56,10 +56,10 @@ const OPIS_TIPA: Record<TipProdavca, string> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const prodavac = prodavacBySlug(slug)
+  const prodavac = await prodavacBySlug(slug)
   if (!prodavac) return { title: 'Prodavac nije pronađen' }
 
-  const oglasi = oglasiProdavca(slug)
+  const oglasi = await oglasiProdavca(slug)
   const naslov = `${prodavac.naziv}, ${tipProdavcaLabela(prodavac.tip)}, ${prodavac.grad}`
 
   return {
@@ -68,9 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'aktivan oglas',
       'aktivna oglasa',
       'aktivnih oglasa',
-    ])} za alat u gradu ${prodavac.grad}. Ocena ${prodavac.ocena.toFixed(1).replace('.', ',')} iz ${
-      prodavac.brojOcena
-    } ocena, ${prodavac.odgovaraZa} odgovara na poruke.`,
+    ])} za alat u gradu ${prodavac.grad}. ${tipProdavcaLabela(prodavac.tip)}, na Alatnici od ${mesecIGodina(prodavac.clanOd)}`,
     alternates: { canonical: `/prodavac/${slug}` },
     openGraph: {
       type: 'profile',
@@ -82,10 +80,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProdavacStranica({ params }: Props) {
   const { slug } = await params
-  const prodavac = prodavacBySlug(slug)
+  const prodavac = await prodavacBySlug(slug)
   if (!prodavac) notFound()
 
-  const oglasi = oglasiProdavca(slug)
+  const oglasi = await oglasiProdavca(slug)
 
   /* Kartice se renderuju na serveru i prosleđuju klijentskom filteru kao
      gotovi čvorovi — katalog oglasa nikad ne ulazi u bundle pregledača. */
@@ -133,7 +131,7 @@ export default async function ProdavacStranica({ params }: Props) {
     '@type': prodavac.tip === 'privatno-lice' ? 'Person' : 'LocalBusiness',
     name: prodavac.naziv,
     address: { '@type': 'PostalAddress', addressLocality: prodavac.grad, addressCountry: 'RS' },
-    ...(prodavac.brojOcena > 0
+    ...(prodavac.ocena !== undefined && prodavac.brojOcena > 0
       ? {
           aggregateRating: {
             '@type': 'AggregateRating',
@@ -214,13 +212,15 @@ export default async function ProdavacStranica({ params }: Props) {
             <dt>Aktivnih oglasa</dt>
             <dd className={s.brojkaVrednost}>{oglasi.length}</dd>
           </div>
-          <div className={s.brojkaStavka}>
-            <dt>Odgovara</dt>
-            <dd className={s.brojkaTekst}>
-              <Ikona ime="sat" velicina={16} />
-              {prodavac.odgovaraZa}
-            </dd>
-          </div>
+          {prodavac.odgovaraZa ? (
+            <div className={s.brojkaStavka}>
+              <dt>Odgovara</dt>
+              <dd className={s.brojkaTekst}>
+                <Ikona ime="sat" velicina={16} />
+                {prodavac.odgovaraZa}
+              </dd>
+            </div>
+          ) : null}
           <div className={s.brojkaStavka}>
             <dt>Tip naloga</dt>
             <dd className={s.brojkaTekst}>{tipProdavcaLabela(prodavac.tip)}</dd>
@@ -274,8 +274,6 @@ export default async function ProdavacStranica({ params }: Props) {
         </div>
 
         <aside className={s.bocno} aria-label="Ocena i provera prodavca">
-          <Ocena ocena={prodavac.ocena} brojOcena={prodavac.brojOcena} />
-
           <section className={s.provera} aria-labelledby="kako-se-proverava">
             <p className="micro">Iskreno o proveri</p>
             <h2 id="kako-se-proverava" className={s.proveraNaslov}>
@@ -284,16 +282,16 @@ export default async function ProdavacStranica({ params }: Props) {
 
             <ul className={s.proveraLista}>
               <li>
-                <strong>Identitet.</strong> Prodavnice i servisi se proveravaju po PIB-u i matičnom
-                broju u registru privrednih subjekata. Privatna lica potvrđuju broj telefona.
+                <strong>Verifikovan nalog.</strong> Oznaku dodeljuje tim Alatnice ručno, posle
+                provere podataka naloga. Prodavac je ne može sam sebi dodeliti.
               </li>
               <li>
-                <strong>Istorija naloga.</strong> Datum otvaranja, broj objavljenih oglasa i
-                prosečno vreme odgovora se ne unose ručno. Računaju se iz ponašanja naloga.
+                <strong>Istorija naloga.</strong> Datum otvaranja i broj aktivnih oglasa ne unosi
+                prodavac, nego ih računa sajt.
               </li>
               <li>
-                <strong>Ocene.</strong> Ocenu ostavlja samo kupac koji je kroz Alatnicu vodio
-                prepisku sa prodavcem. Prodavac ne može da obriše ocenu.
+                <strong>Prijave.</strong> Svaki oglas može da se prijavi sa svoje stranice. Prodavac
+                čiji oglasi ne odgovaraju stvarnosti gubi nalog.
               </li>
             </ul>
 

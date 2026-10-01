@@ -1,130 +1,197 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import { Ikona } from '@/components/Ikone'
 import s from '@/components/staticne/Stranica.module.css'
+import { ili, OPERATER } from '@/lib/site'
 
 export const metadata: Metadata = {
-  title: 'Privatnost',
+  title: 'Politika privatnosti',
   description:
-    'Alatnica ne prikuplja lične podatke, nema naloge, nema analitiku i nema kolačiće za praćenje. Jedino što se čuva je lista sačuvanih oglasa, i to u tvom pregledaču.',
+    'Koje podatke o ličnosti Alatnica obrađuje, zašto, koliko dugo ih čuva, ko još ima pristup i kako ostvaruješ svoja prava po Zakonu o zaštiti podataka o ličnosti.',
   alternates: { canonical: '/privatnost' },
 }
+
+/** Menjaj pri svakoj izmeni teksta. */
+const VAZI_OD = '1. oktobar 2026.'
 
 export default function PrivatnostStranica() {
   return (
     <div className={`container ${s.strana}`}>
       <Breadcrumbs
-        stavke={[{ naziv: 'Početna', href: '/' }, { naziv: 'Privatnost' }]}
+        stavke={[{ naziv: 'Početna', href: '/' }, { naziv: 'Politika privatnosti' }]}
         className={s.mrvice}
       />
 
       <header className={s.uvod}>
-        <p className="micro">Podaci</p>
-        <h1 className={s.naslov}>Privatnost</h1>
+        <p className="micro">Privatnost</p>
+        <h1 className={s.naslov}>Politika privatnosti</h1>
         <p className={s.lede}>
-          Najkraća moguća verzija: ovaj sajt o tebi ne zna ništa i ne pokušava da sazna. Nema naloga,
-          nema analitike, nema kolačića za praćenje i nema servera koji prima tvoje podatke.
+          Šta znamo o tebi, zašto, koliko dugo i kako to možeš da promeniš. U skladu sa Zakonom o
+          zaštiti podataka o ličnosti („ZZPL").
         </p>
       </header>
 
-      <div className={s.napomena}>
-        <span className={s.napomenaIkona}>
-          <Ikona ime="stit" velicina={16} />
-        </span>
-        <p>
-          <strong className={s.napomenaNaslov}>Ovo nije standardni tekst o privatnosti.</strong>
-          Alatnica je demonstracioni projekat bez naloga i bez baze korisnika, pa bi prepisivanje
-          uobičajenih odredaba o „rukovaocu podataka" i „legitimnom interesu" ovde bilo samo
-          zavaravanje. Ispod piše tačno šta se dešava, i ništa više od toga.
-        </p>
-      </div>
-
       <div className={s.proza}>
-        <section aria-labelledby="ne-prikuplja">
-          <h2 id="ne-prikuplja" className={`${s.h2} ${s.h2Prvi}`}>
-            Šta se ne prikuplja
+        <section aria-labelledby="rukovalac">
+          <h2 id="rukovalac" className={`${s.h2} ${s.h2Prvi}`}>
+            1. Rukovalac
+          </h2>
+          <p className={s.p}>
+            Rukovalac podacima je {ili(OPERATER.naziv)}, {ili(OPERATER.adresa)}, PIB{' '}
+            {ili(OPERATER.pib)}, MB {ili(OPERATER.maticniBroj)}. Za sva pitanja o podacima i za
+            ostvarivanje prava piši na {ili(OPERATER.email)} ili preko{' '}
+            <Link href="/kontakt?tema=podaci">obrasca za kontakt</Link>.
+          </p>
+        </section>
+
+        <section aria-labelledby="podaci">
+          <h2 id="podaci" className={s.h2}>
+            2. Koje podatke obrađujemo i zašto
           </h2>
           <ul className={s.lista}>
-            <li>Nema naloga, pa nema imena, imejla ni lozinke.</li>
-            <li>Nema analitike: ni Google Analytics, ni bilo koji drugi merni servis.</li>
-            <li>Nema piksela društvenih mreža i nema reklamnih mreža.</li>
-            <li>Nema kolačića za praćenje. Zato nema ni onog dosadnog prozora za saglasnost.</li>
-            <li>Nema slanja podataka trećim stranama, jer nema podataka koji bi se poslali.</li>
+            <li>
+              <strong>Nalog:</strong> email, lozinka (čuvamo samo njen kriptografski otisak, ne samu
+              lozinku), ime i prezime ili naziv firme, tip naloga, grad, a opciono telefon, PIB i
+              kratak opis. Svrha: otvaranje i vođenje naloga i objava oglasa. Osnov: izvršenje
+              ugovora (ovih <Link href="/uslovi">uslova</Link>).
+            </li>
+            <li>
+              <strong>Oglasi i fotografije:</strong> sve što uneseš u oglas. Pri otpremanju iz
+              fotografija brišemo prateće podatke (EXIF), uključujući GPS lokaciju. Osnov:
+              izvršenje ugovora.
+            </li>
+            <li>
+              <strong>Poruke:</strong> sadržaj razgovora između kupca i prodavca. Svrha: dostava
+              poruka. Poruke ne čitamo, osim kad obrađujemo prijavu ili sumnju na prevaru. Osnov:
+              izvršenje ugovora i legitimni interes (bezbednost korisnika).
+            </li>
+            <li>
+              <strong>Prijave oglasa i kontakt obrazac:</strong> ime, email i tekst koji pošalješ.
+              Svrha: odgovor i obrada prijave. Osnov: legitimni interes.
+            </li>
+            <li>
+              <strong>Tehnički podaci:</strong> IP adresa pri prijavi, registraciji, slanju poruka i
+              sličnim radnjama, radi zaštite od pogađanja lozinki, spama i zloupotrebe. Osnov:
+              legitimni interes (bezbednost sajta).
+            </li>
+          </ul>
+          <p className={s.p}>
+            Podaci za nalog su neophodni da bi nalog postojao; bez njih ne možeš da objavljuješ ni
+            da šalješ poruke. Pregled oglasa ne traži nikakve podatke.
+          </p>
+        </section>
+
+        <section aria-labelledby="javno">
+          <h2 id="javno" className={s.h2}>
+            3. Šta je javno vidljivo
+          </h2>
+          <p className={s.p}>
+            Na tvom javnom profilu i oglasima vide se: ime ili naziv firme, tip naloga, grad, opis,
+            datum otvaranja naloga i tvoji aktivni oglasi. Broj telefona, ako si ga uneo, prikazuje
+            se kupcu kad na tvom oglasu klikne „Pozovi". Email adresu nikad ne prikazujemo.
+          </p>
+        </section>
+
+        <section aria-labelledby="primaoci">
+          <h2 id="primaoci" className={s.h2}>
+            4. Ko još obrađuje podatke
+          </h2>
+          <p className={s.p}>
+            Podatke ne prodajemo i ne dajemo trećim licima za reklamiranje. Koristimo pružaoce
+            usluga koji podatke obrađuju po našem nalogu (obrađivači):
+          </p>
+          <ul className={s.lista}>
+            <li>Vercel Inc. — hosting sajta i skladište fotografija;</li>
+            <li>Neon Inc. — baza podataka.</li>
+          </ul>
+          <p className={s.p}>
+            Serveri ovih pružalaca mogu biti van Srbije, uključujući SAD. Prenos se vrši uz mere
+            zaštite koje ZZPL predviđa, kao što su standardne ugovorne klauzule. Podatke možemo
+            dostaviti i državnim organima kada to zakon nalaže.
+          </p>
+        </section>
+
+        <section aria-labelledby="rokovi">
+          <h2 id="rokovi" className={s.h2}>
+            5. Koliko dugo čuvamo podatke
+          </h2>
+          <ul className={s.lista}>
+            <li>
+              Nalog, oglasi i fotografije — dok postoji nalog. Kad obrišeš oglas, brišu se i
+              njegove fotografije.
+            </li>
+            <li>
+              Brisanjem naloga trajno se brišu podaci naloga, oglasi, fotografije i razgovori u
+              kojima si učestvovao (i za drugu stranu u razgovoru).
+            </li>
+            <li>Poruke sa kontakt obrasca i prijave — dok je potrebno za obradu, a najduže 12 meseci.</li>
+            <li>Zapisi pokušaja sa IP adresom — najduže nekoliko dana.</li>
           </ul>
         </section>
 
-        <section aria-labelledby="pregledac">
-          <h2 id="pregledac" className={s.h2}>
-            Šta ostaje u tvom pregledaču
+        <section aria-labelledby="kolacici">
+          <h2 id="kolacici" className={s.h2}>
+            6. Kolačići i lokalno skladište
           </h2>
+          <ul className={s.lista}>
+            <li>
+              <code>nalog</code> — kolačić prijave, postavlja se samo kad se prijaviš i važi 30
+              dana. Neophodan je za rad naloga i zato ne traži pristanak.
+            </li>
+            <li>
+              <code>alatnica:sacuvano</code> — lista sačuvanih oglasa, u lokalnom skladištu tvog
+              pregledača. Ne šalje se nama dok ne otvoriš stranicu Sačuvani oglasi.
+            </li>
+            <li>
+              Oznaka da je oglas već pregledan u ovoj kartici pregledača (sessionStorage), da se
+              pregled ne bi brojao dvaput.
+            </li>
+          </ul>
           <p className={s.p}>
-            Jedna jedina stvar: lista oglasa koje si sačuvao klikom na srce. Ona se upisuje u
-            lokalno skladište tvog pregledača, pod ključem <code>alatnica:sacuvano</code>, i sadrži
-            samo adrese oglasa, na primer <code>makita-hr2470-rotaciona-busilica</code>.
-          </p>
-          <p className={s.p}>
-            Ta lista nikada ne napušta tvoj uređaj. Ne šalje se nigde, ne vidi je niko osim tebe, i
-            nestaje čim obrišeš podatke sajta u podešavanjima pregledača ili klikneš na srce da
-            skloniš oglas. Ako otvoriš sajt na drugom uređaju, tamo je prazno. Nema naloga koji bi
-            ih povezao.
-          </p>
-          <p className={s.p}>
-            Stranica <Link href="/sacuvano">sačuvani oglasi</Link> samo čita tu listu i prikazuje
-            odgovarajuće oglase.
-          </p>
-        </section>
-
-        <section aria-labelledby="obrasci">
-          <h2 id="obrasci" className={s.h2}>
-            Obrasci na sajtu
-          </h2>
-          <p className={s.p}>
-            Obrazac na stranici <Link href="/kontakt">kontakt</Link> i ceo tok za{' '}
-            <Link href="/prodaj">postavljanje oglasa</Link> proveravaju unos, ali ništa ne šalju.
-            Ono što upišeš postoji samo u memoriji stranice i nestaje kada je zatvoriš ili
-            osvežiš.
-          </p>
-          <p className={s.p}>
-            Fotografije koje eventualno prevučeš u tok za prodaju ne odlaze nigde. Prikazuju se
-            preko privremene adrese koju pravi sam pregledač i brišu se zajedno sa stranicom.
-          </p>
-        </section>
-
-        <section aria-labelledby="tehnicko">
-          <h2 id="tehnicko" className={s.h2}>
-            Tehnička strana
-          </h2>
-          <p className={s.p}>
-            Sajt je statičan. Fontovi Bricolage Grotesque i Schibsted Grotesk se isporučuju sa
-            istog servera kao i sajt, a ne sa Google-ovih servera, pa se tvoja IP adresa ne šalje
-            nikome trećem prilikom učitavanja stranice.
-          </p>
-          <p className={s.p}>
-            Serveru na kome sajt stoji, kao i svakom veb serveru, ostaju standardni zapisi o
-            pristupu: IP adresa, vreme i tražena adresa. To je tehnički minimum bez kog internet ne
-            radi, i ti zapisi se ne koriste ni za kakvo profilisanje.
+            Ne koristimo kolačiće za analitiku, praćenje ni reklame.
           </p>
         </section>
 
         <section aria-labelledby="prava">
           <h2 id="prava" className={s.h2}>
-            Tvoja prava
+            7. Tvoja prava
           </h2>
           <p className={s.p}>
-            Prava na uvid, ispravku i brisanje podataka imaju smisla kada neko čuva tvoje podatke.
-            Ovde ih niko ne čuva, pa se pravo na brisanje ostvaruje jednim klikom u podešavanjima
-            tvog pregledača: brisanjem lokalnog skladišta za ovaj sajt.
+            Imaš pravo na pristup svojim podacima, njihovu ispravku, brisanje, ograničenje obrade,
+            prenosivost i pravo na prigovor na obradu zasnovanu na legitimnom interesu. Većinu
+            podataka menjaš sam u <Link href="/nalog">Mom nalogu</Link>, gde možeš i da obrišeš
+            nalog. Za ostalo nam piši; odgovaramo bez odlaganja, a najkasnije u roku od 30 dana.
           </p>
           <p className={s.p}>
-            Ako Alatnica ikada postane pravi servis sa nalozima i porukama, ovaj tekst bi morao da
-            se napiše iznova, sa stvarnim rukovaocem podataka, pravnim osnovom obrade i rokovima
-            čuvanja. Do tada, ovo je iskren opis stanja.
+            Ako smatraš da obrada nije zakonita, imaš pravo da podneseš pritužbu Povereniku za
+            informacije od javnog značaja i zaštitu podataka o ličnosti (www.poverenik.rs).
+          </p>
+        </section>
+
+        <section aria-labelledby="bezbednost">
+          <h2 id="bezbednost" className={s.h2}>
+            8. Bezbednost
+          </h2>
+          <p className={s.p}>
+            Sajt radi isključivo preko šifrovane veze (HTTPS). Lozinke čuvamo samo kao bcrypt
+            otisak, pristup bazi ima samo operater, a pokušaji pogađanja lozinke se automatski
+            blokiraju. Nijedan sistem nije potpuno siguran: koristi lozinku koju ne koristiš nigde
+            drugde.
+          </p>
+        </section>
+
+        <section aria-labelledby="izmene">
+          <h2 id="izmene" className={s.h2}>
+            9. Izmene
+          </h2>
+          <p className={s.p}>
+            Ovu politiku možemo da menjamo; o bitnim izmenama obaveštavamo na sajtu. Datum od kog
+            važi trenutna verzija stoji ispod.
           </p>
         </section>
       </div>
 
-      <p className={s.datum}>Poslednja izmena: 20. avgust 2026.</p>
+      <p className={s.datum}>Važi od: {VAZI_OD}</p>
     </div>
   )
 }

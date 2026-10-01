@@ -57,7 +57,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const b = brendBySlug(slug)
   if (!b) return { title: 'Brend nije pronađen' }
 
-  const broj = filtrirajOglase({ brend: [b.slug] }).length
+  const broj = (await filtrirajOglase({ brend: [b.slug] })).length
   const { sirovi } = parseNaBrend(await searchParams, b)
   const filtrirano = brojAktivnihFiltera(sirovi) > 0 || !!sirovi.sort
   const osnova = `/brend/${b.slug}`
@@ -70,7 +70,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     title: broj
       ? `${b.naziv}, ${brojSr(broj, ['oglas', 'oglasa', 'oglasa'])}, nov i polovan alat`
       : `${b.naziv}, alat, sistemi i cene`,
-    description: `${prvaRecenica(b.opis)} ${brojSr(broj, ['oglas', 'oglasa', 'oglasa'])} na Alatnici, sa ocenom stanja i poznatim prodavcem.${sistemi}`,
+    description: `${prvaRecenica(b.opis)}${broj ? ` ${brojSr(broj, ['oglas', 'oglasa', 'oglasa'])} na Alatnici.` : ''} Svaki oglas ima ocenu stanja i poznatog prodavca.${sistemi}`,
     robots: filtrirano ? { index: false, follow: true } : { index: true, follow: true },
     alternates: { canonical: osnova },
     openGraph: {
@@ -124,15 +124,17 @@ export default async function BrendStranica({ params, searchParams }: Props) {
 
   const sp = await searchParams
   const { filteri } = parseNaBrend(sp, b)
-  const podaci = pripremiBrowse(filteri)
+  /* Brojevi za sadržaj strane — vezani za brend, nezavisni od korisnikovih filtera. */
+  const [podaci, oglasiBrenda, uBrendu, globalni] = await Promise.all([
+    pripremiBrowse(filteri),
+    filtrirajOglase({ brend: [b.slug] }),
+    brojeviFiltera({ brend: [b.slug] }),
+    brojeviFiltera({}),
+  ])
   const fasete = samoFasete(podaci)
   const osnova = `/brend/${b.slug}`
-
-  /* Brojevi za sadržaj strane — vezani za brend, nezavisni od korisnikovih filtera. */
-  const oglasiBrenda = filtrirajOglase({ brend: [b.slug] })
   const ukupno = oglasiBrenda.length
-  const uBrendu = brojeviFiltera({ brend: [b.slug] })
-  const globalniAku = brojeviFiltera({}).aku
+  const globalniAku = globalni.aku
 
   const cene = oglasiBrenda.map((o) => o.cena)
   const najniza = cene.length ? Math.min(...cene) : 0
@@ -186,6 +188,7 @@ export default async function BrendStranica({ params, searchParams }: Props) {
 
         <p className={s.opis}>{b.opis}</p>
 
+        {ukupno > 0 ? (
         <dl className={s.brojke}>
           <div>
             <dt>Oglasa</dt>
@@ -206,6 +209,7 @@ export default async function BrendStranica({ params, searchParams }: Props) {
             </dd>
           </div>
         </dl>
+        ) : null}
       </header>
 
       {/* ── Oglasi ──────────────────────────────────────────────── */}

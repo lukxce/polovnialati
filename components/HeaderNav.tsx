@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Ikona } from '@/components/Ikone'
 import { useSacuvani } from '@/components/SacuvajDugme'
+import { osveziSesiju, useSesija } from '@/components/useSesija'
 import s from './Header.module.css'
 
 export type StabloStavka = {
@@ -15,34 +16,21 @@ export type StabloStavka = {
   deca: { slug: string; naziv: string }[]
 }
 
-export type SesijaZaNav = { naziv: string; uloga: 'PRODAVAC' | 'ADMIN'; neprocitano: number } | null
 
 export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
   const putanja = usePathname()
   const sacuvani = useSacuvani()
   const [meni, setMeni] = useState(false)
   const [mega, setMega] = useState(false)
-  const [sesija, setSesija] = useState<SesijaZaNav>(null)
+  const sesija = useSesija() ?? null
   const megaRef = useRef<HTMLDivElement>(null)
 
-  // Sesija se učitava na klijentu da Header ostane statičan (vidi Header.tsx).
-  useEffect(() => {
-    let otkazano = false
-    fetch('/api/auth/sesija')
-      .then((r) => r.json())
-      .then((podaci: SesijaZaNav) => {
-        if (!otkazano) setSesija(podaci)
-      })
-      .catch(() => {})
-    return () => {
-      otkazano = true
-    }
-  }, [])
-
-  // Zatvori sve pri promeni rute
+  // Zatvori sve pri promeni rute. Sesija se osvežava pri ulasku na nalog i
+  // poruke — tu se broj nepročitanih najčešće menja.
   useEffect(() => {
     setMeni(false)
     setMega(false)
+    if (putanja.startsWith('/poruke') || putanja.startsWith('/nalog')) osveziSesiju()
   }, [putanja])
 
   // Escape i klik izvan mega-menija

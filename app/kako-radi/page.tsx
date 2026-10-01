@@ -207,7 +207,7 @@ const PLACANJE: Pravilo[] = [
     ikona: 'prodavnica',
     naslov: 'Od prodavnice i servisa traži račun',
     tekst:
-      'Pravno lice mora da izda fiskalni račun i on je jedini dokaz za garanciju. Kod polovnog alata prodatog uz račun garancija je po zakonu najmanje šest meseci, i to se ne dogovara usmeno.',
+      'Firma mora da izda fiskalni račun, a račun je tvoj dokaz kada se pozivaš na garanciju ili na zakonska prava kupca. Rok garancije traži napisan na računu ili garantnom listu, ne usmeno.',
   },
 ]
 
@@ -275,15 +275,15 @@ const ZASTAVICE: Pravilo[] = [
 const PITANJA = [
   {
     p: 'Da li Alatnica naplaćuje objavu oglasa?',
-    o: 'Ne. Objava je besplatna i nema plaćenih pozicija u rezultatima. Oglasi označeni sa „Izdvojeno" u ovoj demonstraciji postoje da bi se video prikaz istaknutog oglasa, a ne zato što je neko nešto platio.',
+    o: 'Ne. Objava je besplatna i nema plaćenih pozicija u rezultatima. Oznaku „Izdvojeno" dodeljuje tim Alatnice kompletnim oglasima sa pravim fotografijama i popunjenom listom provere, i ona uvek piše na kartici.',
   },
   {
     p: 'Ko proverava oglase označene sa „Provereno"?',
-    o: 'Oznaka znači da su podaci iz oglasa upoređeni sa fotografijama i sa serijskim brojem sa pločice. Ona ne garantuje ispravnost mašine. Ispravnost potvrđuje jedino tvoj test uživo.',
+    o: 'Tim Alatnice je pregledao oglas: da se opis, fotografije i ocena stanja slažu. Oznaka ne garantuje ispravnost mašine. Ispravnost potvrđuje jedino tvoj test uživo.',
   },
   {
     p: 'Šta ako mašina posle kupovine ne radi?',
-    o: 'Kod kupovine od privatnog lica važi ono što ste se dogovorili u prepisci, zato se dogovor piše, a ne izgovara. Kod prodavnice i servisa važi zakonska garancija na polovnu robu, najmanje šest meseci, uz račun.',
+    o: 'Kod kupovine od privatnog lica važi ono što ste se dogovorili u prepisci, zato se dogovor piše, a ne izgovara. Kod prodavnice i servisa imaš prava kupca po Zakonu o zaštiti potrošača, uz račun. Alatnica nije strana u kupoprodaji, ali oglas prodavca koji ne poštuje dogovor možeš da prijaviš.',
   },
   {
     p: 'Zašto se stanje ne piše slobodnim tekstom?',
@@ -582,23 +582,22 @@ export default function KakoRadiStranica() {
       </section>
 
       {/* ── Tamna traka ───────────────────────────────────────── */}
-      <section className={`tamni-panel ${s.traka}`} aria-labelledby="demo-naslov">
-        <p className="micro">Budi svestan</p>
-        <h2 id="demo-naslov" className={s.trakaNaslov}>
-          Ovo je <span className="akcenat">demonstracija proizvoda</span>
+      <section className={`tamni-panel ${s.traka}`} aria-labelledby="dalje-naslov">
+        <p className="micro">Spreman si</p>
+        <h2 id="dalje-naslov" className={s.trakaNaslov}>
+          Kupuj sa listom provere, <span className="akcenat">prodaj sa njom</span>
         </h2>
         <p className={s.trakaTekst}>
-          Svi oglasi, prodavci, ocene, cene i recenzije na Alatnici su izmišljeni radi prikaza kako
-          proizvod radi. Nijedna poruka se ne šalje, nijedan oglas se ne objavljuje i nijedna
-          transakcija nije moguća. Slike alata su generisane ilustracije, ne fotografije.
-        </p>
-        <p className={s.trakaTekst}>
-          Saveti o pregledu alata, plaćanju i susretu uživo na ovoj stranici su, međutim, stvarni i
-          primenjivi na bilo kom oglasniku. Zato i stoje ovde.
+          Alatnica nije strana u kupoprodaji: dogovor, plaćanje i preuzimanje su između kupca i
+          prodavca. Zato ova pravila postoje. Ako nešto u oglasu ne odgovara onome što vidiš uživo,
+          prijavi oglas sa njegove stranice.
         </p>
         <div className={s.trakaAkcije}>
           <Link href="/oglasi" className="btn btn-primary">
             Pogledaj oglase
+          </Link>
+          <Link href="/prodaj" className="btn btn-tertiary">
+            Postavi oglas
           </Link>
           <Link href="/vodici" className="btn btn-tertiary">
             Vodiči za kupovinu

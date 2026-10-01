@@ -2,7 +2,6 @@ import {
   brojeviFiltera,
   dostupniAkuSistemi,
   filtrirajOglase,
-  prodavacBySlug,
   stabloKategorija,
   sviBrendovi,
   sviGradovi,
@@ -45,28 +44,31 @@ export type BrowsePodaci = BrowseFasete & { rezultati: Oglas[] }
  * Jedan poziv koji vraća i rezultate i sve fasete za dati skup filtera.
  * Koristi ga i `/oglasi` i `/kategorija/[...slug]`.
  */
-export function pripremiBrowse(f: Filteri): BrowsePodaci {
-  const rezultati = filtrirajOglase(f)
-  const osnovni = brojeviFiltera(f)
+export async function pripremiBrowse(f: Filteri): Promise<BrowsePodaci> {
+  const [rezultati, osnovni, bezTipa, bezDostave, bezGarancije, gradovi, akuSistemi] =
+    await Promise.all([
+      filtrirajOglase(f),
+      brojeviFiltera(f),
+      filtrirajOglase({ ...f, tip: undefined }),
+      filtrirajOglase({ ...f, dostava: undefined }),
+      filtrirajOglase({ ...f, garancija: undefined }),
+      sviGradovi(),
+      dostupniAkuSistemi(f),
+    ])
 
   const tip: Record<TipProdavca, number> = {
     'privatno-lice': 0,
     prodavnica: 0,
     servis: 0,
   }
-  for (const o of filtrirajOglase({ ...f, tip: undefined })) {
-    const p = prodavacBySlug(o.prodavacId)
-    if (p) tip[p.tip] += 1
-  }
+  for (const o of bezTipa) tip[o.prodavacTip] += 1
 
   const dostava: Record<Dostava, number> = { licno: 0, kurirska: 0, besplatna: 0, pouzece: 0 }
-  for (const o of filtrirajOglase({ ...f, dostava: undefined })) {
+  for (const o of bezDostave) {
     for (const d of o.dostava) dostava[d] += 1
   }
 
-  const garancija = filtrirajOglase({ ...f, garancija: undefined }).filter(
-    (o) => (o.garancija ?? 0) > 0,
-  ).length
+  const garancija = bezGarancije.filter((o) => (o.garancija ?? 0) > 0).length
 
   return {
     rezultati,
@@ -74,8 +76,8 @@ export function pripremiBrowse(f: Filteri): BrowsePodaci {
     brojevi: { ...osnovni, tip, dostava, garancija },
     stablo: stabloKategorija(),
     brendovi: sviBrendovi(),
-    gradovi: sviGradovi(),
-    akuSistemi: dostupniAkuSistemi(f),
+    gradovi,
+    akuSistemi,
   }
 }
 

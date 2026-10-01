@@ -4,12 +4,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { Ikona } from '@/components/Ikone'
 import KontaktForma from '@/components/staticne/KontaktForma'
 import s from '@/components/staticne/Stranica.module.css'
+import { ili, OPERATER } from '@/lib/site'
 import k from './stranica.module.css'
 
 export const metadata: Metadata = {
   title: 'Kontakt',
   description:
-    'Pitanja o Alatnici, prijava spornog oglasa ili saradnja. Obrazac je deo demonstracije i ništa ne šalje. Piše šta bi se u pravoj verziji desilo.',
+    'Pitanja o Alatnici, prijava spornog oglasa, problem sa nalogom ili saradnja. Piši nam preko obrasca ili na email.',
   alternates: { canonical: '/kontakt' },
 }
 
@@ -18,7 +19,7 @@ const BRZI = [
     ikona: 'kljuc' as const,
     naslov: 'Kako se prijavljuje sporan oglas',
     tekst:
-      'U pravoj verziji svaki oglas ima dugme za prijavu, a prijava ide sa linkom i razlogom. Ovde ta veza ne postoji, ali se sumnjivi obrasci prepoznaju po istim znacima.',
+      'Najbrže je dugme „Prijavi oglas" na samom oglasu, ispod provere stanja: prijava stiže direktno sa linkom i razlogom. Šta je sumnjivo u oglasu, piše na stranici Kako radi.',
     href: '/kako-radi#crvene-zastavice',
     hrefTekst: 'Crvene zastavice u oglasu',
   },
@@ -52,9 +53,8 @@ export default function KontaktStranica() {
         <p className="micro">Javi se</p>
         <h1 className={s.naslov}>Kontakt</h1>
         <p className={s.lede}>
-          Pitanje o proizvodu, prijava oglasa koji ne pripada ovde ili predlog saradnje: piši. Odmah
-          da bude jasno: obrazac ispod je deo demonstracije, ništa ne šalje i nijedan podatak ne
-          napušta tvoj pregledač.
+          Pitanje o sajtu, problem sa nalogom, prijava oglasa koji ne pripada ovde ili predlog
+          saradnje: piši. Odgovaramo na email, obično u roku od jednog do dva radna dana.
         </p>
       </header>
 
@@ -62,8 +62,8 @@ export default function KontaktStranica() {
         <div className={k.kolonaForma}>
           <h2 className={k.formaNaslov}>Pošalji poruku</h2>
           <p className={k.formaUvod}>
-            Provera unosa je stvarna: polja se proveravaju kao u pravoj verziji. Slanje nije, i
-            posle klika na „Pošalji" piše tačno šta bi se desilo da server postoji.
+            Zaboravio si lozinku? Izaberi tu temu i navedi email naloga. Javićemo ti se sa
+            privremenom lozinkom.
           </p>
           <KontaktForma />
         </div>
@@ -90,11 +90,16 @@ export default function KontaktStranica() {
           </ul>
 
           <div className={k.demoBlok}>
-            <p className="micro">Za pravu verziju</p>
+            <p className="micro">Operater sajta</p>
             <p className={k.demoTekst}>
-              U produkciji bi ovde stajala adresa podrške, vreme odgovora i obrazac koji zaista
-              stiže do nekoga. Pošto Alatnica nije živ servis, izmišljena adresa i izmišljeni broj
-              telefona bi bili gori od ove rečenice.
+              {ili(OPERATER.naziv)}
+              <br />
+              {ili(OPERATER.adresa)}
+              <br />
+              PIB {ili(OPERATER.pib)} · MB {ili(OPERATER.maticniBroj)}
+              <br />
+              Email:{' '}
+              {OPERATER.email ? <a href={`mailto:${OPERATER.email}`}>{OPERATER.email}</a> : ili('')}
             </p>
           </div>
         </aside>

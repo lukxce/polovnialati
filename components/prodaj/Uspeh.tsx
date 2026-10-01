@@ -9,13 +9,15 @@ import s from './tok.module.css'
 
 type Props = {
   nacrt: Nacrt
+  /** slug objavljenog oglasa — link ka javnoj stranici */
+  slug?: string
   brendovi: BrendOpcija[]
   nazivKategorije?: string
   /** Vrati se u tok na prvi korak i počni novi nacrt. */
   ponovo: () => void
 }
 
-export function Uspeh({ nacrt, brendovi, nazivKategorije, ponovo }: Props) {
+export function Uspeh({ nacrt, slug, brendovi, nazivKategorije, ponovo }: Props) {
   const oglas = nacrtUOglas(nacrt)
   const brendNaziv = brendovi.find((b) => b.slug === nacrt.brend)?.naziv ?? 'Brend'
 
@@ -27,27 +29,14 @@ export function Uspeh({ nacrt, brendovi, nazivKategorije, ponovo }: Props) {
         </span>
         <h2 className={s.uspehNaslov}>Oglas je objavljen</h2>
         <p className={s.uspehLede}>
-          Sačuvan je na tvom nalogu, u kategoriji{' '}
-          <strong>{nazivKategorije ?? 'koju si izabrao'}</strong> po ceni od{' '}
-          <strong>{formatCena(nacrt.cena ?? 0)}</strong>. Odatle možeš da ga uređuješ, deaktiviraš ili
-          obrišeš u bilo kom trenutku.
+          Javan je odmah, u kategoriji <strong>{nazivKategorije ?? 'koju si izabrao'}</strong> po
+          ceni od <strong>{formatCena(nacrt.cena ?? 0)}</strong>. U Mom nalogu menjaš cenu, sklanjaš
+          ga kad prodaš ili ga brišeš.
         </p>
       </div>
 
-      <div className={s.uspehIskrenost}>
-        <Ikona ime="stit" velicina={20} />
-        <div>
-          <p>
-            <strong>Za sada je vidljiv samo u tvom nalogu i adminu.</strong> Javna pretraga
-            (<code>/oglasi</code>) i dalje prikazuje probne oglase — pravi oglasi se tamo uključuju u
-            sledećoj fazi. „Provereno" oznaku dodeljuje admin ručno, posle pregleda fotografija i
-            unetih podataka.
-          </p>
-        </div>
-      </div>
-
       <div className={s.uspehPregled}>
-        <p className="micro">Kartica koja bi se objavila</p>
+        <p className="micro">Tvoja kartica u pretrazi</p>
         <div className={s.pregledMreza}>
           <KarticaPregled
             oglas={oglas}
@@ -59,8 +48,13 @@ export function Uspeh({ nacrt, brendovi, nazivKategorije, ponovo }: Props) {
       </div>
 
       <div className={s.uspehAkcije}>
-        <Link href="/nalog" className="btn btn-primary btn-veliki">
-          Idi na Moj nalog
+        {slug ? (
+          <Link href={`/oglas/${slug}`} className="btn btn-primary btn-veliki">
+            Pogledaj oglas
+          </Link>
+        ) : null}
+        <Link href="/nalog" className="btn btn-tertiary btn-veliki">
+          Moj nalog
         </Link>
         <button type="button" className="btn btn-tertiary btn-veliki" onClick={ponovo}>
           Napravi još jedan oglas
@@ -68,19 +62,19 @@ export function Uspeh({ nacrt, brendovi, nazivKategorije, ponovo }: Props) {
       </div>
 
       <div className={s.uspehSledece}>
-        <h3 className={s.savetNaslov}>Šta je stvarno, šta još nije</h3>
+        <h3 className={s.savetNaslov}>Šta sledi</h3>
         <ol className={s.savetLista}>
           <li>
-            <strong>Provera oglasa — stvarno.</strong> Admin ručno pregleda fotografije i unete
-            podatke i označava oglas kao <em>Provereno</em> iz admin panela.
+            <strong>Poruke kupaca</strong> stižu u tvoje sanduče (Poruke u navigaciji), uz značku
+            sa brojem nepročitanih.
           </li>
           <li>
-            <strong>Poruke kupaca — još ne.</strong> Sanduče i vreme odgovora na profilu prodavca
-            nisu izgrađeni; ovo ostaje sledeći korak.
+            <strong>Oznaku „Provereno"</strong> dodeljuje tim Alatnice posle pregleda fotografija i
+            unetih podataka.
           </li>
           <li>
-            <strong>Javna pretraga — još ne.</strong> Pravi oglasi se za sada vide samo u tvom
-            nalogu i adminu, ne i na <code>/oglasi</code> gde su i dalje probni podaci.
+            <strong>Kad prodaš</strong>, skloni oglas u Mom nalogu, da ti kupci ne pišu za alat koji
+            više nemaš.
           </li>
         </ol>
       </div>

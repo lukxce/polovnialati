@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Ikona } from '@/components/Ikone'
-import { stabloKategorija } from '@/lib/queries'
+import { ili, OPERATER } from '@/lib/site'
+import { stabloKategorija } from '@/lib/taksonomija'
 import s from './Footer.module.css'
 
 const KOLONE = [
@@ -82,15 +83,19 @@ export function Footer() {
             <Ikona ime="stit" velicina={18} />
           </span>
           <p>
-            <strong>Ovo je demonstracija.</strong> Svi oglasi, prodavci, ocene i cene su izmišljeni
-            radi prikaza proizvoda. Nijedna poruka se ne šalje, nijedan oglas se ne objavljuje i
-            nijedna transakcija nije moguća. Slike su generisane ilustracije, ne fotografije alata.
+            <strong>Alatnica je oglasnik, ne prodavac.</strong> Kupovina se dogovara i plaća
+            direktno između kupca i prodavca. Alat pogledaj i probaj pre plaćanja, i nikad ne šalji
+            kaparu nepoznatom prodavcu.
           </p>
         </div>
 
         <div className={s.dno}>
-          <p className="micro">© {new Date().getFullYear()} Alatnica</p>
-          <p className="micro">Sve na srpskom, latinicom</p>
+          <p className="micro">
+            © {new Date().getFullYear()} {ili(OPERATER.naziv)}
+            {OPERATER.pib ? ` · PIB ${OPERATER.pib}` : ''}
+            {OPERATER.maticniBroj ? ` · MB ${OPERATER.maticniBroj}` : ''}
+          </p>
+          <p className="micro">{ili(OPERATER.adresa)}</p>
         </div>
       </div>
     </footer>

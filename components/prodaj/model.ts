@@ -2,7 +2,8 @@ import type { Dostava, Oglas, Specifikacija, Stanje } from '@/lib/types'
 
 /* ════════════════════════════════════════════════════════════════
    Nacrt oglasa — jedino stanje koje tok drži.
-   Sve živi u memoriji pregledača: ništa se ne šalje niti čuva.
+   Živi u memoriji pregledača dok se ne objavi; fotografije se otpremaju
+   tek pri objavi (ProdajniTok.objavi).
    ════════════════════════════════════════════════════════════════ */
 
 export type Fotografija = {
@@ -283,8 +284,8 @@ export function greskeKoraka(korak: number, n: Nacrt, koren?: string): Greske {
     if (!n.brend) g.brend = 'Izaberi brend.'
     if (n.model.trim().length < 2) g.model = 'Unesi oznaku modela, npr. GBH 2-28 F.'
     if (!n.stanje) g.stanje = 'Izaberi jednu od pet ocena stanja.'
-    if (n.godiste !== undefined && (n.godiste < 1980 || n.godiste > 2026)) {
-      g.godiste = 'Godište mora biti između 1980. i 2026.'
+    if (n.godiste !== undefined && (n.godiste < 1980 || n.godiste > new Date().getFullYear())) {
+      g.godiste = `Godište mora biti između 1980. i ${new Date().getFullYear()}.`
     }
     const duzinaOpisa = n.opis.trim().length
     if (duzinaOpisa < MIN_OPIS) {
@@ -404,9 +405,10 @@ export function nacrtUOglas(n: Nacrt): Oglas {
     lokacija: n.grad ?? 'Beograd',
     dostava: n.dostava,
     prodavacId: 'nacrt',
+    prodavacTip: 'privatno-lice',
+    vlasnikId: 'nacrt',
     objavljeno: new Date().toISOString(),
     pregleda: 0,
-    sacuvano: 0,
     provereno: false,
     istaknuto: false,
     stanjeChecklist: Object.entries(n.provera).map(([stavka, ok]) => ({ stavka, ok })),

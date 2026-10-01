@@ -43,3 +43,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lokalno otpremljene fotografije (produkcija koristi Vercel Blob)
+/public/uploads

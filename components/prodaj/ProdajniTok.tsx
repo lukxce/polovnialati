@@ -8,6 +8,7 @@ import Korak3Stanje from './Korak3Stanje'
 import Korak4Fotografije from './Korak4Fotografije'
 import Korak5Objava from './Korak5Objava'
 import Uspeh from './Uspeh'
+import { smanjiSliku } from './smanjiSliku'
 import {
   KORACI,
   POSLEDNJI_KORAK,
@@ -67,6 +68,7 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
   const [poruka, setPoruka] = useState<string | undefined>(undefined)
   const [objavljuje, setObjavljuje] = useState(false)
   const [greskaObjave, setGreskaObjave] = useState<string | undefined>(undefined)
+  const [objavljenSlug, setObjavljenSlug] = useState<string>()
 
   /* Svi napravljeni objektni URL-ovi: opoziv drži tok, ne korak sa slikama —
      inače bi prelazak na korak 5 obrisao slike koje pregled još prikazuje. */
@@ -120,7 +122,7 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
 
     if (iz.objavljeno) {
       setPoruka(
-        'Nacrt više ne postoji. Ništa se ne čuva na serveru, pa ga osvežavanje stranice briše. Kreni ponovo od kategorije.',
+        'Oglas je objavljen, a nacrt je obrisan osvežavanjem stranice. Objavljene oglase vidiš u Mom nalogu. Za novi oglas kreni od kategorije.',
       )
     } else if (iz.korak > spusten) {
       setPoruka(
@@ -246,18 +248,27 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
 
   /* ── Objava ──────────────────────────────────────────────────── */
 
-  /** blob: URL -> data URL (base64), da fotografija preživi izlazak iz ove
-   *  kartice pregledača. Radi jer je blob i dalje čitljiv preko fetch() dok
-   *  se ne opozove (vidi urlovi.current, opoziva se tek pri unmount-u toka). */
-  async function blobUUrl(url: string): Promise<string> {
-    const odgovor = await fetch(url)
-    const blob = await odgovor.blob()
-    return new Promise((resolve, reject) => {
-      const citac = new FileReader()
-      citac.onloadend = () => resolve(citac.result as string)
-      citac.onerror = reject
-      citac.readAsDataURL(blob)
-    })
+  /**
+   * blob: URL iz koraka 4 → smanjen JPEG → /api/slike → javni URL.
+   * Blob je i dalje čitljiv preko fetch() dok se ne opozove (vidi
+   * urlovi.current, opoziva se tek pri unmount-u toka). Već otpremljene
+   * fotografije se pamte, pa ponovni pokušaj posle greške ne šalje sve iznova.
+   */
+  const otpremljene = useRef<Map<string, string>>(new Map())
+  const [napredak, setNapredak] = useState<string>()
+
+  async function otpremi(blobUrl: string): Promise<string> {
+    const vec = otpremljene.current.get(blobUrl)
+    if (vec) return vec
+    const izvor = await (await fetch(blobUrl)).blob()
+    const smanjena = await smanjiSliku(izvor)
+    const forma = new FormData()
+    forma.append('slika', smanjena, 'slika.jpg')
+    const res = await fetch('/api/slike', { method: 'POST', body: forma })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok || !data.url) throw new Error(data.greska || 'Fotografija nije otpremljena.')
+    otpremljene.current.set(blobUrl, data.url)
+    return data.url
   }
 
   const objavi = useCallback(async () => {
@@ -265,7 +276,19 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
     setGreskaObjave(undefined)
     try {
       const oglas = nacrtUOglas(nacrt)
-      const slike = await Promise.all(nacrt.fotografije.map((f) => blobUUrl(f.url)))
+      const slike: string[] = []
+      for (const [i, f] of nacrt.fotografije.entries()) {
+        setNapredak(`Otpremanje fotografija: ${i + 1} od ${nacrt.fotografije.length}`)
+        try {
+          slike.push(await otpremi(f.url))
+        } catch (e) {
+          setGreskaObjave(
+            `Fotografija ${i + 1} (${f.ime}): ${e instanceof Error ? e.message : 'nije otpremljena.'}`,
+          )
+          return
+        }
+      }
+      setNapredak('Objavljivanje oglasa…')
 
       const res = await fetch('/api/oglasi', {
         method: 'POST',
@@ -287,13 +310,19 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
           akuSistem: oglas.akuSistem,
           lokacija: oglas.lokacija,
           dostava: oglas.dostava,
+          stanjeChecklist: oglas.stanjeChecklist,
         }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        setGreskaObjave(data.greska || 'Greška pri objavi oglasa. Pokušaj ponovo.')
+        setGreskaObjave(
+          res.status === 401
+            ? 'Sesija je istekla. Prijavi se ponovo u drugoj kartici pa klikni Objavi još jednom — nacrt ostaje ovde.'
+            : data.greska || 'Greška pri objavi oglasa. Pokušaj ponovo.',
+        )
         return
       }
+      setObjavljenSlug(data.slug)
 
       const sledeca: Adresa = { korak: POSLEDNJI_KORAK, objavljeno: true }
       setAdresa(sledeca)
@@ -303,12 +332,16 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
       setGreskaObjave('Greška pri povezivanju sa serverom. Proveri konekciju i pokušaj ponovo.')
     } finally {
       setObjavljuje(false)
+      setNapredak(undefined)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- otpremi čita samo ref
   }, [nacrt])
 
   const ponovo = useCallback(() => {
     for (const u of urlovi.current) URL.revokeObjectURL(u)
     urlovi.current.clear()
+    otpremljene.current.clear()
+    setObjavljenSlug(undefined)
     setNacrt(PRAZAN_NACRT)
     setDodirnuta([])
     setPoruka(undefined)
@@ -325,6 +358,7 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
       <div ref={vrh}>
         <Uspeh
           nacrt={nacrt}
+          slug={objavljenSlug}
           brendovi={brendovi}
           nazivKategorije={nazivKategorije}
           ponovo={ponovo}
@@ -496,7 +530,7 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
                 onClick={objavi}
                 disabled={!!blokada || objavljuje}
               >
-                {objavljuje ? 'Objavljivanje…' : 'Objavi oglas'}
+                {objavljuje ? (napredak ?? 'Objavljivanje…') : 'Objavi oglas'}
               </button>
             ) : (
               <button

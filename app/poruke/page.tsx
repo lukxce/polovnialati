@@ -3,14 +3,14 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import s from '@/components/nalog/nalog.module.css'
 import ps from '@/components/poruke/poruke.module.css'
-import { ucitajSesiju } from '@/lib/auth'
+import { aktivnaSesija } from '@/lib/auth'
 import { relativnoVreme } from '@/lib/format'
 import { ucitajRazgovore } from '@/lib/poruke'
 
 export const metadata: Metadata = { title: 'Poruke', robots: { index: false, follow: false } }
 
 export default async function PorukeStranica() {
-  const sesija = await ucitajSesiju()
+  const sesija = await aktivnaSesija()
   if (!sesija) redirect('/prijava?odakle=/poruke')
 
   const razgovori = await ucitajRazgovore(sesija.userId)

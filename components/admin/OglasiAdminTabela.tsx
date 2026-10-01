@@ -1,13 +1,26 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { formatCena } from '@/lib/format'
-import type { OglasZaPrikaz } from '@/lib/oglasi'
 import s from '@/components/nalog/nalog.module.css'
 
-type Red = OglasZaPrikaz & { prodavacNaziv: string; prodavacEmail: string }
+export type OglasAdminRed = {
+  id: string
+  slug: string
+  naslov: string
+  cena: number
+  cenaDogovor: boolean
+  aktivan: boolean
+  provereno: boolean
+  istaknuto: boolean
+  createdAt: string
+  prodavacNaziv: string
+  prodavacEmail: string
+  brojPrijava: number
+}
 
-export default function OglasiAdminTabela({ oglasi }: { oglasi: Red[] }) {
+export default function OglasiAdminTabela({ oglasi }: { oglasi: OglasAdminRed[] }) {
   const router = useRouter()
 
   async function prebaci(id: string, polje: 'provereno' | 'istaknuto' | 'aktivan', trenutno: boolean) {
@@ -43,47 +56,42 @@ export default function OglasiAdminTabela({ oglasi }: { oglasi: Red[] }) {
             <th>Cena</th>
             <th>Aktivan</th>
             <th>Provereno</th>
-            <th>Istaknuto</th>
+            <th>Izdvojeno</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {oglasi.map((o) => (
             <tr key={o.id}>
-              <td>{o.naslov}</td>
+              <td>
+                {o.aktivan ? <Link href={`/oglas/${o.slug}`}>{o.naslov}</Link> : o.naslov}
+                <br />
+                <span className={s.mala}>
+                  {new Date(o.createdAt).toLocaleDateString('sr-RS')}
+                  {o.brojPrijava ? ` · ${o.brojPrijava} prijava` : ''}
+                </span>
+              </td>
               <td>
                 {o.prodavacNaziv}
                 <br />
-                <span style={{ color: 'var(--ink-3)', fontSize: 12 }}>{o.prodavacEmail}</span>
-              </td>
-              <td>{o.cenaDogovor ? 'Dogovor' : formatCena(o.cena)}</td>
-              <td>
-                <button
-                  type="button"
-                  className={[s.znacka, o.aktivan ? s.znackaAktivan : s.znackaNeaktivan].join(' ')}
-                  onClick={() => prebaci(o.id, 'aktivan', o.aktivan)}
-                >
-                  {o.aktivan ? 'Aktivan' : 'Neaktivan'}
-                </button>
+                <span className={s.mala}>{o.prodavacEmail}</span>
               </td>
               <td>
-                <button
-                  type="button"
-                  className={[s.znacka, o.provereno ? s.znackaAktivan : s.znackaNeaktivan].join(' ')}
-                  onClick={() => prebaci(o.id, 'provereno', o.provereno)}
-                >
-                  {o.provereno ? 'Da' : 'Ne'}
-                </button>
+                {formatCena(o.cena)}
+                {o.cenaDogovor ? <span className={s.mala}> · dogovor</span> : null}
               </td>
-              <td>
-                <button
-                  type="button"
-                  className={[s.znacka, o.istaknuto ? s.znackaAktivan : s.znackaNeaktivan].join(' ')}
-                  onClick={() => prebaci(o.id, 'istaknuto', o.istaknuto)}
-                >
-                  {o.istaknuto ? 'Da' : 'Ne'}
-                </button>
-              </td>
+              {(['aktivan', 'provereno', 'istaknuto'] as const).map((polje) => (
+                <td key={polje}>
+                  <button
+                    type="button"
+                    className={[s.znacka, o[polje] ? s.znackaAktivan : s.znackaNeaktivan].join(' ')}
+                    onClick={() => prebaci(o.id, polje, o[polje])}
+                    title="Klikni za promenu"
+                  >
+                    {o[polje] ? 'Da' : 'Ne'}
+                  </button>
+                </td>
+              ))}
               <td>
                 <button type="button" className="btn btn-ghost" onClick={() => obrisi(o.id, o.naslov)}>
                   Obriši

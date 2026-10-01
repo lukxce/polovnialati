@@ -9,6 +9,7 @@ import Sekcija from '@/components/Sekcija'
 import StanjeChip from '@/components/StanjeChip'
 import Galerija from '@/components/oglas/Galerija'
 import KontaktAkcije from '@/components/oglas/KontaktAkcije'
+import PrijaviOglas from '@/components/oglas/PrijaviOglas'
 import {
   brojSr,
   dostavaLabela,
@@ -24,21 +25,24 @@ import {
   brendBySlug,
   kategorijaBySlug,
   oglasBySlug,
-  oglasiProdavca,
   prodavacBySlug,
   putanjaKategorije,
   sliniOglasi,
-  sviOglasi,
 } from '@/lib/queries'
+import { apsolutno } from '@/lib/site'
 import type { Oglas, Stanje } from '@/lib/types'
 import s from './stranica.module.css'
 
-const OSNOVA = 'https://alatnica.rs'
-
 type Props = { params: Promise<{ slug: string }> }
 
+/**
+ * Ništa se ne prerenderuje pri build-u: svaki oglas se renderuje pri prvoj
+ * poseti i zatim služi iz keša (ISR) dok se katalog ne promeni — vidi
+ * KATALOG_TAG u lib/queries.ts. Sve što zavisi od posetioca (da li je
+ * vlasnik, da li je prijavljen) radi se u pregledaču, u KontaktAkcije.
+ */
 export async function generateStaticParams() {
-  return sviOglasi().map((o) => ({ slug: o.slug }))
+  return []
 }
 
 /** Schema.org OfferItemCondition po našoj petostepenoj skali. */
@@ -62,9 +66,14 @@ function slikeOglasa(oglas: Oglas): string[] {
   return [...new Set(iz)]
 }
 
+/** Samo prave fotografije idu u OG/JSON-LD — mreže ne prikazuju SVG ilustracije. */
+function fotografije(oglas: Oglas): string[] {
+  return oglas.slike.filter((u) => !u.endsWith('.svg')).map(apsolutno)
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const oglas = oglasBySlug(slug)
+  const oglas = await oglasBySlug(slug)
   if (!oglas) return { title: 'Oglas nije pronađen' }
 
   const brend = brendBySlug(oglas.brend)?.naziv ?? oglas.brend
@@ -84,25 +93,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'website',
       title: `${oglas.naslov}, ${cena}`,
       description: `${stanjeLabela(oglas.stanje)} · ${oglas.lokacija} · ${brend} ${oglas.model}`,
-      url: `${OSNOVA}/oglas/${oglas.slug}`,
-      images: slikeOglasa(oglas).map((putanja) => `${OSNOVA}${putanja}`),
+      url: apsolutno(`/oglas/${oglas.slug}`),
+      ...(fotografije(oglas).length ? { images: fotografije(oglas).slice(0, 4) } : {}),
     },
   }
 }
 
 export default async function OglasStranica({ params }: Props) {
   const { slug } = await params
-  const oglas = oglasBySlug(slug)
+  const oglas = await oglasBySlug(slug)
   if (!oglas) notFound()
 
   const brend = brendBySlug(oglas.brend)
   const brendNaziv = brend?.naziv ?? oglas.brend
   const kategorija = kategorijaBySlug(oglas.kategorija)
   const lanac = putanjaKategorije(oglas.kategorija)
-  const prodavac = prodavacBySlug(oglas.prodavacId)
-  const brojOglasaProdavca = oglasiProdavca(oglas.prodavacId).length
-  const slicni = sliniOglasi(oglas.slug, 4)
+  const [prodavac, slicni] = await Promise.all([
+    prodavacBySlug(oglas.prodavacId),
+    sliniOglasi(oglas, 4),
+  ])
+  const brojOglasaProdavca = prodavac?.brojOglasa ?? 0
   const slike = slikeOglasa(oglas)
+  const praveFotografije = oglas.slike.length > 0 && !oglas.slike[0].endsWith('.svg')
 
   const checklist = oglas.stanjeChecklist ?? []
   const potvrdjeno = checklist.filter((c) => c.ok).length
@@ -135,11 +147,11 @@ export default async function OglasStranica({ params }: Props) {
     model: oglas.model,
     category: kategorija?.naziv ?? oglas.kategorija,
     brand: { '@type': 'Brand', name: brendNaziv },
-    image: slike.map((putanja) => `${OSNOVA}${putanja}`),
+    ...(fotografije(oglas).length ? { image: fotografije(oglas) } : {}),
     itemCondition: SCHEMA_STANJE[oglas.stanje],
     offers: {
       '@type': 'Offer',
-      url: `${OSNOVA}/oglas/${oglas.slug}`,
+      url: apsolutno(`/oglas/${oglas.slug}`),
       price: oglas.cena,
       priceCurrency: 'RSD',
       availability: 'https://schema.org/InStock',
@@ -209,10 +221,6 @@ export default async function OglasStranica({ params }: Props) {
             <Ikona ime="oko" velicina={15} />
             {brojSr(oglas.pregleda, ['pregled', 'pregleda', 'pregleda'])}
           </span>
-          <span className={[s.metaStavka, 'tabular'].join(' ')}>
-            <Ikona ime="srce" velicina={15} />
-            {brojSr(oglas.sacuvano, ['čuvanje', 'čuvanja', 'čuvanja'])}
-          </span>
           {oglas.provereno ? (
             <span className="oznaka oznaka-provereno">
               <Ikona ime="cek" velicina={13} />
@@ -226,7 +234,10 @@ export default async function OglasStranica({ params }: Props) {
       <div className={s.raspored}>
         {/* 2 — galerija */}
         <div className={s.galerija}>
-          <Galerija slike={slike} alt={`${oglas.naslov}, ilustracija kategorije`} />
+          <Galerija
+            slike={slike}
+            alt={praveFotografije ? `${oglas.naslov}, fotografija` : `${oglas.naslov}, ilustracija kategorije`}
+          />
         </div>
 
         <div className={s.bocna}>
@@ -275,10 +286,13 @@ export default async function OglasStranica({ params }: Props) {
             </dl>
 
             <KontaktAkcije
+              oglasId={oglas.id}
               slug={oglas.slug}
               naslov={oglas.naslov}
+              vlasnikId={oglas.vlasnikId}
               prodavacNaziv={prodavac?.naziv ?? 'Prodavac'}
-              odgovaraZa={prodavac?.odgovaraZa ?? 'u toku dana'}
+              imaTelefon={prodavac?.imaTelefon ?? false}
+              odgovaraZa={prodavac?.odgovaraZa}
             />
           </div>
 
@@ -293,13 +307,15 @@ export default async function OglasStranica({ params }: Props) {
 
               <div className={s.prodavacRed}>
                 <ProdavacOznaka tip={prodavac.tip} velicina="srednje" />
-                <span className={s.ocena}>
-                  <Ikona ime="zvezda" velicina={15} />
-                  <strong>{prodavac.ocena.toFixed(1).replace('.', ',')}</strong>
-                  <span className="muted tabular">
-                    ({brojSr(prodavac.brojOcena, ['ocena', 'ocene', 'ocena'])})
+                {prodavac.ocena !== undefined && prodavac.brojOcena > 0 ? (
+                  <span className={s.ocena}>
+                    <Ikona ime="zvezda" velicina={15} />
+                    <strong>{prodavac.ocena.toFixed(1).replace('.', ',')}</strong>
+                    <span className="muted tabular">
+                      ({brojSr(prodavac.brojOcena, ['ocena', 'ocene', 'ocena'])})
+                    </span>
                   </span>
-                </span>
+                ) : null}
               </div>
 
               {prodavac.opis ? <p className={s.prodavacOpis}>{prodavac.opis}</p> : null}
@@ -309,10 +325,12 @@ export default async function OglasStranica({ params }: Props) {
                   <dt>Član od</dt>
                   <dd>{formatDatum(prodavac.clanOd)}</dd>
                 </div>
-                <div className={s.podatak}>
-                  <dt>Odgovara</dt>
-                  <dd>{prodavac.odgovaraZa}</dd>
-                </div>
+                {prodavac.odgovaraZa ? (
+                  <div className={s.podatak}>
+                    <dt>Odgovara</dt>
+                    <dd>{prodavac.odgovaraZa}</dd>
+                  </div>
+                ) : null}
                 <div className={s.podatak}>
                   <dt>Sedište</dt>
                   <dd>{prodavac.grad}</dd>
@@ -323,7 +341,7 @@ export default async function OglasStranica({ params }: Props) {
                 </div>
               </dl>
 
-              {prodavac.oznake.length ? (
+              {prodavac.verifikovan || prodavac.oznake.length ? (
                 <ul className={s.oznake}>
                   {prodavac.verifikovan ? (
                     <li className="oznaka oznaka-provereno">
@@ -513,8 +531,10 @@ export default async function OglasStranica({ params }: Props) {
             <p className={s.stanjeFus}>
               Sve četiri ocene korišćene robe i njihove definicije stoje na{' '}
               <Link href="/kako-radi#ocene-stanja">stranici Kako radi</Link>. Ako se stanje na
-              licu mesta ne poklapa sa ocenom, oglas se prijavljuje i ocena se ispravlja.
+              licu mesta ne poklapa sa ocenom, prijavi oglas: pregledamo ga i prodavac mora da
+              ispravi ocenu ili oglas skidamo.
             </p>
+            <PrijaviOglas oglasId={oglas.id} />
           </section>
         </div>
       </div>

@@ -1,8 +1,15 @@
 import { putanjeSlika } from '@/lib/format'
 import type { Oglas } from '@/lib/types'
 
+/**
+ * DEMO PODACI — koriste se samo za lokalni razvoj (`npm run db:demo` ih
+ * upisuje u lokalnu bazu, označene sa demo=true). Javne stranice ih nikad
+ * ne čitaju direktno.
+ */
+export type DemoOglas = Omit<Oglas, 'slike' | 'prodavacTip' | 'vlasnikId'> & { sacuvano: number }
+
 /** Oglas bez slika — slike se generišu determinističkim putem iz kategorije i brenda. */
-type Seed = Omit<Oglas, 'slike'>
+type Seed = DemoOglas
 
 const seme: Seed[] = [
   /* ══════════════════════════════════════════════════════════════
@@ -2864,7 +2871,7 @@ const seme: Seed[] = [
   },
 ]
 
-export const oglasi: Oglas[] = seme.map((o) => ({
+export const oglasi: (DemoOglas & { slike: string[] })[] = seme.map((o) => ({
   ...o,
   slike: putanjeSlika(o.kategorija, o.brend),
 }))

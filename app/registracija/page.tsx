@@ -3,6 +3,9 @@
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { GRADOVI } from '@/lib/gradovi'
+import { osveziSesiju } from '@/components/useSesija'
+import { bezbednaPutanja } from '@/lib/putanja'
 import type { TipProdavca } from '@/lib/types'
 import s from '@/components/auth/auth.module.css'
 
@@ -32,6 +35,7 @@ function RegistracijaForma() {
   const [grad, setGrad] = useState('')
   const [telefon, setTelefon] = useState('')
   const [pib, setPib] = useState('')
+  const [saglasnost, setSaglasnost] = useState(false)
   const [greska, setGreska] = useState<string | null>(null)
   const [posalje, setPosalje] = useState(false)
 
@@ -44,7 +48,7 @@ function RegistracijaForma() {
     const res = await fetch('/api/auth/registracija', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, lozinka, naziv, tip, grad, telefon, pib }),
+      body: JSON.stringify({ email, lozinka, naziv, tip, grad, telefon, pib, saglasnost }),
     })
     const data = await res.json().catch(() => ({}))
     setPosalje(false)
@@ -52,7 +56,8 @@ function RegistracijaForma() {
       setGreska(data.greska || 'Greška pri registraciji.')
       return
     }
-    router.push(params.get('odakle') || '/nalog')
+    await osveziSesiju()
+    router.push(bezbednaPutanja(params.get('odakle')))
     router.refresh()
   }
 
@@ -62,7 +67,10 @@ function RegistracijaForma() {
         <h1 className={s.naslov}>Registracija</h1>
         <p className={s.lede}>Nalog je besplatan. Treba ti da bi objavio oglas i pratio poruke kupaca.</p>
 
-        <div className={s.tipovi}>
+        <p className={s.oznaka} id="tip-naloga">
+          Prodaješ kao
+        </p>
+        <div className={s.tipovi} role="group" aria-labelledby="tip-naloga">
           {TIPOVI.map((t) => (
             <button
               key={t.vrednost}
@@ -78,13 +86,28 @@ function RegistracijaForma() {
 
         <label className={s['polje-grupa']}>
           <span className={s.oznaka}>{firma ? 'Naziv firme' : 'Ime i prezime'}</span>
-          <input type="text" className="polje" required value={naziv} onChange={(e) => setNaziv(e.target.value)} />
+          <input
+            type="text"
+            className="polje"
+            required
+            maxLength={80}
+            autoComplete={firma ? 'organization' : 'name'}
+            value={naziv}
+            onChange={(e) => setNaziv(e.target.value)}
+          />
         </label>
 
         <div className={s.dva}>
           <label className={s['polje-grupa']}>
             <span className={s.oznaka}>Email</span>
-            <input type="email" className="polje" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input
+              type="email"
+              className="polje"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </label>
           <label className={s['polje-grupa']}>
             <span className={s.oznaka}>Lozinka</span>
@@ -93,6 +116,7 @@ function RegistracijaForma() {
               className="polje"
               required
               minLength={8}
+              autoComplete="new-password"
               value={lozinka}
               onChange={(e) => setLozinka(e.target.value)}
             />
@@ -102,11 +126,30 @@ function RegistracijaForma() {
         <div className={s.dva}>
           <label className={s['polje-grupa']}>
             <span className={s.oznaka}>Grad</span>
-            <input type="text" className="polje" required value={grad} onChange={(e) => setGrad(e.target.value)} />
+            <input
+              type="text"
+              className="polje"
+              required
+              list="gradovi-lista"
+              autoComplete="address-level2"
+              value={grad}
+              onChange={(e) => setGrad(e.target.value)}
+            />
+            <datalist id="gradovi-lista">
+              {GRADOVI.map((g) => (
+                <option key={g} value={g} />
+              ))}
+            </datalist>
           </label>
           <label className={s['polje-grupa']}>
             <span className={s.oznaka}>Telefon (opciono)</span>
-            <input type="tel" className="polje" value={telefon} onChange={(e) => setTelefon(e.target.value)} />
+            <input
+              type="tel"
+              className="polje"
+              autoComplete="tel"
+              value={telefon}
+              onChange={(e) => setTelefon(e.target.value)}
+            />
           </label>
         </div>
 
@@ -117,7 +160,30 @@ function RegistracijaForma() {
           </label>
         ) : null}
 
-        {greska ? <p className={s.greska}>{greska}</p> : null}
+        {telefon.trim() ? (
+          <p className={s.napomena}>
+            Broj telefona se kupcima prikazuje na tvojim oglasima kada kliknu „Pozovi".
+          </p>
+        ) : null}
+
+        <label className={s.saglasnost}>
+          <input
+            type="checkbox"
+            required
+            checked={saglasnost}
+            onChange={(e) => setSaglasnost(e.target.checked)}
+          />
+          <span>
+            Prihvatam <Link href="/uslovi" target="_blank">uslove korišćenja</Link> i upoznat sam sa{' '}
+            <Link href="/privatnost" target="_blank">politikom privatnosti</Link>.
+          </span>
+        </label>
+
+        {greska ? (
+          <p className={s.greska} role="alert">
+            {greska}
+          </p>
+        ) : null}
 
         <button type="submit" className="btn btn-primary btn-veliki" style={{ width: '100%' }} disabled={posalje}>
           {posalje ? 'Kreiranje naloga…' : 'Napravi nalog'}

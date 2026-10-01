@@ -1,122 +1,154 @@
-import { brendovi } from '@/data/brendovi'
-import { kategorije } from '@/data/kategorije'
-import { oglasi } from '@/data/oglasi'
-import { prodavci } from '@/data/prodavci'
+import 'server-only'
+import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
+import { db } from '@/lib/db'
+import { uOglas, uProdavca } from '@/lib/oglasi'
+import {
+  brendBySlug,
+  kategorijaBySlug,
+  kategorijaISveDeca,
+  putanjaKategorije,
+  sveKategorije,
+  sviBrendovi,
+  stabloKategorija,
+} from '@/lib/taksonomija'
 import type { Brend, Kategorija, Oglas, Prodavac, Stanje } from '@/lib/types'
 import { brojAktivnihFiltera, filteriUQuery, type Filteri } from '@/lib/filteri'
 
-/* Oblik filtera i čiste funkcije nad njim žive u `lib/filteri.ts` da ih
-   klijentske komponente mogu uvesti bez povlačenja kataloga u bundle.
+/* Oblik filtera i čiste funkcije nad njim žive u `lib/filteri.ts`, a
+   taksonomija u `lib/taksonomija.ts` — oba su bezbedna za klijent.
    Reeksportuju se ovde da serverski pozivaoci i dalje imaju jedno mesto. */
 export { brojAktivnihFiltera, filteriUQuery }
 export type { Filteri }
+export {
+  brendBySlug,
+  kategorijaBySlug,
+  putanjaKategorije,
+  sveKategorije,
+  sviBrendovi,
+  stabloKategorija,
+}
+
+/* ────────────────────────────────────────────────────────────────
+   Keš kataloga
+
+   Svi aktivni oglasi se čitaju jednim upitom i filtriraju u memoriji — ista
+   logika faseta kao ranije, bez desetak GROUP BY upita po stranici. Rezultat
+   se kešira (Next data cache) pod tagom KATALOG_TAG; svaka izmena oglasa ili
+   naloga zove osveziKatalog() iz lib/osvezavanje.ts.
+
+   U kešu kataloga je opis skraćen (za pretragu je dovoljan početak), pa je
+   keš mali i za par hiljada oglasa. Stranica oglasa čita pun red posebno.
+   Kad aktivnih oglasa bude više od ~2.000, filtriranje treba preseliti u SQL.
+   ──────────────────────────────────────────────────────────────── */
+
+export const KATALOG_TAG = 'katalog'
+
+/**
+ * Next data cache na Vercel-u preživljava deploy. Bez ID-a deploy-a u ključu,
+ * novi kod bi posle deploy-a do sat vremena čitao keš koji je napravio stari
+ * kod (stari oblik podataka, ili stanje baze menjano mimo aplikacije).
+ */
+const VERZIJA = process.env.VERCEL_DEPLOYMENT_ID ?? process.env.VERCEL_GIT_COMMIT_SHA ?? 'lokalno'
+
+/** Sigurnosna mreža: i bez taga, keš nije stariji od 10 minuta (npr. broj pregleda). */
+const OSVEZI_SEKUNDI = 600
+
+const OPIS_U_KATALOGU = 400
+
+type Katalog = { oglasi: Oglas[]; prodavci: Prodavac[] }
+
+const ucitajKatalog = unstable_cache(
+  async (): Promise<Katalog> => {
+    const redovi = await db.oglas.findMany({
+      where: { aktivan: true, user: { blokiran: false } },
+      include: { user: { select: { id: true, slug: true, tip: true } } },
+      orderBy: { createdAt: 'desc' },
+    })
+    const oglasi = redovi.map((r) => {
+      const o = uOglas(r)
+      return o.opis.length > OPIS_U_KATALOGU ? { ...o, opis: o.opis.slice(0, OPIS_U_KATALOGU) } : o
+    })
+
+    const brojPoProdavcu = new Map<string, number>()
+    for (const o of oglasi) brojPoProdavcu.set(o.vlasnikId, (brojPoProdavcu.get(o.vlasnikId) ?? 0) + 1)
+
+    const korisnici = await db.user.findMany({
+      where: { id: { in: [...brojPoProdavcu.keys()] }, blokiran: false },
+    })
+    const prodavci = korisnici.map((u) => uProdavca(u, brojPoProdavcu.get(u.id) ?? 0))
+
+    return { oglasi, prodavci }
+  },
+  ['katalog-v1', VERZIJA],
+  { tags: [KATALOG_TAG], revalidate: OSVEZI_SEKUNDI },
+)
+
+/** Jedan upit po zahtevu, bez obzira koliko komponenti traži katalog. */
+const katalog = cache(ucitajKatalog)
 
 /* ────────────────────────────────────────────────────────────────
    Osnovni pristup podacima
    ──────────────────────────────────────────────────────────────── */
 
-export function sviOglasi(): Oglas[] {
-  return oglasi
+export async function sviOglasi(): Promise<Oglas[]> {
+  return (await katalog()).oglasi
 }
 
-export function oglasBySlug(slug: string): Oglas | undefined {
-  return oglasi.find((o) => o.slug === slug)
+const ucitajOglas = unstable_cache(
+  async (slug: string): Promise<Oglas | null> => {
+    const red = await db.oglas.findUnique({
+      where: { slug },
+      include: { user: { select: { id: true, slug: true, tip: true, blokiran: true } } },
+    })
+    if (!red || !red.aktivan || red.user.blokiran) return null
+    return uOglas(red)
+  },
+  ['oglas-v1', VERZIJA],
+  { tags: [KATALOG_TAG], revalidate: OSVEZI_SEKUNDI },
+)
+
+/** Pun oglas (ceo opis) — samo aktivni oglasi neblokiranih prodavaca. */
+export const oglasBySlug = cache(async (slug: string): Promise<Oglas | undefined> => {
+  return (await ucitajOglas(slug)) ?? undefined
+})
+
+const ucitajProdavca = unstable_cache(
+  async (slug: string): Promise<Prodavac | null> => {
+    const u = await db.user.findUnique({ where: { slug } })
+    if (!u || u.blokiran) return null
+    const broj = await db.oglas.count({ where: { userId: u.id, aktivan: true } })
+    // Admin nalog nema javni profil dok ne objavi nešto.
+    if (u.uloga === 'ADMIN' && broj === 0) return null
+    return uProdavca(u, broj)
+  },
+  ['prodavac-v1', VERZIJA],
+  { tags: [KATALOG_TAG], revalidate: OSVEZI_SEKUNDI },
+)
+
+export const prodavacBySlug = cache(async (slug: string): Promise<Prodavac | undefined> => {
+  return (await ucitajProdavca(slug)) ?? undefined
+})
+
+/** Prodavci sa bar jednim aktivnim oglasom. */
+export async function sviProdavci(): Promise<Prodavac[]> {
+  return (await katalog()).prodavci
 }
 
-export function sveKategorije(): Kategorija[] {
-  return kategorije
+export async function oglasiProdavca(slug: string): Promise<Oglas[]> {
+  return (await katalog()).oglasi.filter((o) => o.prodavacId === slug)
 }
-
-export function kategorijaBySlug(slug: string): Kategorija | undefined {
-  return kategorije.find((k) => k.slug === slug)
-}
-
-/** Nadkategorije sa svojom decom, u redosledu iz taksonomije. */
-export function stabloKategorija(): { kategorija: Kategorija; deca: Kategorija[] }[] {
-  return kategorije
-    .filter((k) => !k.roditelj)
-    .map((kategorija) => ({
-      kategorija,
-      deca: kategorije.filter((d) => d.roditelj === kategorija.slug),
-    }))
-}
-
-/** Lanac za breadcrumb: [nadkategorija, potkategorija] ili [nadkategorija]. */
-export function putanjaKategorije(slug: string): Kategorija[] {
-  const lanac: Kategorija[] = []
-  let trenutna = kategorijaBySlug(slug)
-  const vidjeni = new Set<string>()
-  while (trenutna && !vidjeni.has(trenutna.slug)) {
-    vidjeni.add(trenutna.slug)
-    lanac.unshift(trenutna)
-    trenutna = trenutna.roditelj ? kategorijaBySlug(trenutna.roditelj) : undefined
-  }
-  return lanac
-}
-
-export function sviBrendovi(): Brend[] {
-  return brendovi
-}
-
-export function brendBySlug(slug: string): Brend | undefined {
-  return brendovi.find((b) => b.slug === slug)
-}
-
-/**
- * `brojOglasa` se ne čita iz seed podataka nego se izvodi iz stvarnih oglasa.
- * Ručno upisan broj se pre ili kasnije razmimoiđe sa stanjem, a ovde se broj
- * prikazuje korisniku kao činjenica o prodavcu.
- */
-const BROJ_OGLASA_PO_PRODAVCU = oglasi.reduce<Record<string, number>>((acc, o) => {
-  acc[o.prodavacId] = (acc[o.prodavacId] ?? 0) + 1
-  return acc
-}, {})
-
-const PRODAVCI: Prodavac[] = prodavci.map((p) => ({
-  ...p,
-  brojOglasa: BROJ_OGLASA_PO_PRODAVCU[p.slug] ?? 0,
-}))
-
-export function sviProdavci(): Prodavac[] {
-  return PRODAVCI
-}
-
-export function prodavacBySlug(slug: string): Prodavac | undefined {
-  return PRODAVCI.find((p) => p.slug === slug)
-}
-
-export function oglasiProdavca(slug: string): Oglas[] {
-  return oglasi.filter((o) => o.prodavacId === slug)
-}
-
-/* ────────────────────────────────────────────────────────────────
-   Pomoćne strukture
-   ──────────────────────────────────────────────────────────────── */
-
-const DECA_PO_RODITELJU = new Map<string, string[]>()
-for (const k of kategorije) {
-  if (!k.roditelj) continue
-  const lista = DECA_PO_RODITELJU.get(k.roditelj) ?? []
-  lista.push(k.slug)
-  DECA_PO_RODITELJU.set(k.roditelj, lista)
-}
-
-/** Sam slug + svi listovi ispod njega. Radi i za nadkategoriju i za list. */
-function kategorijaISveDeca(slug: string): Set<string> {
-  const set = new Set<string>([slug])
-  for (const dete of DECA_PO_RODITELJU.get(slug) ?? []) set.add(dete)
-  return set
-}
-
-const PRODAVCI_MAPA = new Map(prodavci.map((p) => [p.slug, p]))
 
 /** Gradovi koji se stvarno pojavljuju na oglasima, azbučno. */
-export function sviGradovi(): string[] {
+export async function sviGradovi(): Promise<string[]> {
+  return gradoviIz((await katalog()).oglasi)
+}
+
+function gradoviIz(oglasi: Oglas[]): string[] {
   return [...new Set(oglasi.map((o) => o.lokacija))].sort((a, b) => a.localeCompare(b, 'sr'))
 }
 
-/** Svi akumulatorski sistemi koji uopšte postoje u bazi. */
-export function sviAkuSistemi(): string[] {
+function akuSistemiIz(oglasi: Oglas[]): string[] {
   return [...new Set(oglasi.map((o) => o.akuSistem).filter((x): x is string => Boolean(x)))].sort(
     (a, b) => a.localeCompare(b, 'sr'),
   )
@@ -128,14 +160,13 @@ function normalizuj(s: string): string {
     .toLowerCase()
     .replace(/đ/g, 'd')
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
     .trim()
 }
 
 /* ────────────────────────────────────────────────────────────────
    Filtriranje
    ──────────────────────────────────────────────────────────────── */
-
 
 /** Pojedinačni predikati — koriste se i za filtriranje i za facet brojeve. */
 const PREDIKATI = {
@@ -150,11 +181,7 @@ const PREDIKATI = {
   garancija: (o: Oglas, f: Filteri) => !f.garancija || (o.garancija ?? 0) > 0,
   dostava: (o: Oglas, f: Filteri) =>
     !f.dostava?.length || f.dostava.some((d) => (o.dostava as string[]).includes(d)),
-  tip: (o: Oglas, f: Filteri) => {
-    if (!f.tip?.length) return true
-    const p = PRODAVCI_MAPA.get(o.prodavacId)
-    return !!p && f.tip.includes(p.tip)
-  },
+  tip: (o: Oglas, f: Filteri) => !f.tip?.length || f.tip.includes(o.prodavacTip),
   q: (o: Oglas, f: Filteri) => {
     if (!f.q) return true
     const q = normalizuj(f.q)
@@ -200,36 +227,43 @@ function sortiraj(lista: Oglas[], sort: Filteri['sort']): Oglas[] {
   return kopija.sort((a, b) => Number(b.istaknuto) - Number(a.istaknuto))
 }
 
-export function filtrirajOglase(f: Filteri): Oglas[] {
+function filtriraj(oglasi: Oglas[], f: Filteri): Oglas[] {
   return sortiraj(
     oglasi.filter((o) => prolazi(o, f)),
     f.sort,
   )
 }
 
-/**
- * Facet brojevi: za svaku dimenziju se broji sa *ostalim* filterima primenjenim,
- * a bez te dimenzije — tako da isključivanje jedne opcije ne obriše ostale brojeve.
- */
-export function brojeviFiltera(f: Filteri): {
+export async function filtrirajOglase(f: Filteri): Promise<Oglas[]> {
+  return filtriraj((await katalog()).oglasi, f)
+}
+
+export type BrojeviFiltera = {
   kategorija: Record<string, number>
   brend: Record<string, number>
   stanje: Record<string, number>
   grad: Record<string, number>
   aku: Record<string, number>
-} {
+}
+
+/**
+ * Facet brojevi: za svaku dimenziju se broji sa *ostalim* filterima primenjenim,
+ * a bez te dimenzije — tako da isključivanje jedne opcije ne obriše ostale brojeve.
+ */
+export async function brojeviFiltera(f: Filteri): Promise<BrojeviFiltera> {
+  const oglasi = (await katalog()).oglasi
   const kategorija: Record<string, number> = {}
   const brend: Record<string, number> = {}
   const stanje: Record<string, number> = {}
   const grad: Record<string, number> = {}
   const aku: Record<string, number> = {}
 
-  for (const k of kategorije) kategorija[k.slug] = 0
-  for (const b of brendovi) brend[b.slug] = 0
+  for (const k of sveKategorije()) kategorija[k.slug] = 0
+  for (const b of sviBrendovi()) brend[b.slug] = 0
   for (const s of ['novo', 'kao-novo', 'koristeno-ispravno', 'vidljivo-koristeno', 'za-delove'])
     stanje[s] = 0
-  for (const g of sviGradovi()) grad[g] = 0
-  for (const a of sviAkuSistemi()) aku[a] = 0
+  for (const g of gradoviIz(oglasi)) grad[g] = 0
+  for (const a of akuSistemiIz(oglasi)) aku[a] = 0
 
   for (const o of oglasi) {
     if (prolazi(o, f, 'kategorija')) {
@@ -251,12 +285,9 @@ export function brojeviFiltera(f: Filteri): {
  * Vraća prazan niz ako aktivna kategorija/brend uopšte ne sadrže akumulatorske
  * oglase — zbog toga se filter „Akumulatorski sistem" i pojavljuje uslovno.
  */
-export function dostupniAkuSistemi(f: Filteri): string[] {
-  const relevantni = oglasi.filter((o) => !!o.akuSistem && prolazi(o, f, 'aku'))
-  if (relevantni.length === 0) return []
-  return [...new Set(relevantni.map((o) => o.akuSistem as string))].sort((a, b) =>
-    a.localeCompare(b, 'sr'),
-  )
+export async function dostupniAkuSistemi(f: Filteri): Promise<string[]> {
+  const relevantni = (await katalog()).oglasi.filter((o) => !!o.akuSistem && prolazi(o, f, 'aku'))
+  return akuSistemiIz(relevantni)
 }
 
 /* ────────────────────────────────────────────────────────────────
@@ -268,9 +299,8 @@ export function dostupniAkuSistemi(f: Filteri): string[] {
  * Ako u leaf kategoriji nema dovoljno, širi se na nadkategoriju, pa na brend —
  * tako se blok „Slični oglasi" nikad ne prikaže poluprazan.
  */
-export function sliniOglasi(slug: string, n = 4): Oglas[] {
-  const izvor = oglasBySlug(slug)
-  if (!izvor) return []
+export async function sliniOglasi(izvor: Oglas, n = 4): Promise<Oglas[]> {
+  const oglasi = (await katalog()).oglasi
 
   const nad = kategorijaBySlug(izvor.kategorija)?.roditelj
   const donja = izvor.cena * 0.6
@@ -309,23 +339,23 @@ export function sliniOglasi(slug: string, n = 4): Oglas[] {
   return rezultat
 }
 
-export function pretraga(q: string): {
+export async function pretraga(q: string): Promise<{
   oglasi: Oglas[]
   kategorije: Kategorija[]
   brendovi: Brend[]
-} {
+}> {
   const upit = normalizuj(q ?? '')
   if (!upit) return { oglasi: [], kategorije: [], brendovi: [] }
   const reci = upit.split(/\s+/)
 
-  const pogodjeni = filtrirajOglase({ q, sort: 'najnovije' })
+  const pogodjeni = await filtrirajOglase({ q, sort: 'najnovije' })
 
-  const pogodjeneKategorije = kategorije.filter((k) => {
+  const pogodjeneKategorije = sveKategorije().filter((k) => {
     const t = normalizuj(`${k.naziv} ${k.opis ?? ''}`)
     return reci.every((r) => t.includes(r))
   })
 
-  const pogodjeniBrendovi = brendovi.filter((b) => {
+  const pogodjeniBrendovi = sviBrendovi().filter((b) => {
     const t = normalizuj(`${b.naziv} ${(b.akuSistemi ?? []).join(' ')}`)
     return reci.every((r) => t.includes(r))
   })
@@ -395,10 +425,10 @@ export function parseFiltere(sp: Record<string, string | string[] | undefined>):
   if (cenaDo !== undefined) f.cenaDo = cenaDo
 
   const grad = jedan(p.grad)
-  if (grad) f.grad = grad
+  if (grad) f.grad = grad.slice(0, 60)
 
-  const aku = lista(p.aku)
-  if (aku.length) f.aku = aku
+  const aku = lista(p.aku).map((a) => a.slice(0, 60))
+  if (aku.length) f.aku = aku.slice(0, 10)
 
   if (jedan(p.garancija) === '1' || jedan(p.garancija) === 'true') f.garancija = true
 
@@ -409,12 +439,10 @@ export function parseFiltere(sp: Record<string, string | string[] | undefined>):
   if (tip.length) f.tip = tip
 
   const q = jedan(p.q)
-  if (q && q.trim()) f.q = q.trim()
+  if (q && q.trim()) f.q = q.trim().slice(0, 100)
 
   const sort = jedan(p.sort)
   if (sort && VALIDNI_SORT.has(sort)) f.sort = sort as Filteri['sort']
 
   return f
 }
-
-

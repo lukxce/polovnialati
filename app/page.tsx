@@ -3,6 +3,7 @@ import Link from 'next/link'
 import MrezaOglasa from '@/components/browse/MrezaOglasa'
 import PoljeZaPretragu from '@/components/browse/PoljeZaPretragu'
 import { Ikona } from '@/components/Ikone'
+import Prazno from '@/components/Prazno'
 import Sekcija from '@/components/Sekcija'
 import { brojSr, STANJA, stanjeDefinicija, stanjeLabela } from '@/lib/format'
 import {
@@ -51,19 +52,24 @@ const KADA_IMA_SMISLA: Record<string, string> = {
   'za-delove': 'Samo ako ti treba kućište, motor, prihvat ili baterija. Ne očekuj da radi.',
 }
 
-export default function Pocetna() {
+export default async function Pocetna() {
   const stablo = stabloKategorija()
-  const brojevi = brojeviFiltera({})
-  const oglasi = sviOglasi()
+  const [brojevi, oglasi, najnoviji, prodavci] = await Promise.all([
+    brojeviFiltera({}),
+    sviOglasi(),
+    filtrirajOglase({ sort: 'najnovije' }),
+    sviProdavci(),
+  ])
 
+  const imaOglasa = oglasi.length > 0
   const istaknuti = oglasi.filter((o) => o.istaknuto)
-  const najnoviji = filtrirajOglase({ sort: 'najnovije' })
+  // Dok nijedan brend nema oglas, prikazuju se svi — strana brenda ima smisla i prazna.
   const brendovi = sviBrendovi()
     .map((b) => ({ ...b, broj: brojevi.brend[b.slug] ?? 0 }))
-    .filter((b) => b.broj > 0)
+    .filter((b) => !imaOglasa || b.broj > 0)
     .sort((a, b) => b.broj - a.broj || a.naziv.localeCompare(b.naziv, 'sr'))
 
-  const brojProdavaca = sviProdavci().length
+  const brojProdavaca = prodavci.length
   const brojLeafKategorija = stablo.reduce((n, x) => n + x.deca.length, 0)
 
   return (
@@ -72,7 +78,8 @@ export default function Pocetna() {
       <section className={s.hero}>
         <div className={`container ${s.heroUnutra}`}>
           <p className={`micro ${s.heroOznaka}`}>
-            Nov i polovan alat · {brojSr(oglasi.length, ['oglas', 'oglasa', 'oglasa'])} u ponudi
+            Nov i polovan alat
+            {imaOglasa ? ` · ${brojSr(oglasi.length, ['oglas', 'oglasa', 'oglasa'])} u ponudi` : ''}
           </p>
 
           <h1 className={s.heroNaslov}>
@@ -126,10 +133,12 @@ export default function Pocetna() {
               <dt>Brendova</dt>
               <dd>{sviBrendovi().length}</dd>
             </div>
-            <div>
-              <dt>Prodavaca</dt>
-              <dd>{brojProdavaca}</dd>
-            </div>
+            {brojProdavaca > 0 ? (
+              <div>
+                <dt>Prodavaca</dt>
+                <dd>{brojProdavaca}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>Ocena stanja</dt>
               <dd>5</dd>
@@ -154,13 +163,11 @@ export default function Pocetna() {
                   </span>
                   <span className={s.plocicaNaziv}>{kategorija.naziv}</span>
                   <span className={s.plocicaBroj}>
-                    {brojSr(brojevi.kategorija[kategorija.slug] ?? 0, [
-                      'oglas',
-                      'oglasa',
-                      'oglasa',
-                    ])}
+                    {imaOglasa
+                      ? brojSr(brojevi.kategorija[kategorija.slug] ?? 0, ['oglas', 'oglasa', 'oglasa'])
+                      : null}
                     <span className={s.plocicaPod}>
-                      {' · '}
+                      {imaOglasa ? ' · ' : ''}
                       {brojSr(deca.length, ['potkategorija', 'potkategorije', 'potkategorija'])}
                     </span>
                   </span>
@@ -190,15 +197,17 @@ export default function Pocetna() {
         </Sekcija>
 
         {/* ── 4. Izdvojeni oglasi ───────────────────────────────── */}
-        <Sekcija
-          nadnaslov="Izdvojeno"
-          naslov="Promovisani oglasi"
-          opis="Plaćena pozicija, i to piše na kartici. Ocena stanja i podaci o prodavcu su isti kao svuda."
-          akcijaHref="/oglasi"
-          akcijaTekst="Svi oglasi"
-        >
-          <MrezaOglasa oglasi={istaknuti} limit={8} />
-        </Sekcija>
+        {istaknuti.length > 0 ? (
+          <Sekcija
+            nadnaslov="Izdvojeno"
+            naslov="Izdvojeni oglasi"
+            opis="Oglase izdvaja tim Alatnice: kompletan opis, prave fotografije i popunjena lista provere. Na kartici piše „Izdvojeno“."
+            akcijaHref="/oglasi"
+            akcijaTekst="Svi oglasi"
+          >
+            <MrezaOglasa oglasi={istaknuti} limit={8} />
+          </Sekcija>
+        ) : null}
       </div>
 
       {/* ── 5. Tamna traka: ocene stanja ────────────────────────── */}
@@ -229,9 +238,11 @@ export default function Pocetna() {
                 <tr>
                   <th scope="col">Ocena</th>
                   <th scope="col">Definicija</th>
-                  <th scope="col" className={s.kolonaBroj}>
-                    Oglasa
-                  </th>
+                  {imaOglasa ? (
+                    <th scope="col" className={s.kolonaBroj}>
+                      Oglasa
+                    </th>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -244,11 +255,13 @@ export default function Pocetna() {
                       <span className={s.definicija}>{stanjeDefinicija(g)}</span>
                       <span className={s.savet}>{KADA_IMA_SMISLA[g]}</span>
                     </td>
-                    <td className={s.kolonaBroj}>
-                      <Link href={`/oglasi?stanje=${g}`} className={s.brojLink}>
-                        {brojevi.stanje[g] ?? 0}
-                      </Link>
-                    </td>
+                    {imaOglasa ? (
+                      <td className={s.kolonaBroj}>
+                        <Link href={`/oglasi?stanje=${g}`} className={s.brojLink}>
+                          {brojevi.stanje[g] ?? 0}
+                        </Link>
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -274,19 +287,32 @@ export default function Pocetna() {
 
       {/* ── 6. Najnovije ────────────────────────────────────────── */}
       <div className="container">
-        <Sekcija
-          nadnaslov="Sveže objavljeno"
-          naslov="Najnovije"
-          akcijaHref="/oglasi"
-          akcijaTekst="Vidi sve"
-        >
-          <MrezaOglasa oglasi={najnoviji} limit={8} />
-        </Sekcija>
+        {imaOglasa ? (
+          <Sekcija
+            nadnaslov="Sveže objavljeno"
+            naslov="Najnovije"
+            akcijaHref="/oglasi"
+            akcijaTekst="Vidi sve"
+          >
+            <MrezaOglasa oglasi={najnoviji} limit={8} />
+          </Sekcija>
+        ) : (
+          <Sekcija nadnaslov="Tek počinjemo" naslov="Budi među prvim prodavcima">
+            <Prazno
+              ikona="alat"
+              naslov="Alatnica je nova i katalog se tek puni"
+              opis="Prvi oglasi u svakoj kategoriji su prvo što kupci vide. Objava je besplatna i traje pet minuta: kategorija, detalji, provera stanja, fotografije i cena."
+              akcijaHref="/prodaj"
+              akcijaTekst="Postavi prvi oglas"
+              predlozi={[{ tekst: 'Kako Alatnica radi', href: '/kako-radi' }]}
+            />
+          </Sekcija>
+        )}
 
         {/* ── 7. Brendovi ─────────────────────────────────────────── */}
         <Sekcija
           nadnaslov="Po proizvođaču"
-          naslov="Popularni brendovi"
+          naslov={imaOglasa ? 'Popularni brendovi' : 'Brendovi'}
           opis="Svaka stranica brenda ima iskreno pozicioniranje i objašnjenje njegovog akumulatorskog sistema, jer baterija odlučuje o sledećih pet kupovina."
         >
           <ul className={s.brendovi}>
@@ -294,7 +320,7 @@ export default function Pocetna() {
               <li key={b.slug}>
                 <Link href={`/brend/${b.slug}`} className={s.brend}>
                   <span className={s.brendIme}>{b.naziv}</span>
-                  <span className={s.brendBroj}>{b.broj}</span>
+                  {imaOglasa ? <span className={s.brendBroj}>{b.broj}</span> : null}
                 </Link>
               </li>
             ))}

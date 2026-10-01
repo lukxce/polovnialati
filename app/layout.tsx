@@ -2,10 +2,11 @@ import type { Metadata, Viewport } from 'next'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { fontVariables } from './fonts'
+import { SITE_URL } from '@/lib/site'
 import './globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://alatnica.rs'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Alatnica: nov i polovan alat, sa pravim opisom stanja',
     template: '%s · Alatnica',
@@ -26,10 +27,10 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'sr_RS',
     siteName: 'Alatnica',
-    url: 'https://alatnica.rs',
+    url: SITE_URL,
     title: 'Alatnica: nov i polovan alat, sa pravim opisom stanja',
     description:
-      'Elektroalat, akumulatorski sistemi, merni instrumenti i sitna mehanizacija. Pet ocena stanja umesto slobodnog teksta, filter po bateriji i proveren prodavac.',
+      'Elektroalat, akumulatorski sistemi, merni instrumenti i sitna mehanizacija. Pet ocena stanja umesto slobodnog teksta, filter po bateriji i prodavac koji se zna po imenu.',
   },
   twitter: {
     card: 'summary_large_image',
@@ -41,9 +42,8 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  alternates: {
-    canonical: '/',
-  },
+  // Kanonski URL namerno nije postavljen ovde: nasledila bi ga svaka strana
+  // koja ne postavi svoj, i sve bi se prijavile pretraživačima kao početna.
 }
 
 export const viewport: Viewport = {
@@ -53,7 +53,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="sr" className={fontVariables}>
+    <html lang="sr-Latn" className={fontVariables}>
       <body>
         <Header />
         <main id="glavni">{children}</main>

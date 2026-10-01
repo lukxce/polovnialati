@@ -1,27 +1,41 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Ikona } from '@/components/Ikone'
 import s from './KontaktForma.module.css'
 
 type Greske = { ime?: string; email?: string; poruka?: string }
 
 const TEME = [
-  'Pitanje o proizvodu',
+  'Pitanje o sajtu',
   'Prijava spornog oglasa',
+  'Zaboravljena lozinka',
+  'Problem sa nalogom',
+  'Zahtev u vezi sa ličnim podacima',
   'Saradnja i partnerstvo',
   'Greška na sajtu',
   'Nešto drugo',
 ]
 
-/**
- * Obrazac je namerno nefunkcionalan: validacija radi, slanje ne postoji.
- * „Pošalji" prikazuje šta bi se desilo u pravoj verziji, i to piše u obrascu.
- */
+/** `?tema=lozinka` (link sa prijave) unapred bira temu. */
+const TEMA_IZ_URLA: Record<string, string> = {
+  lozinka: 'Zaboravljena lozinka',
+  prijava: 'Prijava spornog oglasa',
+  podaci: 'Zahtev u vezi sa ličnim podacima',
+}
+
+/** Poruka ide na /api/kontakt i čuva se u bazi; tim je čita u /admin. */
 export function KontaktForma() {
   const [greske, setGreske] = useState<Greske>({})
   const [poslato, setPoslato] = useState(false)
+  const [salje, setSalje] = useState(false)
+  const [greskaSlanja, setGreskaSlanja] = useState<string>()
   const [tema, setTema] = useState(TEME[0])
+
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get('tema')
+    if (t && TEMA_IZ_URLA[t]) setTema(TEMA_IZ_URLA[t])
+  }, [])
 
   function proveri(podaci: FormData): Greske {
     const g: Greske = {}
@@ -39,12 +53,33 @@ export function KontaktForma() {
     <form
       className={s.forma}
       noValidate
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
-        const podaci = new FormData(e.currentTarget)
+        const forma = e.currentTarget
+        const podaci = new FormData(forma)
         const g = proveri(podaci)
         setGreske(g)
-        setPoslato(Object.keys(g).length === 0)
+        if (Object.keys(g).length) return
+        setSalje(true)
+        setGreskaSlanja(undefined)
+        const res = await fetch('/api/kontakt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ime: podaci.get('ime'),
+            email: podaci.get('email'),
+            tema,
+            tekst: podaci.get('poruka'),
+          }),
+        }).catch(() => null)
+        setSalje(false)
+        if (!res?.ok) {
+          const data = res ? await res.json().catch(() => ({})) : {}
+          setGreskaSlanja(data.greska || 'Poruka nije poslata. Pokušaj ponovo za koji minut.')
+          return
+        }
+        forma.reset()
+        setPoslato(true)
       }}
     >
       <div className={s.red}>
@@ -89,7 +124,7 @@ export function KontaktForma() {
             </span>
           ) : (
             <span id="email-pomoc" className={s.pomoc}>
-              Ne čuva se nigde: obrazac ništa ne šalje.
+              Na ovu adresu ti odgovaramo. Ne koristi se ni za šta drugo.
             </span>
           )}
         </div>
@@ -122,7 +157,8 @@ export function KontaktForma() {
           id="poruka"
           name="poruka"
           className={greske.poruka ? `polje ${s.tekst} ${s.poljeGreska}` : `polje ${s.tekst}`}
-          placeholder="Napiši o čemu je reč. Ako prijavljuješ oglas, dodaj link."
+          maxLength={5000}
+          placeholder="Napiši o čemu je reč. Ako prijavljuješ oglas, dodaj link. Za zaboravljenu lozinku navedi email naloga."
           aria-invalid={greske.poruka ? true : undefined}
           aria-describedby={greske.poruka ? 'poruka-greska' : undefined}
         />
@@ -135,25 +171,29 @@ export function KontaktForma() {
 
       <div className={s.dno}>
         <p className={s.napomena}>
-          Obrazac je deo demonstracije. Provera unosa radi, slanje ne postoji i nijedan podatak ne
-          napušta tvoj pregledač.
+          Slanjem pristaješ da tvoje ime, email i poruku sačuvamo da bismo ti odgovorili. Više u{' '}
+          <a href="/privatnost">politici privatnosti</a>.
         </p>
-        <button type="submit" className="btn btn-primary">
-          Pošalji poruku
+        <button type="submit" className="btn btn-primary" disabled={salje}>
+          {salje ? 'Slanje…' : 'Pošalji poruku'}
         </button>
       </div>
 
       <div aria-live="polite">
+        {greskaSlanja ? (
+          <p className={s.greska} role="alert">
+            {greskaSlanja}
+          </p>
+        ) : null}
         {poslato ? (
           <div className={s.ishod}>
             <span className={s.ishodIkona}>
               <Ikona ime="cek" velicina={16} />
             </span>
             <p>
-              <strong className={s.ishodNaslov}>Poruka nije poslata. To je očekivano.</strong>
-              Unos je ispravan, pa bi u pravoj verziji Alatnice poruka na temu „{tema}" u ovom
-              trenutku otišla na sanduče podrške i dobio bi potvrdu na imejl. Ovde nema servera koji
-              je prima, pa se ništa nije desilo.
+              <strong className={s.ishodNaslov}>Poruka je poslata.</strong>
+              Stigla je do nas na temu „{tema}". Odgovaramo na email koji si upisao, obično u roku
+              od jednog do dva radna dana.
             </p>
           </div>
         ) : null}

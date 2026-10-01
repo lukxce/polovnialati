@@ -1,11 +1,14 @@
 import type { Prodavac } from '@/lib/types'
 
+/** DEMO PODACI — samo za lokalni razvoj, vidi data/oglasi.ts. */
+export type DemoProdavac = Omit<Prodavac, 'id' | 'imaTelefon'> & { ocena: number; odgovaraZa: string }
+
 /**
  * 18 prodavaca: privatna lica, prodavnice i servisi, po gradovima Srbije.
  * `brojOglasa` se u upitima ne koristi kao izvor istine — pravi broj se
  * računa iz oglasa — ali je ovde realno postavljen.
  */
-export const prodavci: Prodavac[] = [
+export const prodavci: DemoProdavac[] = [
   // ── Prodavnice ───────────────────────────────────────────────────
   {
     slug: 'alat-centar-bg',

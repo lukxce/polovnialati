@@ -36,7 +36,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: izbor ? `${izbor}: oglasi za alat` : 'Svi oglasi za alat',
     description: izbor
       ? `Oglasi za alat: ${izbor}. Svaki oglas nosi jednu od pet ocena stanja sa objavljenom definicijom, poznatog prodavca i filter po akumulatorskom sistemu.`
-      : 'Ceo katalog Alatnice: elektroalat, akumulatorski sistemi, merni instrumenti, sitna mehanizacija i potrošni materijal. Filtriraj po kategoriji, oceni stanja, ceni, brendu, bateriji, gradu i tipu prodavca.',
+      : 'Nov i polovan alat na Alatnici: elektroalat, akumulatorski sistemi, merni instrumenti, sitna mehanizacija i potrošni materijal. Filtriraj po kategoriji, oceni stanja, ceni, brendu, bateriji, gradu i tipu prodavca.',
     // Fasetirane kombinacije se ne indeksiraju — indeksira se samo čista putanja.
     robots: filtrirano ? { index: false, follow: true } : { index: true, follow: true },
     alternates: { canonical: OSNOVA },
@@ -46,7 +46,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function OglasiStranica({ searchParams }: Props) {
   const sp = await searchParams
   const filteri = parseFiltere(sp)
-  const podaci = pripremiBrowse(filteri)
+  const podaci = await pripremiBrowse(filteri)
   const fasete = samoFasete(podaci)
 
   return (
@@ -60,9 +60,11 @@ export default async function OglasiStranica({ searchParams }: Props) {
         <p className="micro">Ceo katalog</p>
         <h1 className={s.naslov}>Oglasi za alat</h1>
         <p className={s.lede}>
-          {brojSr(podaci.ukupno, ['oglas', 'oglasa', 'oglasa'])} u ponudi, od mrežnih bušilica do
-          agregata. Svaki nosi jednu od pet ocena stanja sa istom, objavljenom definicijom, a ako
-          već imaš baterije, filter po akumulatorskom sistemu ti odmah skloni sve što ti ne pali.
+          {podaci.ukupno > 0
+            ? `${brojSr(podaci.ukupno, ['oglas', 'oglasa', 'oglasa'])} u ponudi, od mrežnih bušilica do agregata. `
+            : ''}
+          Svaki oglas nosi jednu od pet ocena stanja sa istom, objavljenom definicijom, a ako već
+          imaš baterije, filter po akumulatorskom sistemu ti odmah skloni sve što ti ne pali.
         </p>
       </header>
 

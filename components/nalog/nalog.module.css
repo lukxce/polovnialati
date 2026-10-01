@@ -89,3 +89,100 @@
   display: flex;
   gap: 8px;
 }
+
+.znackaBlokiran {
+  background: var(--g-delove-t);
+  color: var(--g-delove);
+}
+
+.mala {
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.tekstCelije {
+  margin: 4px 0 0;
+  max-width: 520px;
+  white-space: pre-wrap;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.procitano td {
+  opacity: 0.6;
+}
+
+.sekcija {
+  margin-top: 36px;
+}
+
+.sekcijaNaslov {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+
+.upozorenja {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.upozorenja li {
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  background: var(--g-vidljivo-t);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dveKolone {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  .dveKolone {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.forma {
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.forma h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.polje {
+  display: grid;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.poruka {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.porukaOk {
+  color: var(--g-novo);
+}
+
+.porukaGreska {
+  color: var(--g-delove);
+}
+
+.opasno {
+  border-color: var(--g-delove-t);
+}

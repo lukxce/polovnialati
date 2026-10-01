@@ -92,3 +92,33 @@
   font-weight: 600;
   text-decoration: underline;
 }
+
+.napomena {
+  margin: -6px 0 16px;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.saglasnost {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 4px 0 18px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.saglasnost input {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  flex: none;
+  accent-color: var(--ink);
+}
+
+.saglasnost a {
+  color: var(--blue);
+  text-decoration: underline;
+}

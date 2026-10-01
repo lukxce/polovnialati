@@ -90,9 +90,9 @@ export function Korak4Fotografije({ nacrt, azuriraj, ukloniFotografiju, greske }
       <div className={s.iskrenost}>
         <Ikona ime="stit" velicina={18} />
         <p>
-          <strong>Ništa se ne otprema.</strong> Slike se otvaraju samo u tvom pregledaču preko
-          <code> URL.createObjectURL</code> i nestaju čim zatvoriš ili osvežiš stranicu. Alatnica u
-          ovom demou nema server koji bi ih primio.
+          <strong>Fotografije se otpremaju tek kad klikneš Objavi.</strong> Pre slanja ih smanjujemo
+          i brišemo podatke o lokaciji iz fotografije. Snimaj na dnevnom svetlu: pločicu sa
+          modelom, mesta habanja i sav pribor iz oglasa. Najviše 12 fotografija, prva je naslovna.
         </p>
       </div>
 

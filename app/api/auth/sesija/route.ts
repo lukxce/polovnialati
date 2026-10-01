@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { ucitajSesiju } from '@/lib/auth'
+import { aktivnaSesija } from '@/lib/auth'
 import { ukupnoNeprocitano } from '@/lib/poruke'
 
 /**
@@ -12,9 +12,12 @@ import { ukupnoNeprocitano } from '@/lib/poruke'
  * Nosi i broj nepročitanih poruka — jedan fetch umesto dva na svakoj strani.
  */
 export async function GET() {
-  const sesija = await ucitajSesiju()
+  const sesija = await aktivnaSesija()
   if (!sesija) return NextResponse.json(null)
 
   const neprocitano = await ukupnoNeprocitano(sesija.userId)
-  return NextResponse.json({ naziv: sesija.naziv, uloga: sesija.uloga, neprocitano })
+  return NextResponse.json(
+    { id: sesija.userId, naziv: sesija.naziv, uloga: sesija.uloga, neprocitano },
+    { headers: { 'Cache-Control': 'private, no-store' } },
+  )
 }

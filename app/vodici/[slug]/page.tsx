@@ -10,6 +10,7 @@ import VodicKartica from '@/components/vodici/VodicKartica'
 import { formatDatum } from '@/lib/format'
 import { ostaliVodici, sadrzaj, sviVodici, vodicBySlug, vremeCitanja } from '@/lib/vodici'
 import s from './clanak.module.css'
+import { SITE_URL } from '@/lib/site'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -56,7 +57,7 @@ export default async function VodicStranica({ params }: Props) {
     articleSection: vodic.tema,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://alatnica.rs/vodici/${vodic.slug}`,
+      '@id': `${SITE_URL}/vodici/${vodic.slug}`,
     },
     author: { '@type': 'Organization', name: 'Alatnica' },
     publisher: { '@type': 'Organization', name: 'Alatnica' },

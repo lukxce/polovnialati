@@ -5,7 +5,7 @@ import SacuvajDugme from '@/components/SacuvajDugme'
 import Slika from '@/components/Slika'
 import StanjeChip from '@/components/StanjeChip'
 import { formatCena } from '@/lib/format'
-import { brendBySlug, prodavacBySlug } from '@/lib/queries'
+import { brendBySlug } from '@/lib/taksonomija'
 import type { Oglas } from '@/lib/types'
 import s from './OglasKartica.module.css'
 
@@ -17,7 +17,6 @@ type Props = {
 
 export function OglasKartica({ oglas, kompaktno }: Props) {
   const brend = brendBySlug(oglas.brend)
-  const prodavac = prodavacBySlug(oglas.prodavacId)
 
   return (
     <article
@@ -79,10 +78,10 @@ export function OglasKartica({ oglas, kompaktno }: Props) {
             {oglas.lokacija}
           </span>
 
-          {prodavac ? <ProdavacOznaka tip={prodavac.tip} /> : null}
+          <ProdavacOznaka tip={oglas.prodavacTip} />
 
           {oglas.provereno ? (
-            <span className={s.provereno} title="Oglas proveren od strane Alatnice">
+            <span className={s.provereno} title="Oglas je pregledao tim Alatnice">
               <Ikona ime="cek" velicina={13} />
               Provereno
             </span>

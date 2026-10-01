@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
+import { db } from './db'
 import type { TipProdavca } from './types'
 
 // Public self-registration — anyone can create a PRODAVAC account, choosing
@@ -68,8 +69,30 @@ export async function ucitajSesiju(): Promise<Sesija | null> {
   }
 }
 
-export async function zahtevajSesiju(): Promise<Sesija> {
+/**
+ * Sesija proverena i u bazi: nalog još postoji i nije blokiran, a uloga se
+ * čita iz baze, ne iz kolačića. Kolačić važi 30 dana, pa bez ove provere
+ * blokiran ili obrisan nalog bi i dalje mogao da objavljuje i šalje poruke.
+ * Koristi se za svaku radnju koja nešto upisuje.
+ */
+export async function aktivnaSesija(): Promise<Sesija | null> {
   const sesija = await ucitajSesiju()
+  if (!sesija) return null
+  const korisnik = await db.user.findUnique({
+    where: { id: sesija.userId },
+    select: { blokiran: true, uloga: true, naziv: true, tip: true },
+  })
+  if (!korisnik || korisnik.blokiran) return null
+  return {
+    ...sesija,
+    uloga: korisnik.uloga as Uloga,
+    naziv: korisnik.naziv,
+    tip: korisnik.tip as TipProdavca,
+  }
+}
+
+export async function zahtevajSesiju(): Promise<Sesija> {
+  const sesija = await aktivnaSesija()
   if (!sesija) throw new Error('NIJE_PRIJAVLJEN')
   return sesija
 }
@@ -79,3 +102,4 @@ export async function zahtevajAdmina(): Promise<Sesija> {
   if (sesija.uloga !== ULOGE.ADMIN) throw new Error('NIJE_DOZVOLJENO')
   return sesija
 }
+

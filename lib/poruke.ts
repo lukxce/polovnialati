@@ -9,8 +9,11 @@ import { db } from './db'
  * (svoj oglas) — pozivalac (API ruta) prevodi to u HTTP status.
  */
 export async function dobijIliNapraviRazgovor(oglasId: string, kupacId: string, tekst: string) {
-  const oglas = await db.oglas.findUnique({ where: { id: oglasId }, select: { id: true, userId: true } })
-  if (!oglas) throw new Error('OGLAS_NE_POSTOJI')
+  const oglas = await db.oglas.findUnique({
+    where: { id: oglasId },
+    select: { id: true, userId: true, aktivan: true, user: { select: { blokiran: true } } },
+  })
+  if (!oglas || !oglas.aktivan || oglas.user.blokiran) throw new Error('OGLAS_NE_POSTOJI')
   if (oglas.userId === kupacId) throw new Error('SOPSTVENI_OGLAS')
 
   const razgovor = await db.razgovor.upsert({
@@ -81,28 +84,23 @@ export async function ucitajRazgovore(userId: string): Promise<RazgovorPregled[]
   )
 }
 
-/** Ukupan broj nepročitanih poruka preko svih razgovora — za značku u navigaciji. */
+/**
+ * Ukupan broj nepročitanih poruka preko svih razgovora — za značku u
+ * navigaciji. Jedan SQL upit: ovo se zove na svakoj stranici (HeaderNav).
+ */
 export async function ukupnoNeprocitano(userId: string): Promise<number> {
-  const razgovori = await db.razgovor.findMany({
-    where: { OR: [{ kupacId: userId }, { prodavacId: userId }] },
-    select: { id: true, kupacId: true, procitanoKupac: true, procitanoProdavac: true },
-  })
-
-  const brojevi = await Promise.all(
-    razgovori.map((r) => {
-      const jaSamKupac = r.kupacId === userId
-      const procitanoPecat = jaSamKupac ? r.procitanoKupac : r.procitanoProdavac
-      return db.poruka.count({
-        where: {
-          razgovorId: r.id,
-          posiljalacId: { not: userId },
-          createdAt: procitanoPecat ? { gt: procitanoPecat } : undefined,
-        },
-      })
-    }),
-  )
-
-  return brojevi.reduce((a, b) => a + b, 0)
+  const [red] = await db.$queryRaw<{ broj: bigint }[]>`
+    SELECT COUNT(*)::bigint AS broj
+    FROM "Poruka" p
+    JOIN "Razgovor" r ON r.id = p."razgovorId"
+    WHERE p."posiljalacId" <> ${userId}
+      AND (
+        (r."kupacId" = ${userId} AND (r."procitanoKupac" IS NULL OR p."createdAt" > r."procitanoKupac"))
+        OR
+        (r."prodavacId" = ${userId} AND (r."procitanoProdavac" IS NULL OR p."createdAt" > r."procitanoProdavac"))
+      )
+  `
+  return Number(red?.broj ?? 0)
 }
 
 /** Označi razgovor kao pročitan za tu stranu (poziva se kad korisnik otvori nit). */

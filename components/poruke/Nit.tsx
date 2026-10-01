@@ -58,12 +58,17 @@ export function Nit({ razgovorId, mojId, pocetnePoruke }: Props) {
         ))}
       </div>
 
-      {greska ? <p className={s.greska}>{greska}</p> : null}
+      {greska ? (
+        <p className={s.greska} role="alert">
+          {greska}
+        </p>
+      ) : null}
 
       <form className={s.odgovorForma} onSubmit={posalji}>
         <textarea
           className={['polje', s.odgovorPolje].join(' ')}
           rows={2}
+          aria-label="Odgovor"
           placeholder="Napiši odgovor…"
           value={tekst}
           onChange={(e) => setTekst(e.target.value)}

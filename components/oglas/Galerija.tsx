@@ -15,7 +15,7 @@ type Props = {
  * Jedna traka slika za oba raspona:
  *  · telefon — vodoravni snap-scroll + tačkice
  *  · desktop — ista traka, ali se pomera klikom na sličicu
- * Slike su generisani SVG-ovi iz `/public/slike`, pa idu kao običan `<img>`.
+ * Fotografije prodavca (Vercel Blob) ili SVG ilustracije iz `/public/slike` — običan `<img>`.
  */
 export function Galerija({ slike, alt }: Props) {
   const traka = useRef<HTMLDivElement>(null)
