@@ -1,7 +1,7 @@
 /**
  * Podaci o sajtu i operateru — jedno mesto za domen, ime i pravni identitet.
  *
- * Domen: NEXT_PUBLIC_SITE_URL (npr. https://polovnialat.rs). Dok domen nije
+ * Domen: NEXT_PUBLIC_SITE_URL (npr. https://polovnialati.rs). Dok domen nije
  * podešen, na Vercel-u se koristi produkcijska vercel.app adresa.
  *
  * Operater: pravno lice ili preduzetnik koji vodi sajt. Ove vrednosti se
