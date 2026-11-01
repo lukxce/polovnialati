@@ -67,6 +67,8 @@ export const kategorije: Kategorija[] = [
     opis: 'Ono što se troši i najčešće dokupljuje: burgije, krune, diskovi, listovi za testere i vezni materijal.',
   },
   { slug: 'sds-burgije', naziv: 'SDS burgije', roditelj: 'burgije-seciva-i-potrosni-materijal', ikona: 'burgija' },
+  { slug: 'burgije-za-metal-i-drvo', naziv: 'Burgije za metal i drvo', roditelj: 'burgije-seciva-i-potrosni-materijal', ikona: 'burgija' },
+  { slug: 'bitovi-i-nastavci', naziv: 'Bitovi i nastavci', roditelj: 'burgije-seciva-i-potrosni-materijal', ikona: 'odvijac' },
   { slug: 'krune', naziv: 'Krune', roditelj: 'burgije-seciva-i-potrosni-materijal', ikona: 'kruna' },
   { slug: 'rezni-i-brusni-diskovi', naziv: 'Rezni i brusni diskovi', roditelj: 'burgije-seciva-i-potrosni-materijal', ikona: 'disk' },
   { slug: 'listovi-za-testere', naziv: 'Listovi za testere', roditelj: 'burgije-seciva-i-potrosni-materijal', ikona: 'list-testere' },

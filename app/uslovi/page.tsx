@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 }
 
 /** Menjaj pri svakoj izmeni teksta. */
-const VAZI_OD = '1. oktobar 2026.'
+const VAZI_OD = '1. novembar 2026.'
 
 export default function UsloviStranica() {
   return (
@@ -95,7 +95,9 @@ export default function UsloviStranica() {
             <li>Jedan oglas je jedan predmet ili jedan komplet. Isti predmet se ne objavljuje više puta.</li>
             <li>
               Fotografije moraju biti fotografije konkretnog predmeta, ne slike sa sajta
-              proizvođača ili iz tuđih oglasa.
+              proizvođača ili iz tuđih oglasa. Izuzetak: prodavnica koja prodaje nov, neotpakovan
+              alat sme da koristi zvanične fotografije proizvođača ili uvoznika, ako ima dozvolu
+              da ih koristi.
             </li>
             <li>
               Ocena stanja i lista provere moraju odgovarati stvarnom stanju. Ocene i njihove

@@ -12,7 +12,8 @@
     "db:migracija": "prisma migrate dev",
     "db:admin": "tsx prisma/seed.ts",
     "db:demo": "tsx prisma/demo.ts",
-    "db:demo:obrisi": "tsx prisma/demo.ts --obrisi"
+    "db:demo:obrisi": "tsx prisma/demo.ts --obrisi",
+    "uvoz:milwaukee": "tsx scripts/uvoz-milwaukee.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -30,6 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "prisma": "^6.19.3",
+    "sharp": "^0.35.3",
     "tsx": "^4.23.13",
     "typescript": "^5"
   },

@@ -21,7 +21,7 @@ export const UVODI: Record<string, string[]> = {
   ],
   'burgije-seciva-i-potrosni-materijal': [
     'Potrošni materijal je stavka koja se najčešće potceni u računici, a ume da košta više od same mašine na godišnjem nivou.',
-    'SDS burgije, krune, rezni i brusni diskovi, listovi za testere, šrafovi i tiplovi. Ovde je najviše novih artikala i najviše kupovine na količinu, pa cenu poredi po komadu, a ne po pakovanju. Razlika između dva naizgled ista seta zna da bude dvostruka.',
+    'SDS burgije, burgije za metal i drvo, bitovi i nastavci, krune, rezni i brusni diskovi, listovi za testere, šrafovi i tiplovi. Ovde je najviše novih artikala i najviše kupovine na količinu, pa cenu poredi po komadu, a ne po pakovanju. Razlika između dva naizgled ista seta zna da bude dvostruka.',
   ],
   'pneumatika-i-kompresori': [
     'Vazduh kao pogon znači jeftiniji i lakši alat, ali i sav teret prebačen na jednu mašinu koja mora da izdrži.',
@@ -104,6 +104,10 @@ export const SAVETI: Record<string, string> = {
   // Burgije, sečiva i potrošni materijal
   'sds-burgije':
     'Burgija sa četiri rezne ivice duže drži oštrinu u armiranom betonu i ne beži kad naiđe na armaturu.',
+  'burgije-za-metal-i-drvo':
+    'HSS burgija za metal ne buši beton, a burgija za beton u čeliku samo greje. Na kutiji traži materijal, ne samo prečnik.',
+  'bitovi-i-nastavci':
+    'Udarni odvijač traži bitove za udarni rad (označene kao „Impact"); obični pucaju na torziji posle par šrafova.',
   krune:
     'Dijamantska kruna za mokro bušenje traži i dovod vode i mašinu sa odgovarajućim brojem obrtaja. Suva kruna nije zamena.',
   'rezni-i-brusni-diskovi':
