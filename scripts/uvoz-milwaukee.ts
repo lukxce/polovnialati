@@ -6,8 +6,8 @@
 // 1200 px (JPEG) i otpremaju u Vercel Blob; u bazi stoje samo naši URL-ovi.
 //
 //   npx tsx scripts/uvoz-milwaukee.ts oglasi.json --suvo        samo provera, ništa ne upisuje
-//   npx tsx scripts/uvoz-milwaukee.ts oglasi.json --slika=3     uvoz, najviše 3 fotografije po oglasu
-//   npx tsx scripts/uvoz-milwaukee.ts oglasi.json --slika=12    kasnije: dopuni ostale fotografije
+//   npx tsx scripts/uvoz-milwaukee.ts oglasi.json               uvoz, jedna fotografija po oglasu
+//   npx tsx scripts/uvoz-milwaukee.ts oglasi.json --slika=3     najviše 3 fotografije po oglasu
 //
 // Može da se pokrene više puta: slug oglasa je izveden iz kataloškog broja,
 // pa postojeći oglasi ne nastaju ponovo, samo im se dodaju fotografije koje
@@ -42,7 +42,7 @@ const argumenti = process.argv.slice(2)
 const putanja = argumenti.find((a) => !a.startsWith('--'))
 const opcija = (ime: string) => argumenti.find((a) => a.startsWith(`--${ime}=`))?.split('=')[1]
 const SUVO = argumenti.includes('--suvo')
-const MAKS_SLIKA = Number(opcija('slika') ?? 3)
+const MAKS_SLIKA = Number(opcija('slika') ?? 1)
 const MAKS_OTPREMANJA = Number(opcija('maks-otpremanja') ?? 1200)
 const OGRANICI = opcija('limit') ? Number(opcija('limit')) : Infinity
 
