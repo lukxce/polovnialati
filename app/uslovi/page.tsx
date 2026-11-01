@@ -39,19 +39,19 @@ export default function UsloviStranica() {
           <p className={s.p}>
             Sajt vodi {ili(OPERATER.naziv)}, sa sedištem na adresi {ili(OPERATER.adresa)}, PIB{' '}
             {ili(OPERATER.pib)}, matični broj {ili(OPERATER.maticniBroj)} (u daljem tekstu:
-            „Alatnica", „mi"). Kontakt: {ili(OPERATER.email)} ili{' '}
+            „Polovni alati", „mi"). Kontakt: {ili(OPERATER.email)} ili{' '}
             <Link href="/kontakt">obrazac za kontakt</Link>.
           </p>
         </section>
 
         <section aria-labelledby="sta-je">
           <h2 id="sta-je" className={s.h2}>
-            2. Šta Alatnica jeste, a šta nije
+            2. Šta Polovni alati jesu, a šta nisu
           </h2>
           <p className={s.p}>
-            Alatnica je oglasnik za nov i polovan alat: prostor na kome prodavci objavljuju oglase,
-            a kupci ih pretražuju i kontaktiraju prodavce. Alatnica nije prodavac, nije strana u
-            kupoprodaji, ne drži novac, ne šalje robu i ne posreduje u plaćanju.
+            Polovni alati su oglasnik za nov i polovan alat: prostor na kome prodavci objavljuju oglase,
+            a kupci ih pretražuju i kontaktiraju prodavce. Polovni alati nisu prodavac, nisu strana u
+            kupoprodaji, ne drže novac, ne šalju robu i ne posreduju u plaćanju.
           </p>
           <p className={s.p}>
             Ugovor o kupoprodaji nastaje isključivo između kupca i prodavca. Za tačnost oglasa,
@@ -131,7 +131,7 @@ export default function UsloviStranica() {
           <p className={s.p}>
             Poruke služe za dogovor o konkretnom oglasu. Zabranjeno je slanje neželjenih poruka,
             reklama, linkova ka lažnim stranicama za plaćanje ili „dostavu", traženje podataka o
-            platnim karticama i bilo kakvo uznemiravanje. Alatnica nikada neće tražiti da joj
+            platnim karticama i bilo kakvo uznemiravanje. Polovni alati nikada neće tražiti da im
             uplatiš novac ili pošalješ podatke kartice.
           </p>
         </section>
@@ -164,7 +164,7 @@ export default function UsloviStranica() {
           <p className={s.p}>
             Tekstovi vodiča, dizajn i ilustracije sajta su naše autorsko delo. Imena brendova
             (Bosch, Makita, Hilti, DeWalt, Milwaukee i ostali) pripadaju njihovim vlasnicima i
-            koriste se samo da bi se opisao alat. Alatnica nije povezana ni sa jednim od tih
+            koriste se samo da bi se opisao alat. Polovni alati nisu povezani ni sa jednim od tih
             proizvođača niti ih zastupa.
           </p>
         </section>

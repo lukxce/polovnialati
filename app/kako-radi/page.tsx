@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/kako-radi' },
   openGraph: {
     type: 'website',
-    title: 'Kako Alatnica radi · Sigurna kupovina alata',
+    title: 'Kako sajt radi · Sigurna kupovina alata',
     description:
       'Referentna tabela pet ocena stanja, obavezna lista provere, plaćanje i pravila za susret uživo.',
     url: '/kako-radi',
@@ -200,7 +200,7 @@ const PLACANJE: Pravilo[] = [
     ikona: 'x',
     naslov: 'Nikad kapara unapred',
     tekst:
-      'Rezervacija uplatom na račun ili preko brzog transfera je najčešća prevara na oglasnicima. Alatnica nema sistem rezervacije i nikada neće tražiti da uplatiš bilo šta platformi.',
+      'Rezervacija uplatom na račun ili preko brzog transfera je najčešća prevara na oglasnicima. Polovni alati nemaju sistem rezervacije i nikada neće tražiti da uplatiš bilo šta platformi.',
     vrsta: 'crvena',
   },
   {
@@ -274,7 +274,7 @@ const ZASTAVICE: Pravilo[] = [
 
 const PITANJA = [
   {
-    p: 'Da li Alatnica naplaćuje objavu oglasa?',
+    p: 'Da li se objava oglasa naplaćuje?',
     o: 'Ne. Objava je besplatna i nema plaćenih pozicija u rezultatima. Oznaku „Izdvojeno" dodeljuje tim Alatnice kompletnim oglasima sa pravim fotografijama i popunjenom listom provere, i ona uvek piše na kartici.',
   },
   {
@@ -283,7 +283,7 @@ const PITANJA = [
   },
   {
     p: 'Šta ako mašina posle kupovine ne radi?',
-    o: 'Kod kupovine od privatnog lica važi ono što ste se dogovorili u prepisci, zato se dogovor piše, a ne izgovara. Kod prodavnice i servisa imaš prava kupca po Zakonu o zaštiti potrošača, uz račun. Alatnica nije strana u kupoprodaji, ali oglas prodavca koji ne poštuje dogovor možeš da prijaviš.',
+    o: 'Kod kupovine od privatnog lica važi ono što ste se dogovorili u prepisci, zato se dogovor piše, a ne izgovara. Kod prodavnice i servisa imaš prava kupca po Zakonu o zaštiti potrošača, uz račun. Sajt nije strana u kupoprodaji, ali oglas prodavca koji ne poštuje dogovor možeš da prijaviš.',
   },
   {
     p: 'Zašto se stanje ne piše slobodnim tekstom?',
@@ -319,9 +319,9 @@ export default function KakoRadiStranica() {
 
       <header className={s.uvod}>
         <p className="micro">Pravila platforme</p>
-        <h1 className={s.naslov}>Kako Alatnica radi</h1>
+        <h1 className={s.naslov}>Kako sajt radi</h1>
         <p className={s.lede}>
-          Alatnica ne posreduje u plaćanju, ne drži robu i ne garantuje za mašine. Ono što radi je
+          Polovni alati ne posreduju u plaćanju, ne drže robu i ne garantuju za mašine. Ono što rade je
           da svaki oglas natera u istu strukturu: prava kategorija, jedna od pet ocena stanja sa
           objavljenom definicijom, obavezna lista provere i prodavac koji ima ime, tip i istoriju.
           Ova stranica je referenca za sve to, plus ono što nijedna platforma ne može da uradi
@@ -481,7 +481,7 @@ export default function KakoRadiStranica() {
           Sigurna kupovina
         </h2>
         <p className={s.sekcijaUvod}>
-          Alatnica ne drži novac u depozitu i ne posreduje u plaćanju. To znači da pravila ispod
+          Sajt ne drži novac u depozitu i ne posreduje u plaćanju. To znači da pravila ispod
           nisu preporuka nego jedina zaštita koju stvarno imaš, i sva su besplatna.
         </p>
 
@@ -588,7 +588,7 @@ export default function KakoRadiStranica() {
           Kupuj sa listom provere, <span className="akcenat">prodaj sa njom</span>
         </h2>
         <p className={s.trakaTekst}>
-          Alatnica nije strana u kupoprodaji: dogovor, plaćanje i preuzimanje su između kupca i
+          Sajt nije strana u kupoprodaji: dogovor, plaćanje i preuzimanje su između kupca i
           prodavca. Zato ova pravila postoje. Ako nešto u oglasu ne odgovara onome što vidiš uživo,
           prijavi oglas sa njegove stranice.
         </p>

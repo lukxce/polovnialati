@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
+import { NAVRTKA_PUTANJA } from '@/components/Logo'
 
-export const alt = 'Alatnica — nov i polovan alat, sa pravim opisom stanja'
+export const alt = 'Polovni alati — nov i polovan alat, sa pravim opisom stanja'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -20,15 +21,26 @@ export default function OgSlika() {
           color: '#F4F2ED',
         }}
       >
-        <div style={{ fontSize: 40, fontWeight: 800, color: '#FF8A00', letterSpacing: -1 }}>
-          Alatnica
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 44, letterSpacing: -1 }}>
+          <svg width="52" height="52" viewBox="0 0 32 32">
+            <path
+              d={NAVRTKA_PUTANJA}
+              fill="#FF8A00"
+              fillRule="evenodd"
+              stroke="#FF8A00"
+              strokeWidth={3}
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span style={{ fontWeight: 500 }}>polovni</span>
+          <span style={{ fontWeight: 800 }}>alati</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>
-            Nov i polovan alat, sa pravim opisom stanja
+            Dobar alat ne mora da bude nov
           </div>
           <div style={{ fontSize: 32, color: '#C6C0B4' }}>
-            Pet ocena stanja · filter po akumulatorskom sistemu · prodavac koji se zna
+            Pet ocena stanja · filter po aku sistemu · poznat prodavac
           </div>
         </div>
       </div>

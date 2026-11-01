@@ -8,12 +8,12 @@ import './globals.css'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Alatnica: nov i polovan alat, sa pravim opisom stanja',
-    template: '%s · Alatnica',
+    default: 'Polovni alati: nov i polovan alat, sa pravim opisom stanja',
+    template: '%s · Polovni alati',
   },
   description:
     'Marketplace za nov i polovan alat i sitnu građevinsku opremu. Prava taksonomija, pet ocena stanja sa objavljenom definicijom, filter po akumulatorskom sistemu i prodavac koji se zna.',
-  applicationName: 'Alatnica',
+  applicationName: 'Polovni alati',
   keywords: [
     'alat',
     'polovan alat',
@@ -22,19 +22,19 @@ export const metadata: Metadata = {
     'građevinska oprema',
     'oglasi',
   ],
-  authors: [{ name: 'Alatnica' }],
+  authors: [{ name: 'Polovni alati' }],
   openGraph: {
     type: 'website',
     locale: 'sr_RS',
-    siteName: 'Alatnica',
+    siteName: 'Polovni alati',
     url: SITE_URL,
-    title: 'Alatnica: nov i polovan alat, sa pravim opisom stanja',
+    title: 'Polovni alati: nov i polovan alat, sa pravim opisom stanja',
     description:
       'Elektroalat, akumulatorski sistemi, merni instrumenti i sitna mehanizacija. Pet ocena stanja umesto slobodnog teksta, filter po bateriji i prodavac koji se zna po imenu.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Alatnica: nov i polovan alat',
+    title: 'Polovni alati: nov i polovan alat',
     description:
       'Marketplace za alat sa pravom taksonomijom, ocenjenim stanjem i poznatim prodavcem.',
   },

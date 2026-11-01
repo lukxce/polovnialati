@@ -472,7 +472,7 @@ export default async function OglasStranica({ params }: Props) {
             </section>
           ) : null}
 
-          {/* 8 — stanje: razlog zbog kog Alatnica postoji */}
+          {/* 8 — stanje: razlog zbog kog sajt postoji */}
           <section className={s.stanjeSekcija} aria-labelledby="stanje">
             <div className={s.stanjeZaglavlje}>
               <p className="micro">Provera stanja</p>

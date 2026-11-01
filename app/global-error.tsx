@@ -17,7 +17,7 @@ export default function GlobalnaGreska({ reset }: { error: Error & { digest?: st
         }}
       >
         <div style={{ maxWidth: 440, textAlign: 'center' }}>
-          <h1 style={{ fontSize: 28, margin: '0 0 12px' }}>Alatnica trenutno ne radi</h1>
+          <h1 style={{ fontSize: 28, margin: '0 0 12px' }}>Sajt trenutno ne radi</h1>
           <p style={{ lineHeight: 1.6, color: '#48453D' }}>
             Došlo je do greške na našoj strani. Pokušaj ponovo za par minuta.
           </p>

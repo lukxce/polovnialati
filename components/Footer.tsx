@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Ikona } from '@/components/Ikone'
+import Logo from '@/components/Logo'
 import { ili, OPERATER } from '@/lib/site'
 import { stabloKategorija } from '@/lib/taksonomija'
 import s from './Footer.module.css'
@@ -23,7 +24,7 @@ const KOLONE = [
     ],
   },
   {
-    naslov: 'Alatnica',
+    naslov: 'Polovni alati',
     linkovi: [
       { tekst: 'O nama', href: '/o-nama' },
       { tekst: 'Kontakt', href: '/kontakt' },
@@ -41,7 +42,9 @@ export function Footer() {
       <div className="container">
         <div className={s.vrh}>
           <div className={s.znakBlok}>
-            <p className={s.znak}>Alatnica</p>
+            <p className={s.znak}>
+              <Logo />
+            </p>
             <p className={s.slogan}>
               Marketplace za nov i polovan alat. Prava taksonomija, ocenjeno stanje i prodavac koji
               se zna, umesto pretrage kroz hiljadu neopisanih oglasa.
@@ -83,7 +86,7 @@ export function Footer() {
             <Ikona ime="stit" velicina={18} />
           </span>
           <p>
-            <strong>Alatnica je oglasnik, ne prodavac.</strong> Kupovina se dogovara i plaća
+            <strong>Polovni alati su oglasnik, ne prodavac.</strong> Kupovina se dogovara i plaća
             direktno između kupca i prodavca. Alat pogledaj i probaj pre plaćanja, i nikad ne šalji
             kaparu nepoznatom prodavcu.
           </p>

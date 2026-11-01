@@ -7,7 +7,7 @@ import { ili, OPERATER } from '@/lib/site'
 export const metadata: Metadata = {
   title: 'Politika privatnosti',
   description:
-    'Koje podatke o ličnosti Alatnica obrađuje, zašto, koliko dugo ih čuva, ko još ima pristup i kako ostvaruješ svoja prava po Zakonu o zaštiti podataka o ličnosti.',
+    'Koje podatke o ličnosti Polovni alati obrađuju, zašto, koliko dugo ih čuvaju, ko još ima pristup i kako ostvaruješ svoja prava po Zakonu o zaštiti podataka o ličnosti.',
   alternates: { canonical: '/privatnost' },
 }
 

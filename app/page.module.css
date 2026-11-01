@@ -71,53 +71,6 @@
   margin-top: 14px;
 }
 
-.heroBrojke {
-  display: grid;
-  /* Četiri kolone se ne uklapaju na 375px — oznake se sudaraju i brojevi
-     iskaču iz reda. Na telefonu ide 2×2, četiri u red tek kad ima mesta. */
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 12px;
-  margin-top: 26px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-
-.heroBrojke > div {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.heroBrojke dt {
-  font-size: 11.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-3);
-}
-
-.heroBrojke dd {
-  font-family: var(--font-display-stack);
-  font-size: 26px;
-  font-weight: 800;
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-}
-
-@media (min-width: 600px) {
-  .heroBrojke {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 4px 12px;
-  }
-}
-
-@media (min-width: 900px) {
-  .heroBrojke dd {
-    font-size: 32px;
-  }
-}
-
 /* ══ 2. Kategorije ═════════════════════════════════════════════ */
 
 .kategorije {

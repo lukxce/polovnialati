@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: { canonical: `/vodici/${vodic.slug}` },
     openGraph: {
       type: 'article',
-      title: `${vodic.naslov} · Alatnica`,
+      title: `${vodic.naslov} · Polovni alati`,
       description: vodic.opis,
       url: `/vodici/${vodic.slug}`,
       publishedTime: vodic.datum,
@@ -59,8 +59,8 @@ export default async function VodicStranica({ params }: Props) {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/vodici/${vodic.slug}`,
     },
-    author: { '@type': 'Organization', name: 'Alatnica' },
-    publisher: { '@type': 'Organization', name: 'Alatnica' },
+    author: { '@type': 'Organization', name: 'Polovni alati' },
+    publisher: { '@type': 'Organization', name: 'Polovni alati' },
     articleBody: vodic.blokovi
       .map((b) => {
         switch (b.tip) {

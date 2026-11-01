@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/vodici' },
   openGraph: {
     type: 'website',
-    title: 'Vodiči za kupovinu alata · Alatnica',
+    title: 'Vodiči za kupovinu alata · Polovni alati',
     description:
       'Kako izabrati rotacionu bušilicu, kako pregledati polovan alat, akumulatorski sistemi objašnjeni i pošteno poređenje Hilti / Bosch / Makita.',
     url: '/vodici',

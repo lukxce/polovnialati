@@ -553,7 +553,7 @@ export function ProdajniTok({ stablo, brendovi, gradovi }: Props) {
 const UVODI = [
   'Kategorija određuje koje se specifikacije traže, koja lista provere se popunjava i gde kupac nalazi oglas. Izaberi potkategoriju, ne samo grupu.',
   'Ono što kupac pročita pre nego što uopšte pogleda cenu: koja je tačno mašina, u kakvom je stanju i šta je sa njom rađeno.',
-  'Lista provere je razlog zbog kog Alatnica postoji. Prolaziš kroz stavke koje su specifične za tvoju kategoriju i odgovaraš na svaku.',
+  'Lista provere je razlog zbog kog sajt postoji. Prolaziš kroz stavke koje su specifične za tvoju kategoriju i odgovaraš na svaku.',
   'Fotografije nose oglas. Prva je naslovna i ona jedina ide na karticu u pretrazi.',
   'Poslednji korak: koliko, gde i kako se preuzima, pa pregled kartice pre objave.',
 ]

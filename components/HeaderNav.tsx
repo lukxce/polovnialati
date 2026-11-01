@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Logo from '@/components/Logo'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Ikona } from '@/components/Ikone'
@@ -79,8 +80,8 @@ export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
           <Ikona ime="meni" velicina={22} />
         </button>
 
-        <Link href="/" className={s.znak} aria-label="Alatnica, početna">
-          Alatnica
+        <Link href="/" className={s.znak} aria-label="Polovni alati, početna">
+          <Logo />
         </Link>
 
         <div className={s.megaOmot} ref={megaRef}>
@@ -184,7 +185,9 @@ export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
       {meni ? (
         <div className={s.mobilni} role="dialog" aria-modal="true" aria-label="Meni">
           <div className={`container ${s.mobilniVrh}`}>
-            <span className={s.znak}>Alatnica</span>
+            <span className={s.znak}>
+              <Logo />
+            </span>
             <button
               type="button"
               className="btn btn-ghost btn-mali"

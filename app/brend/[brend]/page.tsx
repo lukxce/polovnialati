@@ -75,7 +75,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     alternates: { canonical: osnova },
     openGraph: {
       type: 'website',
-      title: `${b.naziv}, Alatnica`,
+      title: `${b.naziv}, Polovni alati`,
       description: prvaRecenica(b.opis),
       url: osnova,
     },

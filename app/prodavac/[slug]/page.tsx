@@ -297,8 +297,8 @@ export default async function ProdavacStranica({ params }: Props) {
 
             <p className={s.proveraGranica}>
               <strong>Šta ovo ne znači.</strong> Verifikacija govori da nalog pripada onome ko
-              tvrdi da mu pripada. Ne govori ništa o konkretnoj mašini. Alatnica nije videla alat
-              iz ovog oglasa, ne garantuje da je ispravan i ne posreduje u plaćanju. Lista provere
+              tvrdi da mu pripada. Ne govori ništa o konkretnoj mašini. Mi nismo videli alat
+              iz ovog oglasa, ne garantujemo da je ispravan i ne posredujemo u plaćanju. Lista provere
               u oglasu je izjava prodavca, ne nalaz servisa.
             </p>
 
@@ -308,7 +308,7 @@ export default async function ProdavacStranica({ params }: Props) {
             </p>
 
             <Link href="/kako-radi" className={s.proveraLink}>
-              Kako Alatnica radi
+              Kako sajt radi
               <Ikona ime="strelica" velicina={16} />
             </Link>
           </section>

@@ -27,7 +27,7 @@ const BRZI = [
     ikona: 'stit' as const,
     naslov: 'Prevara ili spor sa prodavcem',
     tekst:
-      'Alatnica ne posreduje u plaćanju i ne može da vrati novac. Pre svake kupovine pročitaj pravila o plaćanju i susretu uživo. Ona su besplatna i jedina stvarna zaštita.',
+      'Sajt ne posreduje u plaćanju i ne može da vrati novac. Pre svake kupovine pročitaj pravila o plaćanju i susretu uživo. Ona su besplatna i jedina stvarna zaštita.',
     href: '/kako-radi#sigurna-kupovina',
     hrefTekst: 'Sigurna kupovina',
   },

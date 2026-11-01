@@ -109,7 +109,7 @@ export function Korak1Kategorija({ stablo, izabrana, grupa, naGrupu, naIzbor }: 
               Nema kategorije koja odgovara upitu <strong>„{upit}"</strong>.
             </p>
             <p className={s.pomoc}>
-              Alatnica namerno ne pokriva kamione, bagere i viljuškare. Ako prodaješ elektroalat,
+              Namerno ne pokrivamo kamione, bagere i viljuškare. Ako prodaješ elektroalat,
               probaj naziv mašine: „bušilica", „inverter", „agregat".
             </p>
             <button type="button" className="btn btn-tertiary" onClick={() => setUpit('')}>

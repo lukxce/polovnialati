@@ -20,7 +20,7 @@ function adresaSajta(): string {
 
 export const SITE_URL = adresaSajta()
 
-export const IME_SAJTA = 'Alatnica'
+export const IME_SAJTA = 'Polovni alati'
 
 export const OPERATER = {
   /** Puno poslovno ime, npr. „Preduzetnik Petar Petrović PR, Agencija XY, Beograd" */

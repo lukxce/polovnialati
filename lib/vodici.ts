@@ -368,7 +368,7 @@ export const vodici: Vodic[] = [
     ],
     veze: [
       {
-        naziv: 'Kako radi Alatnica',
+        naziv: 'Kako sajt radi',
         href: '/kako-radi',
         opis: 'Referentna tabela ocena stanja, saveti za plaćanje i za susret uživo.',
       },
@@ -434,7 +434,7 @@ export const vodici: Vodic[] = [
       },
       {
         tip: 'napomena',
-        naslov: 'Zato Alatnica filtrira po sistemu, a ne po naponu',
+        naslov: 'Zato filtriramo po sistemu, a ne po naponu',
         tekst:
           'Filter „akumulatorski sistem" na pregledu oglasa pojavljuje se samo kada je izbor kategorije ili brenda takav da sistemi uopšte postoje. Vrednost je puno ime platforme („18V Makita LXT"), ne broj volti, upravo zato što se po naponu ne može zaključiti ništa o kompatibilnosti.',
       },

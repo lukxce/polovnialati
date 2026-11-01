@@ -1,0 +1,21 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  white-space: nowrap;
+}
+
+.znak {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+
+.rec {
+  display: inline-flex;
+  gap: 0.2em;
+}
+
+.lako {
+  font-weight: 500;
+}

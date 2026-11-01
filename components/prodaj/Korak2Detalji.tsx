@@ -132,7 +132,7 @@ export function Korak2Detalji({
 
         {filtriraniBrendovi.length === 0 ? (
           <p className={s.nemaPogodakaMalo}>
-            Nema brenda po imenu „{upitBrenda}". Alatnica pokriva 17 proizvođača alata.
+            Nema brenda po imenu „{upitBrenda}". Pokrivamo 17 proizvođača alata.
           </p>
         ) : (
           <ul className={s.brendovi}>

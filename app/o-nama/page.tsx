@@ -7,7 +7,7 @@ import { sveKategorije, sviBrendovi } from '@/lib/taksonomija'
 export const metadata: Metadata = {
   title: 'O nama',
   description:
-    'Alatnica je marketplace za nov i polovan alat sa pravom taksonomijom, pet ocena stanja i poznatim prodavcem. Zašto postoji i šta radi drugačije od opštih oglasnika.',
+    'Polovni alati su marketplace za nov i polovan alat sa pravom taksonomijom, pet ocena stanja i poznatim prodavcem. Zašto postoje i šta rade drugačije od opštih oglasnika.',
   alternates: { canonical: '/o-nama' },
 }
 
@@ -29,7 +29,7 @@ export default function ONamaStranica() {
         <p className="micro">O projektu</p>
         <h1 className={s.naslov}>O Alatnici</h1>
         <p className={s.lede}>
-          Alatnica je oglasnik za nov i polovan alat i sitnu građevinsku opremu, napravljen oko
+          Polovni alati su oglasnik za nov i polovan alat i sitnu građevinsku opremu, napravljen oko
           jedne pretpostavke: da kupac alata ima tri konkretna pitanja i da mu nijedan postojeći
           oglasnik u Srbiji na njih ne odgovara.
         </p>
@@ -70,7 +70,7 @@ export default function ONamaStranica() {
 
         <section aria-labelledby="resenje">
           <h2 id="resenje" className={s.h2}>
-            Tri stvari koje Alatnica radi drugačije
+            Tri stvari koje radimo drugačije
           </h2>
 
           <h3 className={s.h3}>1. Taksonomija koja zna razliku</h3>
@@ -102,12 +102,12 @@ export default function ONamaStranica() {
 
         <section aria-labelledby="kako-radi">
           <h2 id="kako-radi" className={s.h2}>
-            Šta Alatnica jeste, a šta nije
+            Šta ovaj sajt jeste, a šta nije
           </h2>
           <p className={s.p}>
-            Alatnica je oglasnik: povezuje kupca i prodavca. Objava oglasa i poruke su besplatni.
-            Kupovina se dogovara i plaća direktno između vas dvoje. Alatnica nije strana u
-            prodaji, ne drži novac i ne šalje robu, pa uvek važi pravilo: alat se gleda i proba
+            Polovni alati su oglasnik: povezuju kupca i prodavca. Objava oglasa i poruke su besplatni.
+            Kupovina se dogovara i plaća direktno između vas dvoje. Mi nismo strana u
+            prodaji, ne držimo novac i ne šaljemo robu, pa uvek važi pravilo: alat se gleda i proba
             pre plaćanja.
           </p>
           <p className={s.p}>

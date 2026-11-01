@@ -14,7 +14,7 @@
   grid-template-areas:
     'meni znak desno'
     'pretraga pretraga pretraga';
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px 12px;
   padding-block: 10px;
@@ -39,7 +39,8 @@
 .znak {
   grid-area: znak;
   font-family: var(--font-display-stack);
-  font-size: 25px;
+  font-size: 21px;
+  min-width: 0;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;

@@ -12,12 +12,11 @@ import {
   stabloKategorija,
   sviBrendovi,
   sviOglasi,
-  sviProdavci,
 } from '@/lib/queries'
 import s from './page.module.css'
 
 export const metadata: Metadata = {
-  title: 'Alatnica, nov i polovan alat, sa pravim opisom stanja',
+  title: 'Polovni alati, nov i polovan alat, sa pravim opisom stanja',
   description:
     'Elektroalat, akumulatorski sistemi, ručni alat i sitna mehanizacija. Pet objavljenih ocena stanja umesto slobodnog teksta, filter po akumulatorskom sistemu i prodavac koji se zna po imenu.',
   alternates: { canonical: '/' },
@@ -54,11 +53,10 @@ const KADA_IMA_SMISLA: Record<string, string> = {
 
 export default async function Pocetna() {
   const stablo = stabloKategorija()
-  const [brojevi, oglasi, najnoviji, prodavci] = await Promise.all([
+  const [brojevi, oglasi, najnoviji] = await Promise.all([
     brojeviFiltera({}),
     sviOglasi(),
     filtrirajOglase({ sort: 'najnovije' }),
-    sviProdavci(),
   ])
 
   const imaOglasa = oglasi.length > 0
@@ -69,8 +67,6 @@ export default async function Pocetna() {
     .filter((b) => !imaOglasa || b.broj > 0)
     .sort((a, b) => b.broj - a.broj || a.naziv.localeCompare(b.naziv, 'sr'))
 
-  const brojProdavaca = prodavci.length
-  const brojLeafKategorija = stablo.reduce((n, x) => n + x.deca.length, 0)
 
   return (
     <>
@@ -83,7 +79,7 @@ export default async function Pocetna() {
           </p>
 
           <h1 className={s.heroNaslov}>
-            Alat koji piše <span className={s.podvuceno}>šta mu stvarno fali</span>
+            Dobar alat <span className={s.podvuceno}>ne mora da bude nov</span>
           </h1>
 
           <p className={s.heroTekst}>
@@ -124,26 +120,6 @@ export default async function Pocetna() {
             </li>
           </ul>
 
-          <dl className={s.heroBrojke}>
-            <div>
-              <dt>Kategorija</dt>
-              <dd>{stablo.length + brojLeafKategorija}</dd>
-            </div>
-            <div>
-              <dt>Brendova</dt>
-              <dd>{sviBrendovi().length}</dd>
-            </div>
-            {brojProdavaca > 0 ? (
-              <div>
-                <dt>Prodavaca</dt>
-                <dd>{brojProdavaca}</dd>
-              </div>
-            ) : null}
-            <div>
-              <dt>Ocena stanja</dt>
-              <dd>5</dd>
-            </div>
-          </dl>
         </div>
       </section>
 
@@ -225,7 +201,7 @@ export default async function Pocetna() {
             </div>
 
             <Link href="/kako-radi" className={`btn btn-primary ${s.oceneDugme}`}>
-              Kako Alatnica radi
+              Kako sajt radi
             </Link>
           </div>
 
@@ -300,11 +276,11 @@ export default async function Pocetna() {
           <Sekcija nadnaslov="Tek počinjemo" naslov="Budi među prvim prodavcima">
             <Prazno
               ikona="alat"
-              naslov="Alatnica je nova i katalog se tek puni"
+              naslov="Sajt je nov i katalog se tek puni"
               opis="Prvi oglasi u svakoj kategoriji su prvo što kupci vide. Objava je besplatna i traje pet minuta: kategorija, detalji, provera stanja, fotografije i cena."
               akcijaHref="/prodaj"
               akcijaTekst="Postavi prvi oglas"
-              predlozi={[{ tekst: 'Kako Alatnica radi', href: '/kako-radi' }]}
+              predlozi={[{ tekst: 'Kako sajt radi', href: '/kako-radi' }]}
             />
           </Sekcija>
         )}
