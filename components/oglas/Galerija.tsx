@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Ikona } from '@/components/Ikone'
 import s from './Galerija.module.css'
@@ -15,7 +16,9 @@ type Props = {
  * Jedna traka slika za oba raspona:
  *  · telefon — vodoravni snap-scroll + tačkice
  *  · desktop — ista traka, ali se pomera klikom na sličicu
- * Fotografije prodavca (Vercel Blob) ili SVG ilustracije iz `/public/slike` — običan `<img>`.
+ * Fotografije prodavca (Vercel Blob) idu kroz next/image (smanjena WebP verzija);
+ * SVG ilustracije iz `/public/slike` next/image sam prosleđuje neizmenjene.
+ * Uvećani prikaz namerno učitava original.
  */
 export function Galerija({ slike, alt }: Props) {
   const traka = useRef<HTMLDivElement>(null)
@@ -71,14 +74,13 @@ export function Galerija({ slike, alt }: Props) {
         >
           {slike.map((izvor, i) => (
             <div className={s.slajd} key={izvor}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={izvor}
                 alt={i === 0 ? alt : `${alt}, prikaz ${i + 1}`}
                 width={1000}
                 height={750}
+                sizes="(max-width: 999px) 100vw, 760px"
                 loading={i === 0 ? 'eager' : 'lazy'}
-                decoding={i === 0 ? 'sync' : 'async'}
                 fetchPriority={i === 0 ? 'high' : 'auto'}
               />
             </div>
@@ -130,8 +132,7 @@ export function Galerija({ slike, alt }: Props) {
                 aria-label={`Prikaži sliku ${i + 1}`}
                 aria-current={i === aktivna ? 'true' : undefined}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={izvor} alt="" width={200} height={150} loading="lazy" />
+                <Image src={izvor} alt="" width={200} height={150} sizes="100px" />
               </button>
             ))}
           </div>
