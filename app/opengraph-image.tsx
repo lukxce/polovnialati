@@ -25,8 +25,10 @@ export default function OgSlika() {
           <svg width="58" height="58" viewBox="0 0 32 32">
             <path d={ETIKETA_PUTANJA} transform={ETIKETA_OKRET} fill="#FF8A00" fillRule="evenodd" />
           </svg>
-          <span>polovni</span>
-          <span style={{ color: '#FF8A00' }}>alati</span>
+          <div style={{ display: 'flex' }}>
+            <span>polovni</span>
+            <span style={{ color: '#FF8A00' }}>alati</span>
+          </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>
