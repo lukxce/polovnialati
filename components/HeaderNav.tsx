@@ -81,7 +81,7 @@ export function HeaderNav({ stablo }: { stablo: StabloStavka[] }) {
         </button>
 
         <Link href="/" className={s.znak} aria-label="Polovni alati, početna">
-          <Logo />
+          <Logo slozi />
         </Link>
 
         <div className={s.megaOmot} ref={megaRef}>

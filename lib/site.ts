@@ -25,7 +25,7 @@ export const IME_SAJTA = 'Polovni alati'
 export const OPERATER = {
   /** Puno poslovno ime, npr. „Preduzetnik Petar Petrović PR, Agencija XY, Beograd" */
   naziv: process.env.NEXT_PUBLIC_OPERATER_NAZIV ?? '',
-  /** Sedište: ulica i broj, poštanski broj, mesto */
+  /** Sedište: ulica i broj, poštanski broj, mesto. Neobavezno: ako je prazno, ne prikazuje se. */
   adresa: process.env.NEXT_PUBLIC_OPERATER_ADRESA ?? '',
   pib: process.env.NEXT_PUBLIC_OPERATER_PIB ?? '',
   maticniBroj: process.env.NEXT_PUBLIC_OPERATER_MB ?? '',
@@ -41,7 +41,7 @@ export function ili(vrednost: string): string {
 }
 
 export function operaterPopunjen(): boolean {
-  return !!(OPERATER.naziv && OPERATER.adresa && OPERATER.pib && OPERATER.maticniBroj && OPERATER.email)
+  return !!(OPERATER.naziv && OPERATER.pib && OPERATER.maticniBroj && OPERATER.email)
 }
 
 /** Apsolutni URL za OG slike, JSON-LD i sitemap. */

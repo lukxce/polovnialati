@@ -1,21 +1,41 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.3em;
+  gap: 0.25em;
   white-space: nowrap;
 }
 
 .znak {
-  width: 1.1em;
-  height: 1.1em;
+  width: 1.15em;
+  height: 1.15em;
   flex: none;
 }
 
 .rec {
-  display: inline-flex;
-  gap: 0.2em;
+  font-weight: 800;
+  letter-spacing: -0.035em;
 }
 
-.lako {
-  font-weight: 500;
+/* Na svetloj pozadini tamnija narandžasta da bi se čitala; tamni paneli
+   postavljaju --logo-naglasak na punu narandžastu. */
+.naglasak {
+  color: var(--logo-naglasak, var(--amber-deep));
+}
+
+@media (max-width: 479px) {
+  .slozi {
+    font-size: 0.82em;
+    gap: 0.22em;
+  }
+
+  .slozi .rec {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 0.9;
+  }
+
+  .slozi .znak {
+    width: 1.75em;
+    height: 1.75em;
+  }
 }

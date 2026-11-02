@@ -37,7 +37,7 @@ export default function UsloviStranica() {
             1. Ko vodi Alatnicu
           </h2>
           <p className={s.p}>
-            Sajt vodi {ili(OPERATER.naziv)}, sa sedištem na adresi {ili(OPERATER.adresa)}, PIB{' '}
+            Sajt vodi {ili(OPERATER.naziv)}{OPERATER.adresa ? `, sa sedištem na adresi ${OPERATER.adresa}` : ''}, PIB{' '}
             {ili(OPERATER.pib)}, matični broj {ili(OPERATER.maticniBroj)} (u daljem tekstu:
             „Polovni alati", „mi"). Kontakt: {ili(OPERATER.email)} ili{' '}
             <Link href="/kontakt">obrazac za kontakt</Link>.

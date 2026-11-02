@@ -94,8 +94,12 @@ export default function KontaktStranica() {
             <p className={k.demoTekst}>
               {ili(OPERATER.naziv)}
               <br />
-              {ili(OPERATER.adresa)}
-              <br />
+              {OPERATER.adresa ? (
+                <>
+                  {OPERATER.adresa}
+                  <br />
+                </>
+              ) : null}
               PIB {ili(OPERATER.pib)} · MB {ili(OPERATER.maticniBroj)}
               <br />
               Email:{' '}

@@ -37,7 +37,7 @@ export default function PrivatnostStranica() {
             1. Rukovalac
           </h2>
           <p className={s.p}>
-            Rukovalac podacima je {ili(OPERATER.naziv)}, {ili(OPERATER.adresa)}, PIB{' '}
+            Rukovalac podacima je {ili(OPERATER.naziv)}, {OPERATER.adresa ? `${OPERATER.adresa}, ` : ''}PIB{' '}
             {ili(OPERATER.pib)}, MB {ili(OPERATER.maticniBroj)}. Za sva pitanja o podacima i za
             ostvarivanje prava piši na {ili(OPERATER.email)} ili preko{' '}
             <Link href="/kontakt?tema=podaci">obrasca za kontakt</Link>.

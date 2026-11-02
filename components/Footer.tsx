@@ -98,7 +98,7 @@ export function Footer() {
             {OPERATER.pib ? ` · PIB ${OPERATER.pib}` : ''}
             {OPERATER.maticniBroj ? ` · MB ${OPERATER.maticniBroj}` : ''}
           </p>
-          <p className="micro">{ili(OPERATER.adresa)}</p>
+          {OPERATER.adresa ? <p className="micro">{OPERATER.adresa}</p> : null}
         </div>
       </div>
     </footer>

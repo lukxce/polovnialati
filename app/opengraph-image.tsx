@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { NAVRTKA_PUTANJA } from '@/components/Logo'
+import { ETIKETA_OKRET, ETIKETA_PUTANJA } from '@/components/Logo'
 
 export const alt = 'Polovni alati — nov i polovan alat, sa pravim opisom stanja'
 export const size = { width: 1200, height: 630 }
@@ -21,19 +21,12 @@ export default function OgSlika() {
           color: '#F4F2ED',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 44, letterSpacing: -1 }}>
-          <svg width="52" height="52" viewBox="0 0 32 32">
-            <path
-              d={NAVRTKA_PUTANJA}
-              fill="#FF8A00"
-              fillRule="evenodd"
-              stroke="#FF8A00"
-              strokeWidth={3}
-              strokeLinejoin="round"
-            />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 48, letterSpacing: -1.5 }}>
+          <svg width="58" height="58" viewBox="0 0 32 32">
+            <path d={ETIKETA_PUTANJA} transform={ETIKETA_OKRET} fill="#FF8A00" fillRule="evenodd" />
           </svg>
-          <span style={{ fontWeight: 500 }}>polovni</span>
-          <span style={{ fontWeight: 800 }}>alati</span>
+          <span>polovni</span>
+          <span style={{ color: '#FF8A00' }}>alati</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>

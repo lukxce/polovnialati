@@ -24,6 +24,7 @@
   letter-spacing: -0.03em;
   line-height: 1;
   color: #fbf9f5;
+  --logo-naglasak: var(--amber);
 }
 
 .slogan {
