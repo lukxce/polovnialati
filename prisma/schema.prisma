@@ -90,6 +90,7 @@ model Oglas {
 
   razgovori Razgovor[]
   prijave   Prijava[]
+  interes   Interes[]
 
   @@index([userId])
   @@index([aktivan, createdAt])
@@ -175,4 +176,20 @@ model Pokusaj {
   createdAt DateTime @default(now())
 
   @@index([kljuc, createdAt])
+}
+
+// Interesovanje kupaca za oglas, za statistiku u /admin: jedan red = jedan
+// pregled, klik na „Pozovi" ili dodir broja telefona. Ne čuva se ko je
+// kliknuo (ni IP ni nalog); duplikate sa iste adrese odbija lib/ogranicenje.
+// Vlasnik oglasa i admin se ne broje.
+model Interes {
+  id        String   @id @default(cuid())
+  oglasId   String
+  oglas     Oglas    @relation(fields: [oglasId], references: [id], onDelete: Cascade)
+  /// 'pregled' | 'telefon' (klik na „Pozovi", broj prikazan) | 'poziv' (dodir broja, otvoren poziv)
+  tip       String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt, tip])
+  @@index([oglasId, tip])
 }

@@ -268,7 +268,12 @@ export function KontaktAkcije({
               {telefon ? (
                 <>
                   <p className={s.panelNaslov}>
-                    <a href={`tel:${telefon.replace(/[^\d+]/g, '')}`}>{telefon}</a>
+                    <a
+                      href={`tel:${telefon.replace(/[^\d+]/g, '')}`}
+                      onClick={() => navigator.sendBeacon?.(`/api/oglasi/${oglasId}/poziv`)}
+                    >
+                      {telefon}
+                    </a>
                   </p>
                   <p className={s.panelTekst}>
                     Pre plaćanja alat pogledaj i probaj uživo. Ne šalji kaparu nepoznatom

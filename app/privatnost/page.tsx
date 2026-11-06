@@ -74,6 +74,10 @@ export default function PrivatnostStranica() {
               sličnim radnjama, radi zaštite od pogađanja lozinki, spama i zloupotrebe. Osnov:
               legitimni interes (bezbednost sajta).
             </li>
+            <li>
+              <strong>Statistika oglasa:</strong> broj pregleda oglasa i klikova na „Pozovi", bez
+              podatka o tome ko je kliknuo. Svrha: praćenje rada sajta. Osnov: legitimni interes.
+            </li>
           </ul>
           <p className={s.p}>
             Podaci za nalog su neophodni da bi nalog postojao; bez njih ne možeš da objavljuješ ni

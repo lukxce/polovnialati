@@ -18,6 +18,10 @@ export type OglasAdminRed = {
   prodavacNaziv: string
   prodavacEmail: string
   brojPrijava: number
+  pregleda: number
+  klikovaPozovi: number
+  poziva: number
+  poruka: number
 }
 
 export default function OglasiAdminTabela({ oglasi }: { oglasi: OglasAdminRed[] }) {
@@ -54,6 +58,7 @@ export default function OglasiAdminTabela({ oglasi }: { oglasi: OglasAdminRed[] 
             <th>Naslov</th>
             <th>Prodavac</th>
             <th>Cena</th>
+            <th title="Pregledi · klik Pozovi · pozivi · poruke">Interes</th>
             <th>Aktivan</th>
             <th>Provereno</th>
             <th>Izdvojeno</th>
@@ -79,6 +84,13 @@ export default function OglasiAdminTabela({ oglasi }: { oglasi: OglasAdminRed[] 
               <td>
                 {formatCena(o.cena)}
                 {o.cenaDogovor ? <span className={s.mala}> · dogovor</span> : null}
+              </td>
+              <td style={{ whiteSpace: 'nowrap' }}>
+                {o.pregleda} pregl.
+                <br />
+                <span className={s.mala}>
+                  {o.klikovaPozovi} „Pozovi" · {o.poziva} poz. · {o.poruka} por.
+                </span>
               </td>
               {(['aktivan', 'provereno', 'istaknuto'] as const).map((polje) => (
                 <td key={polje}>
